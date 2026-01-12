@@ -188,10 +188,11 @@
 
         /* Table Wrapper for MLLM Table */
         .table-wrapper {
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
+        display: grid;             
+        justify-items: start;      /* 子项水平左对齐 */
+        align-items: start;        /* 子项垂直顶端对齐，可选 */
         }
+
 
         /* Centered figures and tables */
         .figure-centered {
@@ -662,36 +663,38 @@
             <div class="mt-8">
                 <h3 class="text-2xl font-bold text-gray-900 mb-4">LMM Probe Results</h3>
                 <p class="text-gray-600 mb-6 text-base">
-                    <span class="font-bold">Training on a mixed dataset of 740K samples from LLaVA-OneVision and 800K samples from LLaVA-Video SFT.</span> The training pipeline proceeds directly to Stage 2 fine-tuning. Following a streamlined native-resolution strategy inspired by LLaVA-OneVision, input frames whose resolution matches the model’s native input size are fed directly into the model without tiling or cropping, enabling an explicit evaluation of the ViT’s native-resolution representation capability. Furthermore, incorporating codec-style patch selection during training improves the visual–language model’s capability. The experimental comparison with the baseline model that does not adopt codec-style patch selection is ongoing, and detailed results will be finalized and reported shortly (TBD).
-                </p>
+                    <span class="font-bold">Training on a mixed dataset of 740K samples from LLaVA-OneVision and 800K samples from LLaVA-Video SFT.</span> The training pipeline proceeds directly to Stage 2 fine-tuning. Following a streamlined native-resolution strategy inspired by LLaVA-OneVision, input frames whose resolution matches the model’s native input size are fed directly into the model without tiling or cropping, enabling an explicit evaluation of the ViT’s native-resolution representation capability. Furthermore, incorporating codec-style patch selection during training consistently improves visual–language performance across image, OCR, and video benchmarks. In codec-based experiments, the token budget is strictly controlled and set equal to the number of sampled frames, ensuring a fair comparison.                </p>
                 <div class="table-wrapper">
-                    <table class="results-table">
+                    <table class="results-table" style="float:left;">
                         <thead>
                             <tr class="header-group">
                                 <th rowspan="2" style="vertical-align: middle; min-width: 140px;">Task</th>
                                 <th rowspan="2" style="vertical-align: middle; min-width: 220px;">Benchmark</th>
-                                <th colspan="2" style="min-width: 140px;">Qwen3-4B-Instruct2507</th>
+                                <th colspan="3" style="min-width: 140px;">Qwen3-4B-Instruct2507</th>
                                 <th colspan="2" style="min-width: 140px;">Qwen2.5-1.5B</th>
                             </tr>
                             <tr class="sub-header">
-                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder</th>
-                                <th style="min-width: 140px;">SigLIP2</th>
-                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder</th>
-                                <th style="min-width: 140px;">SigLIP2</th>
+                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder<br>(Codec)</th>
+                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder<br>(Frame)</th>
+                                <th style="min-width: 140px;">SigLIP2<br>(Frame)</th>
+                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder<br>(Frame)</th>
+                                <th style="min-width: 140px;">SigLIP2<br>(Frame)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Video Tasks -->
                             <tr>
-                                <td rowspan="6" class="task-group-cell">Video</td>
+                                <td rowspan="7" class="task-group-cell">Video</td>
                                 <td class="row-header">MVBench</td>
-                                <td class="best-val highlight-ours">49.8</td>
+                                <td class="best-val highlight-ours">52.6</td>
+                                <td class="highlight-ours">49.8</td>
                                 <td>47.2</td>
-                                <td class="best-val highlight-ours">46.8</td>
+                                <td class="highlight-ours">46.8</td>
                                 <td>45.9</td>
                             </tr>
                             <tr>
                                 <td class="row-header">MLVU-dev</td>
+                                <td class="highlight-ours">46.7</td>
                                 <td class="best-val highlight-ours">49.4</td>
                                 <td>48.4</td>
                                 <td class="best-val highlight-ours">48.5</td>
@@ -699,50 +702,65 @@
                             </tr>
                             <tr>
                                 <td class="row-header">NExT-QA (MC)</td>
-                                <td class="best-val highlight-ours">71.9</td>
+                                <td class="best-val highlight-ours">75.8</td>
+                                <td class="highlight-ours">71.9</td>
                                 <td>70.6</td>
                                 <td class="best-val highlight-ours">67.6</td>
                                 <td>66.8</td>
                             </tr>
                             <tr>
                                 <td class="row-header">VideoMME</td>
-                                <td class="best-val highlight-ours">49.3</td>
+                                <td class="best-val highlight-ours">54.6</td>
+                                <td class="highlight-ours">49.3</td>
                                 <td>46.8</td>
                                 <td class="best-val highlight-ours">44.2</td>
                                 <td>42.7</td>
                             </tr>
                             <tr>
                                 <td class="row-header">Perception Test</td>
-                                <td class="best-val highlight-ours">56.7</td>
+                                <td class="best-val highlight-ours">61.1</td>
+                                <td class="highlight-ours">56.7</td>
                                 <td>56.0</td>
                                 <td class="best-val highlight-ours">55.2</td>
                                 <td>54.7</td>
                             </tr>
                             <tr>
                                 <td class="row-header">TOMATO</td>
+                                <td class="highlight-ours">21.6</td>
                                 <td class="highlight-ours">21.8</td>
                                 <td class="best-val">22.3</td>
                                 <td class="best-val highlight-ours">20.6</td>
                                 <td>20.2</td>
                             </tr>
+                            <tr>
+                                <td class="row-header">LongVideoBench-Val</td>
+                                <td class="best-val highlight-ours">51.9</td>
+                                <td class="highlight-ours">45.5</td>
+                                <td>45.2</td>
+                                <td class="highlight-ours">45.2</td>
+                                <td>45.3</td>
+                            </tr>
                             <!-- Image Tasks -->
                             <tr>
                                 <td rowspan="8" class="task-group-cell">Image</td>
                                 <td class="row-header">ChartQA</td>
-                                <td class="best-val highlight-ours">77.8</td>
+                                <td class="best-val highlight-ours">78.6</td>
+                                <td class="highlight-ours">77.8</td>
                                 <td>76.4</td>
                                 <td class="best-val highlight-ours">67.4</td>
                                 <td>67.2</td>
                             </tr>
                             <tr>
                                 <td class="row-header">DocVQA</td>
-                                <td class="best-val highlight-ours">79.5</td>
+                                <td class="best-val highlight-ours">79.7</td>
+                                <td class="highlight-ours">79.5</td>
                                 <td>75.0</td>
                                 <td class="best-val highlight-ours">73.2</td>
                                 <td>70.8</td>
                             </tr>
                             <tr>
                                 <td class="row-header">InfoVQA</td>
+                                <td class="highlight-ours">44.8</td>
                                 <td class="best-val highlight-ours">45.5</td>
                                 <td>42.0</td>
                                 <td class="best-val highlight-ours">33.1</td>
@@ -750,13 +768,15 @@
                             </tr>
                             <tr>
                                 <td class="row-header">OCRBench</td>
-                                <td class="best-val highlight-ours">630.0</td>
-                                <td>621.0</td>
-                                <td class="highlight-ours">533.0</td>
-                                <td class="best-val">560.0</td>
+                                <td class="highlight-ours">617</td>
+                                <td class="best-val highlight-ours">630</td>
+                                <td>621</td>
+                                <td class="highlight-ours">533</td>
+                                <td class="best-val">560</td>
                             </tr>
                             <tr>
                                 <td class="row-header">OCRBench v2</td>
+                                <td class="best-val highlight-ours">26.2</td>
                                 <td class="highlight-ours">26.1</td>
                                 <td>26.1</td>
                                 <td class="best-val highlight-ours">20.5</td>
@@ -765,12 +785,14 @@
                             <tr>
                                 <td class="row-header">MMBench-EN</td>
                                 <td class="highlight-ours">78.5</td>
+                                <td class="highlight-ours">78.5</td>
                                 <td class="best-val">79.6</td>
                                 <td class="highlight-ours">68.6</td>
                                 <td class="best-val">71.2</td>
                             </tr>
                             <tr>
                                 <td class="row-header">MMStar</td>
+                                <td class="highlight-ours">52.8</td>
                                 <td class="highlight-ours">54.3</td>
                                 <td class="best-val">55.0</td>
                                 <td class="highlight-ours">43.5</td>
@@ -778,6 +800,7 @@
                             </tr>
                             <tr>
                                 <td class="row-header">RealWorldQA</td>
+                                <td class="highlight-ours">61.7</td>
                                 <td class="highlight-ours">61.2</td>
                                 <td class="best-val">62.1</td>
                                 <td class="highlight-ours">57.7</td>
@@ -788,7 +811,7 @@
                 </div>
 
                 <p class="text-xs text-gray-500 mt-2 text-left">
-                    * OV-Encoder uses <a href="https://huggingface.co/lmms-lab-encoder/onevision-encoder-large" class="text-blue-600 hover:underline">onevision-encoder-large</a>. SigLIP2 uses <a href="https://huggingface.co/google/siglip2-so400m-patch16-naflex" class="text-blue-600 hover:underline">siglip2-so400m-patch16-naflex</a>.
+                    * OV-Encoder (Codec) variants use OneVision encoder architecture. SigLIP2 uses <a href="https://huggingface.co/google/siglip2-so400m-patch16-naflex" class="text-blue-600 hover:underline">siglip2-so400m-patch16-naflex</a>. Bold values indicate the best performance within each model size category.
                 </p>
             </div>
 
