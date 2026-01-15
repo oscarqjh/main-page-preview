@@ -432,18 +432,17 @@
                 padding: 1.5rem 1rem;
             }
 
-            /* Image grid - Better mobile scaling */
-            #image-grid-codec,
-            #image-grid-sampling {
-                transform: scale(0.55);
-                transform-origin: top left;
-                margin-bottom: -60px;
-            }
-
             /* Image grid containers - Better mobile display */
             .bg-slate-50.rounded-xl {
                 padding: 1rem !important;
                 margin-bottom: 1.5rem !important;
+                overflow: visible !important;
+            }
+
+            /* Better spacing for section titles on mobile */
+            h4 {
+                font-size: 1rem !important;
+                margin-bottom: 0.75rem !important;
             }
 
             /* Pipeline section - Enhanced mobile layout */
@@ -604,6 +603,168 @@
                 -webkit-overflow-scrolling: touch;
             }
         }
+
+        /* Mobile-specific scaling for grid containers */
+        @media (max-width: 768px) {
+            /* Codec-Style: 2x2 responsive grid layout on mobile */
+            #image-grid-codec {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 auto 2rem auto !important;
+                overflow: hidden !important;
+            }
+            
+            #image-grid-codec .codec-block-wrapper {
+                position: relative !important;
+                left: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                transform: none !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                overflow: visible !important;
+            }
+            
+            /* Scale the inner grid to fit */
+            #image-grid-codec .codec-block-wrapper > div:first-child {
+                max-width: 100% !important;
+                transform-origin: top center !important;
+            }
+            
+            /* Traditional Sampling: 2x2 responsive grid ONLY on mobile */
+            #image-grid-sampling {
+                transform-origin: top center !important;
+                transform: none !important;
+                width: 100% !important;
+                margin: 0 auto 2rem auto !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+                justify-content: center !important;
+                align-items: start !important;
+                overflow: hidden !important;
+            }
+            
+            #image-grid-sampling .sampling-frame-wrapper {
+                position: relative !important;
+                left: auto !important;
+                top: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* Improve table mobile experience - override ::after with ::before */
+            .overflow-x-auto {
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+                background: white;
+            }
+
+            /* Add scrollable table hint at top (overrides default ::after) */
+            .overflow-x-auto::before {
+                content: '→ Swipe to view full table →';
+                display: block;
+                text-align: center;
+                padding: 0.5rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-size: 0.75rem;
+                font-weight: 600;
+                border-radius: 0.5rem 0.5rem 0 0;
+                letter-spacing: 0.05em;
+            }
+
+            /* Hide the bottom scroll hint on mobile (since we have top hint) */
+            /* Overrides the default ::after scroll indicator from line 405-418 */
+            .overflow-x-auto::after {
+                display: none;
+            }
+
+            /* Better table cell sizing on mobile - consolidated sticky-col rules */
+            .data-table th,
+            .data-table td {
+                font-size: 0.7rem !important;
+                padding: 6px 8px !important;
+                white-space: nowrap;
+            }
+            
+            /* Pipeline labels responsive font sizing */
+            .pipeline-label {
+                font-size: 0.65rem !important;
+                padding: 0 0.125rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .data-table .sticky-col {
+                min-width: 120px !important;
+                max-width: 120px !important;
+                box-shadow: 3px 0 8px rgba(0, 0, 0, 0.15) !important;
+                background-color: #ffffff !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* More compact 2x2 grid for very small screens */
+            #image-grid-codec {
+                gap: 0.75rem !important;
+            }
+
+            /* Remove fixed scaling - JavaScript handles sizing */
+            #image-grid-codec .codec-block-wrapper > div[style*="position: absolute"] {
+                transform: none !important;
+            }
+            
+            #image-grid-sampling {
+                transform: none !important;
+            }
+
+            /* Even smaller table text for tiny screens */
+            .data-table th,
+            .data-table td {
+                font-size: 0.65rem !important;
+                padding: 4px 6px !important;
+            }
+
+            .data-table .sticky-col {
+                min-width: 100px !important;
+                max-width: 100px !important;
+            }
+        }
+
+        /* Tablet optimization */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #image-grid-codec {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1.5rem !important;
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            #image-grid-codec .codec-block-wrapper {
+                position: relative !important;
+                left: auto !important;
+                width: 100% !important;
+                transform: none !important;
+            }
+
+            /* Remove fixed scaling - JavaScript handles sizing */
+            #image-grid-codec .codec-block-wrapper > div[style*="position: absolute"] {
+                transform: none !important;
+                transform-origin: top center !important;
+            }
+        }
     </style>
 </head>
 <body class="text-gray-800 bg-slate-50">
@@ -716,27 +877,27 @@
                 </p>
 
                 <!-- Codec Style Input Grid -->
-                <div class="bg-slate-50 rounded-xl p-6 mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2 text-center">
+                <div class="bg-slate-50 rounded-xl p-4 sm:p-6 mb-6">
+                    <h4 class="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center">
                         Codec-Style Input
                     </h4>
                     <p class="text-gray-500 text-xs text-left mb-4">
                         Left: Reference frame (t=1) with all patches. Right: Three animated blocks showing consecutive frames (t=2,3,4 → t=5,6,7 → ...), cycling through t=2 to t=64. Each frame shows only salient patches at their spatial positions. The result: <strong>75-98% fewer patches</strong> while retaining the information that matters.
                     </p>
-                    <div id="image-grid-codec" style="display: block; margin: 0 auto; padding-top: 20px;">
+                    <div id="image-grid-codec" style="display: block; margin: 0 auto 2rem auto; padding-top: 20px; overflow: hidden;">
                         <!-- Grid will be generated by JavaScript -->
                     </div>
                 </div>
 
                 <!-- Sampling Frame Input Grid -->
-                <div class="bg-slate-50 rounded-xl p-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2 text-center">
+                <div class="bg-slate-50 rounded-xl p-4 sm:p-6">
+                    <h4 class="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center">
                         Traditional Frame Sampling
                     </h4>
                     <p class="text-gray-500 text-xs text-left mb-4">
                         Uniformly samples 4 frames and processes all patches from each. Notice the redundancy: static backgrounds, repeated textures, and unchanging regions are processed multiple times across frames—wasting computation on pixels that add no new information.
                     </p>
-                    <div id="image-grid-sampling" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+                    <div id="image-grid-sampling" style="display: block; margin: 0 auto 2rem auto; padding-top: 20px; overflow: hidden;">
                         <!-- Grid will be generated by JavaScript -->
                     </div>
                 </div>
@@ -982,6 +1143,7 @@
                 </p>
             </div>
 
+                            
             <!-- Video Compression Performance Section -->
             <div class="mt-8">
                 <h3 class="text-2xl font-bold text-gray-900 mb-4">Patch-Efficient Video Understanding Comparison</h3>
@@ -990,8 +1152,8 @@
                 </p>
                 <p class="text-gray-600 mb-6 text-base">
                     For a fair comparison, SigLIP2 is evaluated under the same token budgets and adopts a traditional frame sampling strategy, where each group of 256 patches corresponds to a contiguous RGB frame. Under a fixed token budget, OV-Encoder-Codec redistributes patches across time while preserving their spatial positions, enabling long-range temporal coverage. As a result, it outperforms SigLIP2 on Diving48 and Perception Test while reducing patch processing by 75.0%–98.4% compared to dense processing of 16,384 patches.                </p>
-                <div class="overflow-x-auto rounded-lg shadow-sm border border-gray-200 max-w-5xl mx-auto">
-                    <table class="min-w-full divide-y divide-gray-200 data-table">
+                <div class="table-wrapper" style="background: white;" role="region" aria-label="Scrollable comparison table">
+                    <table class="results-table" style="float:left;">
                         <colgroup>
                             <col style="width:22%">
                             <col style="width:18%">
@@ -1113,11 +1275,11 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="text-xs text-gray-500 mt-2 text-left max-w-5xl">
+                <p class="text-xs text-gray-500 mt-2 text-left max-w-full">
                   * Percentages under OV-Encoder-Codec indicate patch reduction relative to dense processing of all 16384 patches.
                 </p>
 
-                <p class="text-xs text-gray-500 mt-2 text-left max-w-5xl">
+                <p class="text-xs text-gray-500 mt-2 text-left max-w-full">
                   '<span class="text-xs text-green-600 font-medium">
                     <i class="fa-solid fa-compress mr-1"></i>
                     16384 patches -> N patches
@@ -1168,9 +1330,89 @@
 
             const NUM_IMAGES_SAMPLING = 4; // sampling: show all 4 image blocks
             const GRID_SIZE = 8;     // 8x8 grid per image
-            const IMAGE_SIZE = 30;   // Size of each patch image in pixels
-            const GAP = 2;           // Gap between images in pixels
-            const IMAGE_GAP = 8;     // Gap between different images
+            
+            // Constants for responsive sizing ratios
+            const GAP_RATIO = 0.067;        // Gap is ~6.7% of base size (2px for 30px)
+            const IMAGE_GAP_RATIO = 0.267;  // Image gap is ~26.7% of base size (8px for 30px)
+            
+            // Use responsive sizing based on container width
+            // Patches now scale fluidly with container size instead of fixed breakpoints
+            function getResponsiveSizes() {
+                const container = document.getElementById('image-grid-codec');
+                const containerWidth = container ? container.offsetWidth : window.innerWidth;
+                
+                // Calculate base size proportionally to container width
+                // For mobile (2x2 grid): each block should fit within half the container
+                // For desktop (4x1 grid): each block should fit within a quarter of the container
+                // Target: 8x8 grid of patches + gaps should fit comfortably in available space
+                
+                let baseSize;
+                if (containerWidth <= 768) {
+                    // Mobile/tablet: 2x2 grid layout
+                    // Each block gets roughly half the container width
+                    // 8 patches + 7 gaps per block, so: (containerWidth / 2 - padding) / 8.5
+                    baseSize = Math.max(15, Math.min(35, Math.floor((containerWidth / 2 - 40) / 8.5)));
+                } else {
+                    // Desktop: 4x1 horizontal layout
+                    // Each block gets roughly a quarter of the container width
+                    // 8 patches + 7 gaps per block, so: (containerWidth / 4 - padding) / 8.5
+                    baseSize = Math.max(20, Math.min(40, Math.floor((containerWidth / 4 - 30) / 8.5)));
+                }
+                
+                return {
+                    IMAGE_SIZE: baseSize,
+                    GAP: Math.max(1, Math.floor(baseSize * GAP_RATIO)),
+                    IMAGE_GAP: Math.max(4, Math.floor(baseSize * IMAGE_GAP_RATIO))
+                };
+            }
+            
+            let sizes = getResponsiveSizes();
+            let IMAGE_SIZE = sizes.IMAGE_SIZE;
+            let GAP = sizes.GAP;
+            let IMAGE_GAP = sizes.IMAGE_GAP;
+            
+            // Debounce function to limit resize handler execution
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+            
+            // Update sizes on window resize with debouncing (150ms delay for smoother adaptation)
+            const handleResize = debounce(function() {
+                const newSizes = getResponsiveSizes();
+                // Check if any size property has changed
+                if (newSizes.IMAGE_SIZE !== IMAGE_SIZE || 
+                    newSizes.GAP !== GAP || 
+                    newSizes.IMAGE_GAP !== IMAGE_GAP) {
+                    
+                    IMAGE_SIZE = newSizes.IMAGE_SIZE;
+                    GAP = newSizes.GAP;
+                    IMAGE_GAP = newSizes.IMAGE_GAP;
+                    
+                    // Reinitialize grids with new sizes
+                    const codecContainer = document.getElementById('image-grid-codec');
+                    const samplingContainer = document.getElementById('image-grid-sampling');
+                    
+                    if (codecContainer && codecContainer.children.length > 0) {
+                        codecContainer.innerHTML = '';
+                        initializeCodecGrid();
+                    }
+                    
+                    if (samplingContainer && samplingContainer.children.length > 0) {
+                        samplingContainer.innerHTML = '';
+                        initializeSamplingGrid();
+                    }
+                }
+            }, 150);
+            
+            window.addEventListener('resize', handleResize);
 
             // Complete file list for Codec Style Input: filename format is imgIdx_row_col_t_h_w
             const codecFiles = [
@@ -1235,13 +1477,27 @@
                 const blockWidth = GRID_SIZE * cellSize - GAP;
                 const blockGap = 20;
                 const totalBlocks = 1 + NUM_ANIM_BLOCKS;
-                const totalWidth = totalBlocks * blockWidth + (totalBlocks - 1) * blockGap;
                 const totalHeight = GRID_SIZE * cellSize - GAP;
+                
+                // Detect layout mode based on container width
+                const containerWidth = gridContainer.offsetWidth || window.innerWidth;
+                const isMobileLayout = containerWidth <= 768;
+                
+                // Calculate appropriate grid dimensions
+                let totalWidth;
+                if (isMobileLayout) {
+                    // Mobile: 2x2 grid, so width should accommodate 2 blocks side by side
+                    totalWidth = 2 * blockWidth + blockGap;
+                } else {
+                    // Desktop: 4x1 horizontal layout
+                    totalWidth = totalBlocks * blockWidth + (totalBlocks - 1) * blockGap;
+                }
 
                 gridContainer.style.position = 'relative';
-                gridContainer.style.width = totalWidth + 'px';
-                gridContainer.style.height = (totalHeight + 40) + 'px';
-                gridContainer.style.overflow = 'visible';
+                gridContainer.style.width = isMobileLayout ? 'auto' : (totalWidth + 'px');
+                gridContainer.style.height = isMobileLayout ? 'auto' : ((totalHeight + 60) + 'px');
+                gridContainer.style.overflow = 'hidden';
+                gridContainer.style.marginBottom = '2rem';
 
                 // group patches by t value: { t: [{h, w, filename}, ...] }
                 const patchesByT = {};
@@ -1249,6 +1505,29 @@
                     if (!patchesByT[p.t]) patchesByT[p.t] = [];
                     patchesByT[p.t].push(p);
                 });
+
+                // Create wrapper for reference block (Block 0)
+                const refBlockWrapper = document.createElement('div');
+                refBlockWrapper.className = 'codec-block-wrapper';
+                
+                if (!isMobileLayout) {
+                    // Desktop: use absolute positioning
+                    refBlockWrapper.style.position = 'absolute';
+                    refBlockWrapper.style.left = '0px';
+                }
+                
+                refBlockWrapper.style.width = blockWidth + 'px';
+                refBlockWrapper.style.height = (totalHeight + 40) + 'px';
+                refBlockWrapper.style.display = 'flex';
+                refBlockWrapper.style.flexDirection = 'column';
+                refBlockWrapper.style.alignItems = 'center';
+                refBlockWrapper.style.overflow = 'visible';
+                
+                // Create inner grid container for patches
+                const refGridDiv = document.createElement('div');
+                refGridDiv.style.position = 'relative';
+                refGridDiv.style.width = blockWidth + 'px';
+                refGridDiv.style.height = totalHeight + 'px';
 
                 // Block 0: Static reference frame (t=0, displayed as t=1)
                 const refPatches = patchesByT[0] || [];
@@ -1300,27 +1579,52 @@
                             imgContainer.style.backgroundColor = '#1a1a1a';
                         }
 
-                        gridContainer.appendChild(imgContainer);
+                        refGridDiv.appendChild(imgContainer);
                     }
                 }
+                
+                refBlockWrapper.appendChild(refGridDiv);
 
                 // Label for reference block
                 const refLabel = document.createElement('div');
-                refLabel.style.position = 'absolute';
-                refLabel.style.left = (blockWidth / 2 - 20) + 'px';
-                refLabel.style.top = (totalHeight + 10) + 'px';
+                refLabel.style.marginTop = '10px';
                 refLabel.style.fontSize = '14px';
                 refLabel.style.fontWeight = '600';
                 refLabel.style.color = '#1f2937';
                 refLabel.textContent = 't = 1';
-                gridContainer.appendChild(refLabel);
+                refBlockWrapper.appendChild(refLabel);
+                gridContainer.appendChild(refBlockWrapper);
 
-                // Animated blocks (2 blocks showing t=2,3 then t=4,5 etc)
+                // Animated blocks (3 blocks showing t=2,3,4, etc.)
                 const animBlocks = [];
                 const animLabels = [];
 
                 for (let blockIdx = 0; blockIdx < NUM_ANIM_BLOCKS; blockIdx++) {
                     const blockX = (1 + blockIdx) * (blockWidth + blockGap);
+                    
+                    // Create wrapper for this animated block
+                    const blockWrapper = document.createElement('div');
+                    blockWrapper.className = 'codec-block-wrapper';
+                    
+                    if (!isMobileLayout) {
+                        // Desktop: use absolute positioning
+                        blockWrapper.style.position = 'absolute';
+                        blockWrapper.style.left = blockX + 'px';
+                    }
+                    
+                    blockWrapper.style.width = blockWidth + 'px';
+                    blockWrapper.style.height = (totalHeight + 40) + 'px';
+                    blockWrapper.style.display = 'flex';
+                    blockWrapper.style.flexDirection = 'column';
+                    blockWrapper.style.alignItems = 'center';
+                    blockWrapper.style.overflow = 'visible';
+                    
+                    // Create inner grid container for patches
+                    const animGridDiv = document.createElement('div');
+                    animGridDiv.style.position = 'relative';
+                    animGridDiv.style.width = blockWidth + 'px';
+                    animGridDiv.style.height = totalHeight + 'px';
+                    
                     const gridCells = {};
 
                     for (let h = 0; h < GRID_SIZE; h++) {
@@ -1329,7 +1633,7 @@
                             imgContainer.style.position = 'absolute';
                             imgContainer.style.width = IMAGE_SIZE + 'px';
                             imgContainer.style.height = IMAGE_SIZE + 'px';
-                            imgContainer.style.left = (blockX + w * cellSize) + 'px';
+                            imgContainer.style.left = (w * cellSize) + 'px';
                             imgContainer.style.top = (h * cellSize) + 'px';
                             imgContainer.style.overflow = 'hidden';
                             imgContainer.style.border = '1px solid #e5e7eb';
@@ -1344,7 +1648,7 @@
                             img.style.objectFit = 'cover';
 
                             imgContainer.appendChild(img);
-                            gridContainer.appendChild(imgContainer);
+                            animGridDiv.appendChild(imgContainer);
                             gridCells[`${h}_${w}`] = { container: imgContainer, img: img };
 
                             imgContainer.addEventListener('mouseenter', function(e) {
@@ -1370,18 +1674,20 @@
                             });
                         }
                     }
+                    
+                    blockWrapper.appendChild(animGridDiv);
 
+                    // Label for this block
+                    const blockLabel = document.createElement('div');
+                    blockLabel.style.marginTop = '10px';
+                    blockLabel.style.fontSize = '14px';
+                    blockLabel.style.fontWeight = '600';
+                    blockLabel.style.color = '#1f2937';
+                    blockLabel.textContent = `t = ...`;
+                    blockWrapper.appendChild(blockLabel);
+                    animLabels.push(blockLabel);
+                    gridContainer.appendChild(blockWrapper);
                     animBlocks.push(gridCells);
-
-                    const label = document.createElement('div');
-                    label.style.position = 'absolute';
-                    label.style.left = (blockX + blockWidth / 2 - 20) + 'px';
-                    label.style.top = (totalHeight + 10) + 'px';
-                    label.style.fontSize = '14px';
-                    label.style.fontWeight = '600';
-                    label.style.color = '#1f2937';
-                    gridContainer.appendChild(label);
-                    animLabels.push(label);
                 }
 
                 let baseT = 1; // start from t=1 (displayed as t=2)
@@ -1438,27 +1744,57 @@
 
             // Standard grid for sampling
             function createImageGrid(gridContainer, fileMap, imageBasePath) {
-                for (let row = 0; row < GRID_SIZE; row++) {
-                    const rowDiv = document.createElement('div');
-                    rowDiv.style.display = 'flex';
-                    rowDiv.style.flexDirection = 'row';
-                    rowDiv.style.gap = GAP + 'px';
-                    rowDiv.style.alignItems = 'center';
+                const cellSize = IMAGE_SIZE + GAP;
+                const blockWidth = GRID_SIZE * cellSize - GAP;
+                const blockHeight = GRID_SIZE * cellSize - GAP;
+                
+                // Detect layout mode based on container width
+                const containerWidth = gridContainer.offsetWidth || window.innerWidth;
+                const isMobileLayout = containerWidth <= 768;
+                
+                const gap = 20;
+                const totalWidth = NUM_IMAGES_SAMPLING * blockWidth + (NUM_IMAGES_SAMPLING - 1) * gap;
+                const totalHeight = blockHeight + 30; // blockHeight + label space
+                
+                gridContainer.style.position = 'relative';
+                gridContainer.style.width = isMobileLayout ? 'auto' : (totalWidth + 'px');
+                gridContainer.style.height = isMobileLayout ? 'auto' : (totalHeight + 'px');
+                gridContainer.style.overflow = 'hidden';
+                gridContainer.style.marginBottom = '2rem';
 
-                    for (let imgIdx = 0; imgIdx < NUM_IMAGES_SAMPLING; imgIdx++) {
-                        if (imgIdx > 0) {
-                            const spacer = document.createElement('div');
-                            spacer.style.width = IMAGE_GAP + 'px';
-                            rowDiv.appendChild(spacer);
-                        }
-
+                // Create 4 frames - mobile: 2x2 grid, desktop: horizontal 4-frame layout
+                for (let imgIdx = 0; imgIdx < NUM_IMAGES_SAMPLING; imgIdx++) {
+                    // Create wrapper for this frame
+                    const frameWrapper = document.createElement('div');
+                    frameWrapper.className = 'sampling-frame-wrapper';
+                    
+                    if (!isMobileLayout) {
+                        // Desktop: use absolute positioning for horizontal 4-frame layout
+                        frameWrapper.style.position = 'absolute';
+                        frameWrapper.style.left = imgIdx * (blockWidth + gap) + 'px';
+                        frameWrapper.style.top = '0px';
+                    }
+                    
+                    frameWrapper.style.width = blockWidth + 'px';
+                    frameWrapper.style.height = (blockHeight + 30) + 'px';
+                    
+                    // Create 8x8 grid for this frame
+                    const gridDiv = document.createElement('div');
+                    gridDiv.style.position = 'relative';
+                    gridDiv.style.width = blockWidth + 'px';
+                    gridDiv.style.height = blockHeight + 'px';
+                    
+                    for (let row = 0; row < GRID_SIZE; row++) {
                         for (let col = 0; col < GRID_SIZE; col++) {
                             const key = `${imgIdx}_${row}_${col}`;
                             const fileInfo = fileMap[key];
 
                             const imgContainer = document.createElement('div');
+                            imgContainer.style.position = 'absolute';
                             imgContainer.style.width = IMAGE_SIZE + 'px';
                             imgContainer.style.height = IMAGE_SIZE + 'px';
+                            imgContainer.style.left = (col * cellSize) + 'px';
+                            imgContainer.style.top = (row * cellSize) + 'px';
                             imgContainer.style.cursor = 'pointer';
                             imgContainer.style.transition = 'all 0.15s';
                             imgContainer.style.overflow = 'hidden';
@@ -1491,11 +1827,10 @@
                                 this.style.transform = 'scale(1.5)';
                                 this.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.3)';
                                 this.style.zIndex = '100';
-                                this.style.position = 'relative';
                                 const t = this.dataset.t || '?';
                                 const h = this.dataset.h || '?';
                                 const w = this.dataset.w || '?';
-                                tooltipText.textContent = `t=${t}, h=${h}, w=${w}`;
+                                tooltipText.textContent = `Frame ${parseInt(t) + 1}, h=${h}, w=${w}`;
                                 tooltip.style.left = (e.clientX + 15) + 'px';
                                 tooltip.style.top = (e.clientY + 15) + 'px';
                                 tooltip.style.opacity = '1';
@@ -1510,15 +1845,27 @@
                                 this.style.transform = 'scale(1)';
                                 this.style.boxShadow = 'none';
                                 this.style.zIndex = '';
-                                this.style.position = '';
                                 tooltip.style.opacity = '0';
                             });
 
-                            rowDiv.appendChild(imgContainer);
+                            gridDiv.appendChild(imgContainer);
                         }
                     }
-
-                    gridContainer.appendChild(rowDiv);
+                    
+                    frameWrapper.appendChild(gridDiv);
+                    
+                    // Add frame label
+                    const frameLabel = document.createElement('div');
+                    frameLabel.style.textAlign = 'center';
+                    frameLabel.style.fontSize = '14px';
+                    frameLabel.style.fontWeight = '600';
+                    frameLabel.style.color = '#1f2937';
+                    frameLabel.style.marginTop = '8px';
+                    const frameMapping = {0: 8, 1: 16, 2: 32, 3: 64};
+                    frameLabel.textContent = `Frame ${imgIdx + 1} (${frameMapping[imgIdx]} frames sampled)`;
+                    frameWrapper.appendChild(frameLabel);
+                    
+                    gridContainer.appendChild(frameWrapper);
                 }
             }
 
@@ -1550,12 +1897,24 @@
                 filename: f.filename
             }));
 
-            // Create grids
-            const codecGridContainer = document.getElementById('image-grid-codec');
-            createTemporalAnimationGrid(codecGridContainer, allCodecPatches, 'images/patches_codec/');
+            // Initialization functions
+            function initializeCodecGrid() {
+                const codecGridContainer = document.getElementById('image-grid-codec');
+                if (codecGridContainer) {
+                    createTemporalAnimationGrid(codecGridContainer, allCodecPatches, 'images/patches_codec/');
+                }
+            }
+            
+            function initializeSamplingGrid() {
+                const samplingGridContainer = document.getElementById('image-grid-sampling');
+                if (samplingGridContainer) {
+                    createImageGrid(samplingGridContainer, samplingFileMap, 'images/patches/');
+                }
+            }
 
-            const samplingGridContainer = document.getElementById('image-grid-sampling');
-            createImageGrid(samplingGridContainer, samplingFileMap, 'images/patches/');
+            // Create grids on initial load
+            initializeCodecGrid();
+            initializeSamplingGrid();
         });
     </script>
 
