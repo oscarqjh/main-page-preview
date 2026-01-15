@@ -608,14 +608,15 @@
         @media (max-width: 768px) {
             /* Codec-Style: 2x2 responsive grid layout on mobile */
             #image-grid-codec {
+                transform-origin: top center !important;
+                transform: none !important;
+                width: 100% !important;
+                margin: 0 auto 2rem auto !important;
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 1rem !important;
-                width: 100% !important;
-                height: auto !important;
-                max-width: 100% !important;
-                padding: 0 !important;
-                margin: 0 auto 2rem auto !important;
+                justify-content: center !important;
+                align-items: start !important;
                 overflow: hidden !important;
             }
             
