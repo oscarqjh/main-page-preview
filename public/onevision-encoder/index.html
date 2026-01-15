@@ -266,8 +266,43 @@
             padding: 10px 10px;
         }
 
+        /* Mobile-specific visual enhancements */
+        @media (max-width: 768px) {
+            /* Add visual separator between sections */
+            section {
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            section:last-of-type {
+                border-bottom: none;
+            }
+
+            /* Improve table container styling */
+            .overflow-x-auto {
+                background: white;
+                border: 1px solid #e5e7eb;
+            }
+
+            /* Better video container on mobile */
+            video, img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* Improve figure captions on mobile */
+            figcaption {
+                padding: 0 0.5rem;
+                font-size: 0.75rem !important;
+            }
+        }
+
         /* --- Mobile Responsive Styles --- */
         @media (max-width: 768px) {
+            /* Smooth scrolling for mobile */
+            html {
+                scroll-behavior: smooth;
+            }
+
             /* Navigation - Mobile hamburger menu */
             .mobile-menu-button {
                 display: block;
@@ -303,6 +338,7 @@
                 display: block;
                 padding: 0.75rem 0;
                 border-bottom: 1px solid #f3f4f6;
+                font-size: 1rem;
             }
 
             .mobile-nav a:last-child {
@@ -311,35 +347,74 @@
 
             /* Hero Section - Reduce text sizes */
             .hero-bg {
-                padding-top: 6rem !important;
-                padding-bottom: 3rem !important;
+                padding-top: 5rem !important;
+                padding-bottom: 2.5rem !important;
             }
 
             h1 {
-                font-size: 2.5rem !important;
-                line-height: 1.2 !important;
+                font-size: 2.25rem !important;
+                line-height: 1.15 !important;
+                margin-bottom: 1.25rem !important;
             }
 
             h1 + p {
-                font-size: 1.125rem !important;
+                font-size: 1.05rem !important;
+                line-height: 1.5 !important;
+                margin-bottom: 1rem !important;
             }
 
-            /* Buttons - Stack vertically on mobile */
+            /* Buttons - Better mobile layout */
             .btn {
-                width: 100%;
-                justify-content: center;
+                padding: 0.7rem 1.25rem;
+                font-size: 0.85rem;
+            }
+
+            /* Navigation buttons - Keep inline on desktop */
+            nav .flex.items-center.gap-2 {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            nav .btn {
+                width: auto;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
             }
 
             /* Section headings */
             h3 {
                 font-size: 1.5rem !important;
+                margin-bottom: 1rem !important;
             }
 
-            /* Tables - Enable horizontal scroll */
+            h4 {
+                font-size: 1.125rem !important;
+            }
+
+            /* Tables - Enhanced mobile experience */
             .table-wrapper,
             .overflow-x-auto {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
+                position: relative;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            /* Add scroll hint for tables */
+            .table-wrapper::after,
+            .overflow-x-auto::after {
+                content: '← Scroll →';
+                position: sticky;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(90deg, transparent 0%, rgba(248, 250, 252, 0.95) 20%);
+                padding: 0.5rem 1rem;
+                font-size: 0.7rem;
+                color: #64748b;
+                text-align: right;
+                pointer-events: none;
+                font-weight: 500;
             }
 
             .data-table,
@@ -347,66 +422,88 @@
                 min-width: 800px;
             }
 
+            /* Improve sticky column on mobile */
+            .data-table .sticky-col {
+                box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            }
+
             /* Feature cards - Full width on mobile */
             .feature-card {
                 padding: 1.5rem 1rem;
             }
 
-            /* Image grid - Adjust for mobile */
+            /* Image grid - Better mobile scaling */
             #image-grid-codec,
             #image-grid-sampling {
-                transform: scale(0.6);
+                transform: scale(0.55);
                 transform-origin: top left;
-                margin-bottom: -40px;
+                margin-bottom: -60px;
             }
 
-            /* Pipeline GIF controls - Adjust spacing */
+            /* Image grid containers - Better mobile display */
+            .bg-slate-50.rounded-xl {
+                padding: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            /* Pipeline section - Enhanced mobile layout */
             #pipelinePrevBtn,
             #pipelineNextBtn {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
             }
 
             #pipelineDots button {
-                width: 8px !important;
-                height: 8px !important;
+                width: 10px !important;
+                height: 10px !important;
             }
 
-            /* Pipeline label item styling */
-            /* Pipeline label container styling - positioned above video */
+            /* Pipeline labels - Better responsive layout */
             .pipeline-labels {
                 display: flex !important;
                 flex-direction: row !important;
                 justify-content: space-around !important;
                 align-items: center !important;
                 margin-bottom: 0.75rem !important;
-                padding: 0 1rem !important;
+                padding: 0 0.5rem !important;
                 flex-wrap: nowrap !important;
+                gap: 0.25rem !important;
             }
             
-            /* Pipeline label item styling */
             .pipeline-label {
                 flex: 1;
                 text-align: center;
-                font-size: 0.875rem;
+                font-size: 0.625rem;
+                line-height: 1.2;
                 font-weight: 600;
                 color: #1f2937;
-                white-space: nowrap;
-                padding: 0 0.25rem;
+                white-space: normal;
+                padding: 0 0.125rem;
+                word-break: break-word;
             }
-            
-            /* Pipeline labels - Make responsive */
-            @media (max-width: 768px) {
-                .pipeline-label {
-                    font-size: 0.65rem;
-                    white-space: normal;
-                }
+
+            /* Video container padding */
+            #pipelineGifContainer {
+                margin-bottom: 0.5rem;
+            }
+
+            /* Pagination controls - Better spacing */
+            div[style*="display: flex"][style*="justify-content: center"] {
+                margin-top: 1rem !important;
             }
 
             /* Padding adjustments */
             section {
                 padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
+            }
+
+            /* Container padding */
+            .max-w-5xl,
+            .max-w-6xl,
+            .max-w-7xl {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
             }
 
             /* Font size adjustments */
@@ -417,10 +514,80 @@
             .text-base,
             p {
                 font-size: 0.875rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 1rem !important;
             }
 
             .text-xs {
                 font-size: 0.65rem !important;
+            }
+
+            /* Images - Better mobile sizing */
+            figure img,
+            figure video {
+                border-radius: 0.5rem !important;
+            }
+
+            /* BibTeX section - Better mobile display */
+            #bibtex pre {
+                font-size: 0.7rem !important;
+                line-height: 1.4 !important;
+                padding: 1rem !important;
+                overflow-x: auto !important;
+            }
+
+            /* Better touch targets */
+            a, button {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            /* Icon adjustments */
+            .icon-box {
+                height: 2.5rem;
+                width: 2.5rem;
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Extra small devices (phones in portrait, less than 480px) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.875rem !important;
+            }
+
+            h1 + p {
+                font-size: 0.95rem !important;
+            }
+
+            .hero-bg {
+                padding-top: 4.5rem !important;
+                padding-bottom: 2rem !important;
+            }
+
+            h3 {
+                font-size: 1.25rem !important;
+            }
+
+            .pipeline-label {
+                font-size: 0.5rem !important;
+            }
+
+            #image-grid-codec,
+            #image-grid-sampling {
+                transform: scale(0.45);
+                margin-bottom: -80px;
+            }
+
+            #pipelinePrevBtn,
+            #pipelineNextBtn {
+                width: 36px;
+                height: 36px;
+            }
+
+            #pipelineDots button {
+                width: 8px !important;
+                height: 8px !important;
             }
         }
 
