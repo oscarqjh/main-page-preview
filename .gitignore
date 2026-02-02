@@ -24,6 +24,7 @@ Thumbs.db
 
 # Backup folder (temporary)
 _backup/
+_archive/
 archive/
 
 # TypeScript
