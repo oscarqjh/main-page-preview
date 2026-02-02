@@ -82,7 +82,7 @@ function CircuitScene({ seedValue }: { seedValue: number }) {
       });
     }
     return temp;
-  }, [seedValue]);
+  }, [seedValue, viewport.width, viewport.height]);
 
   const maxConnections = count * 8; 
   const lineGeometry = useMemo(() => {
