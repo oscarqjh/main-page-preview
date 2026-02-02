@@ -93,6 +93,11 @@
 	--border-thin: 1px;
 	--border-medium: 2px;
 	--border-thick: 4px;
+	
+	/* Brutalist Design System */
+	--border-radius: 0;
+	--shadow-hard: 4px 4px 0 0 var(--foreground);
+	--grid-color: rgba(254, 215, 170, 0.2);
 }
 
 /* Reset */
