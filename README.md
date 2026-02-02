@@ -1,467 +1,265 @@
-# LMMS Blog & Portfolio Site
+# LMMS-Lab Website
 
-A modern, responsive blog and portfolio website built with Astro, featuring advanced content authoring with MDX, interactive React components, and a sophisticated content management system for research publications and technical documentation.
+A modern research blog built with Next.js 14, featuring a brutalist/sci-fi design system with auto-generated thumbnails and randoma11y-compliant color palette.
 
-## Features ✨
+## Design System
 
-- **MDX Support**: Enhanced markdown with React components
-- **Interactive Components**: CodeDemo, ResourceCard, and more
-- **Content Collections**: Type-safe content management for posts, notes, and series
-- **Author Management**: Centralized author database with automatic URL resolution
-- **Related Posts**: Smart recommendation system with manual overrides
-- **Responsive Design**: Mobile-first approach with dark/light mode support
-- **SEO Optimized**: Comprehensive metadata and Open Graph support
+### Color Palette (randoma11y)
+
+| Role | Color | Hex |
+|------|-------|-----|
+| Background | Deep Teal | `#0369a1` |
+| Foreground | Warm Cream | `#fed7aa` |
+
+APCA Contrast: -62.729 (passes Lc 60 for body text)
+
+### Visual Style
+
+- Brutalist/sci-fi aesthetic
+- Procedurally generated thumbnails
+- Halftone and circuit patterns
+- Animated SVG elements
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- pnpm (recommended) or npm
-
-### Installation
-
-1. Clone the repository:
-
 ```bash
-git clone https://github.com/Luodian/main-page-preview.git
-cd main-page-preview
-```
-
-2. Install dependencies:
-
-```bash
-pnpm install
-# or
+# Install dependencies
 npm install
-```
 
-3. Start the development server:
-
-```bash
-pnpm dev
-# or
+# Development
 npm run dev
-```
 
-The site will be available at `http://localhost:3000`
-
-### Building for Production
-
-Build the site for production:
-
-```bash
-pnpm build
-# or
+# Build
 npm run build
 ```
 
-Preview the production build locally:
+## Adding a New Blog Post
+
+### 1. Create the MDX File
+
+Create a new `.mdx` file in `content/posts/`:
 
 ```bash
-pnpm preview
-# or
-npm run preview
+content/posts/your-post-slug.mdx
 ```
 
-## Content Creation Guide
+The filename becomes the URL slug: `/posts/your-post-slug`
 
-### Blog Posts
-
-Create rich, interactive blog posts using either Markdown (`.md`) or MDX (`.mdx`) files in `src/content/post/`.
-
-#### Basic Post Structure
+### 2. Add Frontmatter
 
 ```yaml
 ---
 title: "Your Post Title"
-description: "SEO-optimized description (50-160 characters recommended)"
-publishDate: "2024-01-15T00:00:00Z"
-# Primary tags for categorization
-mainTags: ["ai", "research"] # recommended to only use 1 or 2 mainTags
-tags: ["ai", "research", "machine-learning", "computer-vision"] # Additional tags (include mainTags again)
----
-# Your content here
-```
-
-#### Complete Frontmatter Reference
-
-| Field             | Type        | Required | Description                                  | Used In                       |
-| ----------------- | ----------- | -------- | -------------------------------------------- | ----------------------------- |
-| `title`           | string      | ✓        | Post title (recommended: max 60 chars)       | All components, SEO           |
-| `description`     | string      | ✓        | SEO meta description (50-160 chars)          | SEO, social shares            |
-| `publishDate`     | date/string | ✓        | Publication date (ISO 8601 format)           | Post listing, sorting         |
-| `mainTags`        | array       | ✓        | Primary categories (used for related posts)  | BlogGrid filters, KeepReading |
-| `tags`            | array       |          | Additional tags for detailed categorization  | Tag pages, search             |
-| `thumbnail`       | string      |          | Featured image URL for post previews         | BlogGrid, KeepReading         |
-| `coverImage`      | object      |          | `{src: image(), alt: string}` for hero image | BlogPost layout               |
-| `draft`           | boolean     |          | Hide from production (default: false)        | Content filtering             |
-| `ogImage`         | string      |          | Custom Open Graph image                      | Social media shares           |
-| `updatedDate`     | date/string | ✓        | Last modification date                       | Post footer                   |
-| `seriesId`        | string      |          | Link to series collection                    | Series navigation             |
-| `orderInSeries`   | number      |          | Position within series                       | Series ordering               |
-| `author`          | object      |          | Single author `{name, url?, main?}`          | Post footer, bylines          |
-| `authors`         | array       |          | Multiple authors (same format as author)     | Post footer, bylines          |
-| `acknowledgement` | string      |          | Acknowledgment text                          | Post footer                   |
-| `bibtex`          | string      |          | BibTeX citation                              | Post footer                   |
-| `related`         | array       |          | Manual related post IDs (max 3)              | KeepReading component         |
-
-#### Content Format Options
-
-**Markdown (.md)**: Traditional markdown with all standard features
-
-```markdown
-# Heading
-
-Regular markdown content with **bold** and _italic_ text.
-```
-
-**MDX (.mdx)**: Enhanced markdown with React components
-
-````mdx
-import { CodeDemo, ResourceCard } from "@/components/mdx/components";
-
-# Enhanced Content
-
-<CodeDemo title="Python Example">```python print("Hello, World!") ```</CodeDemo>
-````
-
-### Notes
-
-Create quick thoughts and informal content in `src/content/note/`.
-
-```yaml
----
-title: "Quick Note Title"
-publishDate: "2024-01-15T18:26:00Z"
-description: "Optional description"
-image: "https://example.com/image.jpg" # Optional thumbnail
----
-Your note content...
-```
-
-### Series
-
-Group related posts into series using `src/content/series/`.
-
-```yaml
----
-title: "Series Title"
-description: "Series description"
-featured: true # Show in featured series list
----
-```
-
-Reference in posts using:
-
-```yaml
-seriesId: "your-series-id"
-orderInSeries: 1
-```
-
-## MDX Components
-
-### CodeDemo
-
-Enhanced code blocks with copy functionality and professional styling.
-
-````mdx
-<CodeDemo title="Installation" language="bash" showCopy={true}>
-  ```bash npm install package-name ```
-</CodeDemo>
-````
-
-**Props:**
-
-- `title?`: string - Optional header title
-- `language?`: string - Language for syntax highlighting (default: "bash")
-- `showCopy?`: boolean - Show copy button (default: true)
-
-### ResourceCard
-
-Professional resource links with icons and metadata.
-
-```mdx
-<ResourceCard
-  title="Project Resources"
-  description="Essential links and materials"
-  resources={[
-    {
-      type: "github",
-      title: "Source Code",
-      description: "Complete implementation",
-      url: "https://github.com/user/repo",
-    },
-    {
-      type: "paper",
-      title: "Research Paper",
-      url: "https://arxiv.org/abs/2024.12345",
-    },
-  ]}
-/>
-```
-
-**Resource Types:** `github`, `paper`, `model`, `dataset`, `demo`, `link`
-
-**Grouped Resources:**
-
-```mdx
-<ResourceCard
-  groups={[
-    {
-      type: "model",
-      title: "Model Variants",
-      description: "Different model configurations",
-      items: [
-        { name: "Base Model", url: "https://...", metadata: "7B params" },
-        { name: "Large Model", url: "https://...", metadata: "13B params" },
-      ],
-    },
-  ]}
-/>
-```
-
-### ResponsiveImage
-
-Optimized responsive images with lazy loading, captions, and flexible styling.
-
-```mdx
-<ResponsiveImage
-  src="/images/example.jpg"
-  alt="Description of the image"
-  caption="Optional image caption"
-  variant="max"
-  align="center"
-  maxWidth="80%"
-  rounded={true}
-/>
-```
-
-**Props:**
-
-- `src`: string - Image source URL (required)
-- `alt`: string - Alt text for accessibility (required)
-- `caption?`: string - Optional caption text below image
-- `align?`: "left" | "center" | "right" - Image alignment (default: "center")
-- `variant?`: "aligned" | "max" - Width behavior (default: "aligned" matches blog text width ~48rem; use "max" for full-width images)
-- `maxWidth?`: string - Optional max-width override (only used when `variant="max"`)
-- `rounded?`: boolean - Apply rounded corners (default: true)
-- `className?`: string - Additional CSS classes
-- `loading?`: "lazy" | "eager" - Loading strategy (default: "lazy")
-
-**Features:**
-
-- Automatic responsive sizing
-- Lazy loading by default
-- Hover shadow effects
-- Error handling with console logging
-- Semantic HTML with `<figure>` and `<figcaption>`
-
-### Other MDX Components
-
-- **Callout**: `<Callout type="info|warning|error|success" title="Title">Content</Callout>`
-- **Gallery**: `<Gallery images={[{src, alt, caption}]} columns={3} />`
-- **LiveCodeEditor**: `<LiveCodeEditor defaultCode="console.log('Hello')" />`
-- **Badge**: `<Badge variant="outline">Label</Badge>`
-
-## Author Management
-
-Authors are centrally managed in `authors.yaml` for consistency across all posts. It is recommended to maintain a updated authors.yaml so it can be reused in future posts.
-
-### Adding Authors
-
-Edit `authors.yaml`:
-
-```yaml
-authors:
-  "Author Name":
-    name: "Author Name"
-    url: "https://author-website.com"
-    affiliation: "Institution Name" # Optional
-```
-
-### Using Authors in Posts
-
-Reference by name in frontmatter:
-
-```yaml
+description: "Brief description for SEO (50-160 characters)"
+publishDate: "2025-02-01"
+mainTags: ["research", "llm"]
+tags: ["research", "llm", "multimodal"]
 authors:
   - name: "Author Name"
-    main: true # Shows asterisk for main contributor
+    url: "https://author-website.com"
+    main: true
   - name: "Co-Author Name"
-    url: "https://co-author-website.com" # Overwrites authors.yaml
+bibtex: |
+  @article{yourpaper2025,
+    title={Your Paper Title},
+    author={Author, Name},
+    journal={arXiv preprint},
+    year={2025}
+  }
+---
+
+Your markdown content here...
 ```
 
-If no authors are listed, then defaults to `LMMs-Lab Team`
+### 3. Frontmatter Reference
 
-**Fallback Behavior:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `title` | string | Yes | Post title (max 60 chars recommended) |
+| `description` | string | Yes | SEO description (50-160 chars) |
+| `publishDate` | string | Yes | ISO date format (YYYY-MM-DD) |
+| `mainTags` | string[] | Yes | Primary categories (1-2 tags) |
+| `tags` | string[] | No | All tags including mainTags |
+| `authors` | object[] | No | List of authors with name, url, main |
+| `bibtex` | string | No | BibTeX citation block |
+| `thumbnail` | string | No | Custom thumbnail URL (overrides auto-generation) |
 
-- If author exists in `authors.yaml`: Uses database information
-- If author not in database: Uses frontmatter data directly
-- URLs can be overridden in frontmatter if needed
+## Auto-Generated Thumbnails
 
-## Component Usage Guide
+When no `thumbnail` is specified in frontmatter, the system automatically generates a sci-fi themed thumbnail based on the post title.
 
-### Related Posts System
+### How It Works
 
-The KeepReading component automatically suggests related posts using a smart algorithm:
+The `PostThumbnail` component (`components/blog/PostThumbnail.tsx`) generates SVG patterns procedurally:
 
-1. **Manual relations** (frontmatter `related` field) - highest priority
-2. **MainTag matches** - posts sharing primary categories
-3. **Latest posts** - fallback for new content
+1. **Hash Generation**: Title is hashed to a deterministic number
+2. **Pattern Selection**: Hash selects one of 5 pattern variants
+3. **Element Generation**: Pattern elements are generated with seeded randomness
+4. **Animation**: CSS animations with staggered delays
 
-### Content Schema Validation
+### Pattern Variants
 
-All content is validated using Zod schemas defined in `src/content.config.ts`:
+| Variant | Description | Visual Style |
+|---------|-------------|--------------|
+| `HalftonePortrait` | Dithered figure silhouette | Dot matrix portrait |
+| `CircuitGrid` | Grid nodes with circuit traces | Tech/hardware aesthetic |
+| `DataBlocks` | Rectangular data visualization | Dashboard/analytics |
+| `WaveformDisplay` | Audio waveforms + spectrum bars | Signal processing |
+| `AbstractFigure` | Radial rings with particles | Cosmic/abstract |
 
-- Type safety at build time
-- Automatic transformations (date parsing, tag normalization)
-- Clear error messages for invalid content
+### Customizing Thumbnail Generation
 
-### Default Behaviors
+To force a specific pattern variant, modify the component usage:
 
-- **Draft posts**: Hidden in production, visible in development
-- **Missing thumbnails**: Graceful fallback to default images
-- **Author URLs**: Auto-resolved from authors.yaml database
-- **Related posts**: Smart algorithm with manual override capability
-- **Tags**: Automatically lowercased and deduplicated
-- **Images**: Lazy loading with skeleton placeholders
+```tsx
+// In your page component
+<PostThumbnail 
+  title={post.title} 
+  seed={post.slug}  // Change seed to get different pattern
+/>
+```
+
+The pattern is determined by: `hash(seed || title) % 5`
+
+To get a specific pattern for a post, you can:
+1. Adjust the post slug
+2. Or modify the seed parameter
+
+### Pattern-to-Hash Mapping
+
+| Hash % 5 | Pattern |
+|----------|---------|
+| 0 | HalftonePortrait |
+| 1 | CircuitGrid |
+| 2 | DataBlocks |
+| 3 | WaveformDisplay |
+| 4 | AbstractFigure |
+
+### Using Custom Thumbnails
+
+To use a custom image instead of auto-generation:
+
+```yaml
+---
+title: "Your Post"
+thumbnail: "/images/custom-thumbnail.jpg"
+# or external URL
+thumbnail: "https://example.com/image.jpg"
+---
+```
+
+### Animation Details
+
+All thumbnails include subtle CSS animations:
+
+| Element | Animation | Duration |
+|---------|-----------|----------|
+| Circles | Pulse opacity | 3s |
+| Rectangles | Float up/down | 4s |
+| Lines | Pulse opacity | 2.5s |
+| Polylines | Wave side-to-side | 6s |
+| Paths | Draw effect | 3s |
+
+Animations respect `prefers-reduced-motion` for accessibility.
 
 ## Project Structure
 
 ```
-src/
-├── content/
-│   ├── post/           # Blog posts (.md, .mdx)
-│   ├── note/           # Notes and quick thoughts
-│   └── series/         # Post series definitions
+├── app/                    # Next.js app router
+│   ├── page.tsx           # Homepage
+│   ├── posts/
+│   │   └── [slug]/        # Dynamic blog post pages
+│   └── layout.tsx         # Root layout
 ├── components/
-│   ├── mdx/           # MDX-specific components
-│   │   ├── CodeDemo.astro
-│   │   ├── ResourceCard.tsx
-│   │   ├── Callout.astro
-│   │   └── Gallery.astro
-│   ├── blog/          # Blog-specific components
-│   ├── react/         # React components
-│   └── ui/            # Base UI components
-├── layouts/
-│   ├── BlogPost.astro     # Standard markdown layout
-│   ├── MDXBlogPost.astro  # MDX layout with imports
-│   └── Base.astro         # Site-wide layout
-├── pages/             # Site pages and API routes
-└── styles/            # Global styles and themes
+│   ├── blog/
+│   │   ├── PostThumbnail.tsx   # Auto-generated thumbnails
+│   │   ├── TableOfContents.tsx # Sticky TOC
+│   │   └── ReadingProgress.tsx # Reading progress bar
+│   └── decorative/
+│       ├── DitherPattern.tsx   # Background textures
+│       ├── ConcentricOverlay.tsx
+│       └── GrainOverlay.tsx
+├── content/
+│   └── posts/             # MDX blog posts
+├── lib/
+│   ├── posts.ts           # Post loading utilities
+│   └── toc.ts             # Table of contents extraction
+└── styles/
+    └── globals.css        # Design system + animations
 ```
 
-## Configuration
+## Styling Guide
 
-### Main Config Files
-
-- `src/site.config.ts` - Site metadata and settings
-- `astro.config.ts` - Astro and MDX configuration
-- `src/content.config.ts` - Content schema definitions
-- `authors.yaml` - Author database
-- `tailwind.config.ts` - Styling and typography
-
-### Environment Setup
-
-```bash
-# Development
-pnpm dev
-
-# Type checking
-pnpm astro sync
-
-# Build validation
-pnpm build
-```
-
-## Advanced Features
-
-### Markdown Processing Pipeline
-
-**Remark Plugins** (Content Processing):
-
-- Reading time calculation
-- Custom directives (:::note, :::warning)
-- Math equation support
-- Collapsible sections
-
-**Rehype Plugins** (HTML Processing):
-
-- Syntax highlighting (rehype-pretty-code)
-- External link handling
-- Image optimization
-- Math rendering (KaTeX)
-
-### Styling System
-
-**Tailwind Typography**: Custom "citrus" prose theme
+### CSS Variables
 
 ```css
-prose-citrus {
-  /* Headings with accent colors */
-  prose-headings:text-accent-base
-
-  /* Enhanced links */
-  prose-a:text-accent
-
-  /* Professional code blocks */
-  prose-pre:bg-neutral-50
+:root {
+  --background: #0369a1;
+  --foreground: #fed7aa;
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, monospace;
 }
 ```
 
-## Available Commands
+### Utility Classes
 
-| Command            | Description               |
-| ------------------ | ------------------------- |
-| `pnpm dev`         | Start development server  |
-| `pnpm build`       | Build for production      |
-| `pnpm preview`     | Preview production build  |
-| `pnpm astro sync`  | Generate TypeScript types |
-| `pnpm astro check` | Type checking             |
+| Class | Effect |
+|-------|--------|
+| `.card-lift` | Hover lift with shadow |
+| `.link-underline` | Animated underline on hover |
+| `.fade-in-up` | Fade in from below |
+| `.interactive` | Brightness on hover |
 
-## Writing Guidelines
+## Development
 
-### Content Best Practices
+```bash
+# Run development server
+npm run dev
 
-- **File naming**: Use kebab-case, descriptive names (becomes URL slug)
-- **Frontmatter**: Always include required fields
-- **Images**: Optimize before adding, include alt text
-- **Tags**: Use consistent, lowercase tags
-- **Series**: Group related content for better navigation
+# Type check
+npx tsc --noEmit
 
-### MDX Best Practices
+# Build for production
+npm run build
 
-- Import components at the top of MDX files
-- Use semantic component props
-- Test interactive components in development
-- Maintain consistent spacing around components
+# Preview production build
+npm run start
+```
 
-### SEO Optimization
+## Adding New Thumbnail Patterns
 
-- Write compelling meta descriptions (50-160 characters)
-- Use descriptive titles (under 60 characters)
-- Include relevant keywords in tags
-- Optimize images with proper alt text
-- Leverage OpenGraph metadata for social sharing
+To add a new pattern variant:
 
-## Contributing
+1. Create the pattern function in `components/blog/PostThumbnail.tsx`:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Add your content or make changes
-4. Test locally with `pnpm build`
-5. Commit your changes with clear messages
-6. Push to your fork and open a pull request
+```tsx
+function NewPattern({ hash }: { hash: number }) {
+  const elements = useMemo(() => {
+    const items: JSX.Element[] = [];
+    // Generate SVG elements using seededRandom(hash + offset)
+    return items;
+  }, [hash]);
 
-### Code Style
+  return (
+    <svg className="post-thumbnail-v2-svg" viewBox="0 0 100 100">
+      {elements}
+    </svg>
+  );
+}
+```
 
-- Follow existing TypeScript conventions
-- Use semantic HTML in components
-- Ensure responsive design works on all devices
-- Test both light and dark modes
-- Validate content schema compliance
+2. Add to the variant list and switch statement:
+
+```tsx
+const variants = ["concentric", "scanlines", ..., "newpattern"];
+
+// In renderPattern switch:
+case "newpattern":
+  return <NewPattern hash={hash} />;
+```
+
+3. Update the total variant count for hash distribution.
 
 ## License
 
-MIT - Feel free to use this template for your own projects!
+MIT
