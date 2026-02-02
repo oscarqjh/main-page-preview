@@ -20,7 +20,7 @@ export default function Card({ href, style, children, ...props }: CardProps) {
 
 	if (href) {
 		return (
-			<Link href={href} style={cardStyle} className="card-lift" {...(props as any)}>
+			<Link href={href} style={cardStyle} className="card-lift" {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
 				{children}
 			</Link>
 		);
