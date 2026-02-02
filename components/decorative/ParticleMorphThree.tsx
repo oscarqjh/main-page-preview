@@ -61,10 +61,11 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
   const [currentState, setCurrentState] = useState<MorphState>("loss");
 
   useEffect(() => {
-    // Initial callback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     onStateChange?.("loss");
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -282,7 +283,6 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
           const amp = Math.abs(noise) * (1.0 - Math.abs((col/16)-0.5));
           const barHeight = 120 * amp * amp + 20;
 
-          const v = col / 15;
           const vSym = (row / 15 - 0.5) * 2; 
 
           const x = (col * spacing16) - offset16;
@@ -390,10 +390,11 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
     window.addEventListener('resize', handleResize);
 
     return () => {
+      const currentContainer = containerRef.current;
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
-      if (containerRef.current && containerRef.current.contains(renderer.domElement)) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (currentContainer && currentContainer.contains(renderer.domElement)) {
+        currentContainer.removeChild(renderer.domElement);
       }
       geometry.dispose();
       material.dispose();
