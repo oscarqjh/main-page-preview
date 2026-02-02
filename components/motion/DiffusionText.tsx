@@ -18,7 +18,6 @@ const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 export function DiffusionText({ 
   text, 
   className = "", 
-  scrambleSpeed = 50,
   revealSpeed = 1500,
   variant = "diffusion"
 }: DiffusionTextProps) {

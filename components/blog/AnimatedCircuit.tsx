@@ -58,7 +58,6 @@ function CircuitScene({ seedValue }: { seedValue: number }) {
       }
     }
     
-    const selectedSlots = [];
     for (let i = slots.length - 1; i > 0; i--) {
       const j = Math.floor(seededRandom(seedValue + i * 123) * (i + 1));
       [slots[i], slots[j]] = [slots[j], slots[i]];
