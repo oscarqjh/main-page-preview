@@ -1569,15 +1569,17 @@ tbody tr:hover {
 @media (min-width: 768px) {
 	.museum-featured-card {
 		grid-template-columns: 1fr 1fr;
+		align-items: center;  /* Vertically center both columns */
 	}
 }
 
 .museum-featured-image {
 	position: relative;
-	aspect-ratio: 16/10;
+	aspect-ratio: 1;  /* Square for better visual balance */
 	overflow: hidden;
 	background: rgba(255, 255, 255, 0.05);
 	min-height: 300px;
+	max-height: 480px;  /* Limit max height */
 }
 
 .museum-featured-img {
@@ -1977,10 +1979,6 @@ tbody tr:hover {
 	50% { transform: translateX(5px); }
 }
 
-.post-thumbnail-v2-svg circle {
-	animation: thumbPulse 3s var(--ease-in-out) infinite;
-}
-
 .post-thumbnail-v2-svg rect {
 	animation: thumbFloat 4s var(--ease-in-out) infinite;
 }
@@ -2004,7 +2002,6 @@ tbody tr:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.post-thumbnail-v2-svg circle,
 	.post-thumbnail-v2-svg rect,
 	.post-thumbnail-v2-svg line,
 	.post-thumbnail-v2-svg polyline,

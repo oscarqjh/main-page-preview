@@ -1,6 +1,5 @@
 "use client";
 
-import { PixelDivider } from "@/components/decorative";
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedSection } from "@/components/home/FeaturedSection";
 import { CollectionSection } from "@/components/home/CollectionSection";
@@ -18,8 +17,6 @@ export default function HomeClient({ posts }: HomeClientProps) {
 	return (
 		<div className="museum-home">
 			<HeroSection />
-
-			<PixelDivider variant="dashed" />
 
 			<FeaturedSection featuredPost={featuredPost} />
 

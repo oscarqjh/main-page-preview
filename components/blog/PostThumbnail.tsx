@@ -52,29 +52,29 @@ export function PostThumbnail({
 }
 
 function HalftonePortrait({ hash }: { hash: number }) {
-	const dots = useMemo(() => {
+	const blocks = useMemo(() => {
 		const elements: JSX.Element[] = [];
 		const cols = 24;
 		const rows = 18;
-		
+
 		const centerX = 12 + (seededRandom(hash) - 0.5) * 6;
 		const centerY = 9 + (seededRandom(hash + 1) - 0.5) * 4;
 		const headRadius = 5 + seededRandom(hash + 2) * 2;
 		const bodyWidth = 8 + seededRandom(hash + 3) * 4;
-		
+
 		for (let row = 0; row < rows; row++) {
 			for (let col = 0; col < cols; col++) {
 				const x = (col + 0.5) * (100 / cols);
 				const y = (row + 0.5) * (100 / rows);
-				
+
 				const distToHead = Math.sqrt(
-					Math.pow((col - centerX) / headRadius, 2) + 
+					Math.pow((col - centerX) / headRadius, 2) +
 					Math.pow((row - centerY + 2) / headRadius, 2)
 				);
-				
-				const inBody = row > centerY + 1 && 
+
+				const inBody = row > centerY + 1 &&
 					Math.abs(col - centerX) < bodyWidth / 2 * (1 + (row - centerY) * 0.15);
-				
+
 				let size = 0;
 				if (distToHead < 1) {
 					size = (1 - distToHead) * 3 + seededRandom(hash + row * cols + col) * 0.8;
@@ -86,14 +86,16 @@ function HalftonePortrait({ hash }: { hash: number }) {
 						size = seededRandom(hash + row * cols + col + 300) * 1.5;
 					}
 				}
-				
+
 				if (size > 0.3) {
+					const s = size * 2;
 					elements.push(
-						<circle
+						<rect
 							key={`${row}-${col}`}
-							cx={`${x}%`}
-							cy={`${y}%`}
-							r={size}
+							x={x - s / 2}
+							y={y - s / 2}
+							width={s}
+							height={s}
 							fill="currentColor"
 							style={{ animationDelay: `${((row + col) % 10) * 0.15}s` }}
 						/>
@@ -106,7 +108,7 @@ function HalftonePortrait({ hash }: { hash: number }) {
 
 	return (
 		<svg className="post-thumbnail-v2-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
-			{dots}
+			{blocks}
 		</svg>
 	);
 }
@@ -239,13 +241,14 @@ function DataBlocks({ hash }: { hash: number }) {
 		for (let i = 0; i < 15; i++) {
 			const x = seededRandom(hash + i + 2000) * 90 + 5;
 			const y = seededRandom(hash + i + 2100) * 90 + 5;
-			const size = seededRandom(hash + i + 2200) * 2 + 0.5;
+			const size = (seededRandom(hash + i + 2200) * 2 + 0.5) * 2;
 			items.push(
-				<circle
+				<rect
 					key={`dot-${i}`}
-					cx={x}
-					cy={y}
-					r={size}
+					x={x - size / 2}
+					y={y - size / 2}
+					width={size}
+					height={size}
 					fill="currentColor"
 					opacity="0.4"
 				/>
@@ -324,22 +327,24 @@ function WaveformDisplay({ hash }: { hash: number }) {
 function AbstractFigure({ hash }: { hash: number }) {
 	const elements = useMemo(() => {
 		const items: JSX.Element[] = [];
-		
+
 		const centerX = 50 + (seededRandom(hash) - 0.5) * 20;
 		const centerY = 45 + (seededRandom(hash + 1) - 0.5) * 10;
-		
+
+		// Concentric squares instead of circles
 		const numRings = 6 + Math.floor(seededRandom(hash + 2) * 4);
 		for (let i = 0; i < numRings; i++) {
-			const radius = 8 + i * 5;
-			const dashArray = seededRandom(hash + i + 100) > 0.5 
+			const size = (8 + i * 5) * 2;
+			const dashArray = seededRandom(hash + i + 100) > 0.5
 				? `${5 + seededRandom(hash + i + 110) * 10} ${3 + seededRandom(hash + i + 120) * 5}`
 				: "none";
 			items.push(
-				<circle
+				<rect
 					key={`ring-${i}`}
-					cx={centerX}
-					cy={centerY}
-					r={radius}
+					x={centerX - size / 2}
+					y={centerY - size / 2}
+					width={size}
+					height={size}
 					fill="none"
 					stroke="currentColor"
 					strokeWidth={seededRandom(hash + i + 130) > 0.7 ? 2 : 1}
@@ -349,7 +354,7 @@ function AbstractFigure({ hash }: { hash: number }) {
 				/>
 			);
 		}
-		
+
 		const numRays = 8 + Math.floor(seededRandom(hash + 200) * 8);
 		for (let i = 0; i < numRays; i++) {
 			const angle = (i / numRays) * Math.PI * 2 + seededRandom(hash + 210) * 0.5;
@@ -369,38 +374,43 @@ function AbstractFigure({ hash }: { hash: number }) {
 				/>
 			);
 		}
-		
+
+		// Core square
+		const coreSize = (5 + seededRandom(hash + 300) * 3) * 2;
 		items.push(
-			<circle
+			<rect
 				key="core"
-				cx={centerX}
-				cy={centerY}
-				r={5 + seededRandom(hash + 300) * 3}
+				x={centerX - coreSize / 2}
+				y={centerY - coreSize / 2}
+				width={coreSize}
+				height={coreSize}
 				fill="currentColor"
 				opacity="0.9"
 			/>
 		);
-		
+
+		// Scattered squares
 		const numDots = 30 + Math.floor(seededRandom(hash + 400) * 20);
 		for (let i = 0; i < numDots; i++) {
 			const angle = seededRandom(hash + i + 500) * Math.PI * 2;
 			const dist = 15 + seededRandom(hash + i + 510) * 35;
 			const x = centerX + Math.cos(angle) * dist;
 			const y = centerY + Math.sin(angle) * dist;
-			const size = seededRandom(hash + i + 520) * 2 + 0.5;
+			const size = (seededRandom(hash + i + 520) * 2 + 0.5) * 2;
 			items.push(
-				<circle
+				<rect
 					key={`scatter-${i}`}
-					cx={x}
-					cy={y}
-					r={size}
+					x={x - size / 2}
+					y={y - size / 2}
+					width={size}
+					height={size}
 					fill="currentColor"
 					opacity={0.3 + seededRandom(hash + i + 530) * 0.5}
 					style={{ animationDelay: `${(i % 15) * 0.12}s` }}
 				/>
 			);
 		}
-		
+
 		return items;
 	}, [hash]);
 
