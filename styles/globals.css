@@ -82,6 +82,24 @@
 	--font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 	--font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
 
+	/* =============================================================================
+	   TYPOGRAPHY SCALE - 5 Levels Only
+	   =============================================================================
+	   Designed for 4K readability. Minimum size is 16px (1rem).
+	   ALL text must use one of these 5 levels - no custom sizes allowed.
+
+	   Level 1 (Display):    Hero titles, major page headings
+	   Level 2 (Heading):    Section headers, H1
+	   Level 3 (Subheading): Card titles, H2, H3, featured text
+	   Level 4 (Body):       Body text, paragraphs, descriptions
+	   Level 5 (Caption):    Labels, nav, captions, metadata (MINIMUM)
+	   ============================================================================= */
+	--text-display: 3rem;      /* 48px - Level 1: Hero titles */
+	--text-heading: 2rem;      /* 32px - Level 2: Section headers */
+	--text-subheading: 1.5rem; /* 24px - Level 3: Card titles */
+	--text-body: 1.125rem;     /* 18px - Level 4: Body text */
+	--text-caption: 1rem;      /* 16px - Level 5: Minimum readable on 4K */
+
 	/* Spacing scale */
 	--space-xs: 0.25rem;
 	--space-sm: 0.5rem;
@@ -98,6 +116,126 @@
 	--border-radius: 0;
 	--shadow-hard: 4px 4px 0 0 var(--foreground);
 	--grid-color: rgba(254, 215, 170, 0.2);
+}
+
+/* =============================================================================
+   UTILITY CLASSES (Tailwind-style)
+   ============================================================================= */
+
+/* Position */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+
+/* Inset */
+.inset-0 { inset: 0; }
+.top-0 { top: 0; }
+.right-0 { right: 0; }
+.bottom-0 { bottom: 0; }
+.left-0 { left: 0; }
+
+/* Size */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.min-h-\[1\.2em\] { min-height: 1.2em; }
+.min-h-\[400px\] { min-height: 400px; }
+
+/* Display */
+.block { display: block; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.hidden { display: none; }
+
+/* Flexbox */
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+
+/* Z-index */
+.z-0 { z-index: 0; }
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-50 { z-index: 50; }
+
+/* Overflow */
+.overflow-hidden { overflow: hidden; }
+
+/* Background */
+.bg-\[var\(--background\)\] { background-color: var(--background); }
+.bg-\[\#0369a1\] { background-color: #0369a1; }
+
+/* Text - Using 5-level typography scale */
+.text-display { font-size: var(--text-display); }      /* Level 1: 48px */
+.text-heading { font-size: var(--text-heading); }      /* Level 2: 32px */
+.text-subheading { font-size: var(--text-subheading); } /* Level 3: 24px */
+.text-body { font-size: var(--text-body); }            /* Level 4: 18px */
+.text-caption { font-size: var(--text-caption); }      /* Level 5: 16px */
+.text-2xl { font-size: var(--text-subheading); line-height: 1.3; }  /* Maps to Level 3 */
+.font-normal { font-weight: 400; }
+.lowercase { text-transform: lowercase; }
+.uppercase { text-transform: uppercase; }
+
+/* Spacing */
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.ml-2 { margin-left: 0.5rem; }
+
+/* Opacity */
+.opacity-80 { opacity: 0.8; }
+
+/* Transitions */
+.transition-opacity { transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.duration-500 { transition-duration: 500ms; }
+
+/* Mix Blend Mode */
+.mix-blend-overlay { mix-blend-mode: overlay; }
+
+/* Group hover */
+.group:hover .group-hover\:opacity-10 { opacity: 0.1; }
+
+/* Pointer Events */
+.pointer-events-none { pointer-events: none; }
+
+/* Additional Size */
+.w-4 { width: 1rem; }
+.h-4 { height: 1rem; }
+
+/* Borders */
+.border-l-2 { border-left-width: 2px; border-left-style: solid; }
+.border-r-2 { border-right-width: 2px; border-right-style: solid; }
+.border-t-2 { border-top-width: 2px; border-top-style: solid; }
+.border-b-2 { border-bottom-width: 2px; border-bottom-style: solid; }
+.border-\[var\(--foreground\)\] { border-color: var(--foreground); }
+.border-none\! { border: none !important; }
+
+/* Padding */
+.p-0\! { padding: 0 !important; }
+.p-4 { padding: 1rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+
+/* Positioning */
+.left-6 { left: 1.5rem; }
+
+/* Transforms */
+.-translate-y-1\/2 { transform: translateY(-50%); }
+
+/* Typography */
+.font-mono { font-family: var(--font-mono); }
+.font-bold { font-weight: 700; }
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.tracking-widest { letter-spacing: 0.1em; }
+.text-\[var\(--foreground\)\] { color: var(--foreground); }
+
+/* Opacity */
+.opacity-70 { opacity: 0.7; }
+
+/* Responsive padding */
+@media (min-width: 768px) {
+	.md\:p-6 { padding: 1.5rem; }
 }
 
 /* Reset */
@@ -140,7 +278,7 @@ a:focus-visible {
 	outline-offset: 2px;
 }
 
-/* Headings */
+/* Headings - Using 5-level typography scale */
 h1,
 h2,
 h3,
@@ -153,16 +291,16 @@ h6 {
 }
 
 h1 {
-	font-size: 2.5rem;
+	font-size: var(--text-heading);  /* Level 2: 32px */
 }
 h2 {
-	font-size: 2rem;
+	font-size: var(--text-subheading);  /* Level 3: 24px */
 }
 h3 {
-	font-size: 1.5rem;
+	font-size: var(--text-subheading);  /* Level 3: 24px */
 }
 h4 {
-	font-size: 1.25rem;
+	font-size: var(--text-body);  /* Level 4: 18px */
 }
 
 /* Paragraphs */
@@ -173,7 +311,7 @@ p {
 /* Code - flat style */
 code {
 	font-family: var(--font-mono);
-	font-size: 0.85em;
+	font-size: 0.9em;  /* Relative to parent, maintains readability */
 	padding: 0.15em 0.4em;
 	box-shadow: 0 0 0 1px currentColor;
 	background: rgba(254, 215, 170, 0.1);
@@ -182,7 +320,7 @@ code {
 
 pre {
 	font-family: var(--font-mono);
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	line-height: 1.6;
 	padding: var(--space-lg);
 	box-shadow: 0 0 0 var(--border-medium) currentColor;
@@ -196,7 +334,7 @@ pre code {
 	box-shadow: none;
 	padding: 0;
 	background: transparent;
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 }
 
 /* Syntax highlighting - rehype-pretty-code */
@@ -210,7 +348,7 @@ pre code {
 
 [data-rehype-pretty-code-title] {
 	font-family: var(--font-mono);
-	font-size: 0.75rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	padding: var(--space-sm) var(--space-md);
 	border-bottom: 1px solid currentColor;
 	background: rgba(254, 215, 170, 0.1);
@@ -293,7 +431,7 @@ table {
 	border-collapse: collapse;
 	margin-bottom: var(--space-md);
 	box-shadow: 0 0 0 var(--border-medium) currentColor;
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 }
 
 th,
@@ -398,24 +536,37 @@ tbody tr:hover {
 }
 
 /* =============================================================================
-   MOTION SYSTEM
+   MOTION SYSTEM - Apple-inspired
+   =============================================================================
+
+   Apple Motion Design Principles:
+   - Purpose: Every animation should have meaning and intent
+   - Continuity: Motion should feel natural and connected
+   - Responsiveness: Interface should feel instantly responsive
+   - Subtlety: Less is more; avoid flashy or distracting motion
+
    ============================================================================= */
 
-/* Animation timing tokens */
+/* Animation timing tokens - Apple-inspired */
 :root {
-	--duration-instant: 100ms;
-	--duration-fast: 150ms;
-	--duration-normal: 250ms;
-	--duration-slow: 400ms;
-	--duration-slower: 600ms;
+	/* Durations - Apple uses longer, more deliberate timings */
+	--duration-instant: 100ms;    /* Micro-interactions */
+	--duration-fast: 200ms;       /* Button states, small UI */
+	--duration-normal: 350ms;     /* Standard transitions */
+	--duration-slow: 500ms;       /* Page elements, cards */
+	--duration-slower: 700ms;     /* Hero animations, reveals */
+	--duration-emphasis: 1000ms;  /* Major reveals, scroll-triggered */
 
-	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-	--ease-in: cubic-bezier(0.7, 0, 0.84, 0);
-	--ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
-	--ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+	/* Apple-style easing curves */
+	--ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);           /* Default Apple ease */
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);         /* Dramatic deceleration */
+	--ease-in: cubic-bezier(0.42, 0, 1, 1);                 /* Acceleration (exits) */
+	--ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);          /* Symmetric ease */
+	--ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Subtle overshoot */
+	--ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);            /* Material-style smooth */
 }
 
-/* Keyframe animations */
+/* Keyframe animations - Apple-style (subtle, smooth) */
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -428,7 +579,7 @@ tbody tr:hover {
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
-		transform: translateY(16px);
+		transform: translateY(20px);
 	}
 	to {
 		opacity: 1;
@@ -439,7 +590,7 @@ tbody tr:hover {
 @keyframes fadeInDown {
 	from {
 		opacity: 0;
-		transform: translateY(-16px);
+		transform: translateY(-20px);
 	}
 	to {
 		opacity: 1;
@@ -450,7 +601,7 @@ tbody tr:hover {
 @keyframes scaleIn {
 	from {
 		opacity: 0;
-		transform: scale(0.95);
+		transform: scale(0.96);
 	}
 	to {
 		opacity: 1;
@@ -461,7 +612,7 @@ tbody tr:hover {
 @keyframes slideInLeft {
 	from {
 		opacity: 0;
-		transform: translateX(-24px);
+		transform: translateX(-30px);
 	}
 	to {
 		opacity: 1;
@@ -469,52 +620,74 @@ tbody tr:hover {
 	}
 }
 
+/* Apple-style subtle pulse - barely noticeable */
 @keyframes pulse {
-	0%,
-	100% {
+	0%, 100% {
 		opacity: 1;
 	}
 	50% {
-		opacity: 0.6;
+		opacity: 0.85;
 	}
 }
 
-/* Animation utility classes */
+/* Apple-style breathing animation */
+@keyframes breathe {
+	0%, 100% {
+		transform: scale(1);
+		opacity: 0.9;
+	}
+	50% {
+		transform: scale(1.02);
+		opacity: 1;
+	}
+}
+
+/* Apple-style float animation */
+@keyframes floatSubtle {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
+/* Animation utility classes - Apple-style timing */
 .fade-in {
-	animation: fadeIn var(--duration-normal) var(--ease-out);
+	animation: fadeIn var(--duration-slow) var(--ease-out);
 }
 
 .fade-in-up {
-	animation: fadeInUp var(--duration-normal) var(--ease-out);
+	animation: fadeInUp var(--duration-slow) var(--ease-out);
 }
 
 .fade-in-down {
-	animation: fadeInDown var(--duration-normal) var(--ease-out);
+	animation: fadeInDown var(--duration-slow) var(--ease-out);
 }
 
 .scale-in {
-	animation: scaleIn var(--duration-normal) var(--ease-out);
+	animation: scaleIn var(--duration-slow) var(--ease-out);
 }
 
 .slide-in-left {
-	animation: slideInLeft var(--duration-normal) var(--ease-out);
+	animation: slideInLeft var(--duration-slow) var(--ease-out);
 }
 
-/* Staggered animation delays */
+/* Apple-style staggered animation delays - longer gaps for rhythm */
 .stagger-1 {
-	animation-delay: 50ms;
+	animation-delay: 80ms;
 }
 .stagger-2 {
-	animation-delay: 100ms;
+	animation-delay: 160ms;
 }
 .stagger-3 {
-	animation-delay: 150ms;
+	animation-delay: 240ms;
 }
 .stagger-4 {
-	animation-delay: 200ms;
+	animation-delay: 320ms;
 }
 .stagger-5 {
-	animation-delay: 250ms;
+	animation-delay: 400ms;
 }
 
 /* Animation fill mode helper */
@@ -554,45 +727,64 @@ tbody tr:hover {
 }
 
 /* =============================================================================
-   INTERACTION STATES
+   INTERACTION STATES - Apple-inspired
    ============================================================================= */
 
-/* Base interactive element */
+/* Base interactive element - Apple uses subtle opacity changes */
 .interactive {
 	cursor: pointer;
-	transition: filter var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out),
+	transition:
+		opacity var(--duration-fast) var(--ease-out),
+		transform var(--duration-fast) var(--ease-out),
 		box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .interactive:hover {
-	filter: brightness(1.1);
+	opacity: 0.8;
 }
 
 .interactive:active {
-	transform: scale(0.98);
+	transform: scale(0.97);
+	opacity: 0.7;
 }
 
-/* Card lift effect */
+/* Card lift effect - refined hover with depth */
 .card-lift {
 	cursor: pointer;
-	transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+	isolation: isolate;
+	will-change: transform, box-shadow;
+	transition:
+		transform var(--duration-normal) var(--ease-out),
+		box-shadow var(--duration-normal) var(--ease-out),
+		filter var(--duration-normal) var(--ease-out);
 }
 
 .card-lift:hover {
 	transform: translateY(-4px);
-	box-shadow: 0 0 0 2px currentColor, 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+	box-shadow:
+		0 0 0 2px var(--foreground),
+		0 20px 40px -15px rgba(0, 0, 0, 0.35),
+		0 8px 16px -8px rgba(0, 0, 0, 0.2);
+	filter: brightness(1.02);
 }
 
-/* Subtle scale on hover (for icons, buttons) */
+.card-lift:active {
+	transform: translateY(-1px);
+	box-shadow:
+		0 0 0 2px var(--foreground),
+		0 8px 20px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* Subtle scale on hover - Apple keeps it minimal */
 .hover-scale {
 	transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .hover-scale:hover {
-	transform: scale(1.05);
+	transform: scale(1.02);
 }
 
-/* Underline animation for links */
+/* Underline animation for links - Apple-style smooth reveal */
 .link-underline {
 	position: relative;
 	text-decoration: none;
@@ -616,10 +808,11 @@ tbody tr:hover {
 	transform-origin: left;
 }
 
-/* Focus ring for keyboard navigation */
+/* Focus ring - Apple-style accessible focus */
 .focus-ring:focus-visible {
 	outline: 2px solid currentColor;
-	outline-offset: 4px;
+	outline-offset: 3px;
+	transition: outline-offset var(--duration-fast) var(--ease-out);
 }
 
 /* =============================================================================
@@ -676,7 +869,7 @@ tbody tr:hover {
 }
 
 .blog-date {
-	font-size: 0.75rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -685,7 +878,7 @@ tbody tr:hover {
 }
 
 .blog-title {
-	font-size: 2.25rem;
+	font-size: var(--text-display);  /* Level 1: 48px */
 	font-weight: 800;
 	line-height: 1.1;
 	color: var(--background);
@@ -694,18 +887,18 @@ tbody tr:hover {
 
 @media (min-width: 640px) {
 	.blog-title {
-		font-size: 3rem;
+		font-size: var(--text-display);  /* Level 1: 48px */
 	}
 }
 
 @media (min-width: 1024px) {
 	.blog-title {
-		font-size: 3.5rem;
+		font-size: var(--text-display);  /* Level 1: 48px */
 	}
 }
 
 .blog-description {
-	font-size: 1.25rem;
+	font-size: var(--text-subheading);  /* Level 3: 24px */
 	line-height: 1.5;
 	color: var(--background);
 	margin-bottom: var(--space-md);
@@ -713,7 +906,7 @@ tbody tr:hover {
 }
 
 .blog-authors {
-	font-size: 0.9375rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	color: #1a1a1a;
 	margin-bottom: var(--space-md);
 }
@@ -741,7 +934,7 @@ tbody tr:hover {
 }
 
 .blog-main-tag {
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
@@ -752,7 +945,7 @@ tbody tr:hover {
 }
 
 .blog-prose {
-	font-size: 1.125rem;
+	font-size: var(--text-body);  /* Level 4: 18px */
 	line-height: 1.8;
 	color: #1a1a1a;
 }
@@ -778,19 +971,19 @@ tbody tr:hover {
 }
 
 .blog-prose h1 {
-	font-size: 2rem;
+	font-size: var(--text-heading);  /* Level 2: 32px */
 }
 
 .blog-prose h2 {
-	font-size: 1.5rem;
+	font-size: var(--text-subheading);  /* Level 3: 24px */
 }
 
 .blog-prose h3 {
-	font-size: 1.25rem;
+	font-size: var(--text-subheading);  /* Level 3: 24px */
 }
 
 .blog-prose h4 {
-	font-size: 1.125rem;
+	font-size: var(--text-body);  /* Level 4: 18px */
 }
 
 .blog-prose a {
@@ -835,7 +1028,7 @@ tbody tr:hover {
 
 .blog-prose code {
 	font-family: var(--font-mono);
-	font-size: 0.85em;
+	font-size: 0.9em;  /* Relative to parent, maintains readability */
 	padding: 0.2em 0.4em;
 	background: rgba(3, 105, 161, 0.1);
 	border: 1px solid rgba(3, 105, 161, 0.2);
@@ -845,7 +1038,7 @@ tbody tr:hover {
 /* Code blocks - Mac terminal style */
 .blog-prose pre {
 	font-family: var(--font-mono);
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	line-height: 1.6;
 	padding: 1.25rem;
 	background: #1a1a1a;
@@ -893,7 +1086,7 @@ tbody tr:hover {
 /* If there is a title, hide the fake dots and style the real title */
 .blog-prose [data-rehype-pretty-code-title] {
 	font-family: var(--font-mono);
-	font-size: 0.75rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	padding: 0.6rem 1rem;
 	background: #252525;
 	color: #a0a0a0;
@@ -933,7 +1126,7 @@ tbody tr:hover {
 }
 
 .blog-prose figcaption {
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	color: var(--background);
 	text-align: center;
 	margin-top: 0.75em;
@@ -953,7 +1146,7 @@ tbody tr:hover {
 	width: max-content;
 	min-width: 50%;
 	border-collapse: collapse;
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-variant-numeric: tabular-nums;
 	border: 2px solid var(--background);
 }
@@ -967,7 +1160,7 @@ tbody tr:hover {
 
 .blog-prose th {
 	font-weight: 600;
-	font-size: 0.75rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 	background: var(--background);
@@ -1057,7 +1250,7 @@ tbody tr:hover {
 	padding: var(--space-md);
 	background: transparent;
 	border-left: 1px solid rgba(3, 105, 161, 0.2);
-	font-size: 0.8125rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	scrollbar-width: none;
 	-ms-overflow-style: none;
 }
@@ -1068,7 +1261,7 @@ tbody tr:hover {
 
 .toc-title {
 	font-weight: 600;
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	color: rgba(3, 105, 161, 0.6);
@@ -1203,7 +1396,7 @@ tbody tr:hover {
 	display: flex;
 	align-items: center;
 	gap: var(--space-sm);
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.15em;
@@ -1211,7 +1404,7 @@ tbody tr:hover {
 }
 
 .museum-hero-title {
-	font-size: clamp(2.5rem, 8vw, 5rem);
+	font-size: var(--text-display);  /* Level 1: 48px */
 	font-weight: 800;
 	line-height: 0.95;
 	letter-spacing: -0.03em;
@@ -1219,7 +1412,7 @@ tbody tr:hover {
 }
 
 .museum-hero-subtitle {
-	font-size: 1.125rem;
+	font-size: var(--text-body);  /* Level 4: 18px */
 	line-height: 1.6;
 	opacity: 0.85;
 	max-width: 36ch;
@@ -1241,7 +1434,7 @@ tbody tr:hover {
 	color: var(--background);
 	text-decoration: none;
 	font-weight: 600;
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	letter-spacing: 0.02em;
 	transition: filter var(--duration-fast) var(--ease-out);
 }
@@ -1258,7 +1451,7 @@ tbody tr:hover {
 	color: inherit;
 	text-decoration: none;
 	font-weight: 600;
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	letter-spacing: 0.02em;
 	box-shadow: inset 0 0 0 2px currentColor;
 	transition: filter var(--duration-fast) var(--ease-out);
@@ -1324,7 +1517,7 @@ tbody tr:hover {
 }
 
 .museum-section-label {
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.15em;
@@ -1342,7 +1535,7 @@ tbody tr:hover {
 	display: flex;
 	align-items: center;
 	gap: var(--space-xs);
-	font-size: 0.75rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -1409,21 +1602,21 @@ tbody tr:hover {
 }
 
 .museum-featured-date {
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 600;
 	letter-spacing: 0.15em;
 	opacity: 0.7;
 }
 
 .museum-featured-title {
-	font-size: clamp(1.5rem, 4vw, 2.25rem);
+	font-size: var(--text-heading);  /* Level 2: 32px */
 	font-weight: 700;
 	line-height: 1.15;
 	margin: 0;
 }
 
 .museum-featured-desc {
-	font-size: 0.9375rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	line-height: 1.6;
 	opacity: 0.8;
 	margin: 0;
@@ -1436,12 +1629,12 @@ tbody tr:hover {
 }
 
 .museum-tag {
-	font-size: 0.625rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	padding: 0.4em 0.8em;
-	background: currentColor;
+	background: var(--foreground);
 	color: var(--background);
 }
 
@@ -1476,6 +1669,7 @@ tbody tr:hover {
 	text-decoration: none;
 	color: inherit;
 	box-shadow: none;
+	isolation: isolate;
 }
 
 .museum-card .relative {
@@ -1485,7 +1679,25 @@ tbody tr:hover {
 	padding: 0 !important;
 }
 
+.museum-card-image {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	border: 1px solid rgba(254, 215, 170, 0.2);
+	border-bottom: none;
+	z-index: 1;
+}
+
+.museum-card-image > * {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
 .museum-card-content {
+	position: relative;
+	z-index: 2;
 	padding: var(--space-md);
 	display: flex;
 	flex-direction: column;
@@ -1497,14 +1709,14 @@ tbody tr:hover {
 }
 
 .museum-card-date {
-	font-size: 0.625rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 600;
 	letter-spacing: 0.15em;
 	opacity: 0.6;
 }
 
 .museum-card-title {
-	font-size: 1rem;
+	font-size: var(--text-body);  /* Level 4: 18px */
 	font-weight: 700;
 	line-height: 1.3;
 	margin: 0;
@@ -1512,12 +1724,12 @@ tbody tr:hover {
 }
 
 .museum-card-tag {
-	font-size: 0.5625rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	padding: 0.3em 0.6em;
-	background: currentColor;
+	background: var(--foreground);
 	color: var(--background);
 	align-self: flex-start;
 	margin-top: var(--space-sm);
@@ -1552,14 +1764,14 @@ tbody tr:hover {
 }
 
 .museum-stat-number {
-	font-size: clamp(2rem, 5vw, 3rem);
+	font-size: var(--text-display);  /* Level 1: 48px */
 	font-weight: 800;
 	line-height: 1;
 	letter-spacing: -0.02em;
 }
 
 .museum-stat-label {
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.15em;
@@ -1589,7 +1801,7 @@ tbody tr:hover {
 }
 
 .museum-quote blockquote {
-	font-size: clamp(1.5rem, 4vw, 2.5rem);
+	font-size: var(--text-heading);  /* Level 2: 32px */
 	font-weight: 700;
 	line-height: 1.2;
 	margin: 0;
@@ -1600,7 +1812,7 @@ tbody tr:hover {
 }
 
 .museum-quote-sub {
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	opacity: 0.7;
 	margin: 0;
 }
@@ -1653,7 +1865,7 @@ tbody tr:hover {
 }
 
 .post-thumbnail-title {
-	font-size: clamp(0.875rem, 2vw, 1.125rem);
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 700;
 	line-height: 1.3;
 	text-align: center;
@@ -1737,7 +1949,7 @@ tbody tr:hover {
 }
 
 .post-thumbnail-v2-title {
-	font-size: 0.875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 700;
 	line-height: 1.3;
 	color: var(--foreground);
@@ -1947,6 +2159,7 @@ tbody tr:hover {
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	gap: var(--space-md);
 	max-width: 100%;
 }
@@ -1955,7 +2168,7 @@ tbody tr:hover {
 	display: flex;
 	align-items: center;
 	gap: var(--space-md);
-	font-size: 0.6875rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
@@ -1969,7 +2182,7 @@ tbody tr:hover {
 }
 
 .brutalist-hero-title {
-	font-size: clamp(2rem, 4vw, 3.5rem);
+	font-size: var(--text-display);  /* Level 1: 48px */
 	font-weight: 900;
 	line-height: 1.1;
 	letter-spacing: -0.03em;
@@ -1978,13 +2191,13 @@ tbody tr:hover {
 }
 
 .brutalist-hero-title-sub {
-	font-size: 0.7em;
+	font-size: var(--text-subheading);  /* Level 3: 24px */
 	display: block;
 	margin-top: 0.2em;
 }
 
 .brutalist-hero-subtitle {
-	font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+	font-size: var(--text-body);  /* Level 4: 18px */
 	font-weight: 400;
 	line-height: 1.5;
 	opacity: 0.85;
@@ -2008,11 +2221,11 @@ tbody tr:hover {
 	color: var(--background);
 	text-decoration: none;
 	font-weight: 700;
-	font-size: 1rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	transition: all var(--duration-fast) var(--ease-out);
-	border: 2px solid var(--foreground);
+	box-shadow: 0 0 0 2px var(--foreground);
 }
 
 .brutalist-btn-primary:hover {
@@ -2029,11 +2242,11 @@ tbody tr:hover {
 	color: var(--foreground);
 	text-decoration: none;
 	font-weight: 700;
-	font-size: 1rem;
+	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	transition: all var(--duration-fast) var(--ease-out);
-	border: 2px solid var(--foreground);
+	box-shadow: 0 0 0 2px var(--foreground);
 }
 
 .brutalist-btn-secondary:hover {
@@ -2043,11 +2256,19 @@ tbody tr:hover {
 .brutalist-hero-visual {
 	position: relative;
 	width: 100%;
-	height: 100%;
+	min-height: 400px;  /* Ensure minimum height */
 	display: flex;
-	align-items: center; /* Center align */
+	align-items: center;
 	justify-content: center;
 	z-index: 1;
+}
+
+@media (min-width: 1024px) {
+	.brutalist-hero-visual {
+		min-height: unset;
+		/* Match the height of the content column for alignment */
+		align-self: center;
+	}
 }
 
 /* Neural Network Animation Styles */
@@ -2319,7 +2540,7 @@ tbody tr:hover {
 
 .particle-morph-label .label-text {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-caption);  /* Level 5: 16px minimum */
   color: var(--foreground);
   opacity: 0.6;
   letter-spacing: 3px;

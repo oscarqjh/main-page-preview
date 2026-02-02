@@ -42,7 +42,7 @@ export function HeroSection() {
 					</h1>
 					
 					<p className="brutalist-hero-subtitle fade-in-up animate-fill-both stagger-1">
-						Open-sourcing everything as we can, share the principal insights as we discover.
+						Advancing multimodal intelligence through open research. Models, data, and insights - shared as we discover.
 					</p>
 
 					<div className="brutalist-hero-cta fade-in-up animate-fill-both stagger-2">

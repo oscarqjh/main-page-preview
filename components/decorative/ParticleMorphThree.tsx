@@ -7,8 +7,10 @@ type MorphState = "loss" | "waveform" | "lena" | "matrix";
 
 const GRID_SIZE = 32; // 32x32 = 1024 particles
 const PARTICLE_COUNT = GRID_SIZE * GRID_SIZE;
-const MORPH_DURATION = 3.0;
-const HOLD_DURATION = 5.0;
+
+// Apple-style timing: longer, more deliberate transitions
+const MORPH_DURATION = 2.0;  // Smooth 2s morph transition
+const HOLD_DURATION = 6.0;   // Hold longer for contemplation
 
 // Hardcoded 32x32 Lena (Simplified manually)
 // 0 = Dark, 9 = Bright
@@ -58,7 +60,7 @@ interface ParticleMorphThreeProps {
 
 export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentState, setCurrentState] = useState<MorphState>("loss");
+  const [, setCurrentState] = useState<MorphState>("loss");
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,10 +121,10 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
 
     const material = new THREE.PointsMaterial({
       color: particleColor,
-      size: 4, 
+      size: 4,
       map: sprite,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0, // Start invisible for fade-in effect
       alphaTest: 0.1,
       sizeAttenuation: true,
       blending: THREE.NormalBlending
@@ -135,8 +137,123 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
     const states: MorphState[] = ["loss", "waveform", "lena", "matrix"];
     let stateIndex = 0;
     let transitionStartTime = 0;
-    let holdStartTime = 0;
-    let isHolding = false;
+    // Start in holding state so first frame shows particles in position
+    let isHolding = true;
+    let holdStartTime = performance.now() / 1000; // Initialize for first hold
+
+    // --- Fade In ---
+    const FADE_IN_DURATION = 1.5; // seconds
+    const TARGET_OPACITY = 0.9;
+    let fadeInComplete = false;
+
+    // --- Define updateTargets before using it ---
+    const updateTargets = (state: MorphState, t: number) => {
+      const tgtPos = targetPositions;
+      const targetSz = targetSizes;
+      const slowT = t * 0.5;
+
+      const spacing16 = 14;
+      const offset16 = (16 * spacing16) / 2;
+      const spacing32 = 7;
+      const offset32 = (32 * spacing32) / 2;
+      // Center the visualization - let CSS handle overall alignment
+      const verticalShift = 0;
+
+      const getFoldedIndices = (idx: number) => {
+        const row32 = Math.floor(idx / 32);
+        const col32 = idx % 32;
+        const row16 = Math.floor(row32 / 2);
+        const col16 = Math.floor(col32 / 2);
+        return { row: row16, col: col16, idx16: row16 * 16 + col16 };
+      };
+
+      if (state === 'loss') {
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const { row, col } = getFoldedIndices(i);
+          const idx3 = i * 3;
+          const u = (col / 15) * 2 - 1;
+          const v = (row / 15) * 2 - 1;
+          const x = (col * spacing16) - offset16;
+          const zCoord = (row * spacing16) - offset16;
+          const r = Math.sqrt(u*u + v*v);
+          const height = 50 * Math.exp(-r*r * 2) + 15 * Math.cos(u * 4 + slowT) * Math.sin(v * 4);
+          tgtPos[idx3] = x;
+          // Center the loss surface vertically (peak at ~50, base at ~0, center around 25)
+          tgtPos[idx3+1] = height - 25 + verticalShift;
+          tgtPos[idx3+2] = zCoord;
+          targetSz[i] = BASE_SIZE;
+        }
+      } else if (state === 'waveform') {
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const { row, col } = getFoldedIndices(i);
+          const idx3 = i * 3;
+          const freqBase = col * 0.3;
+          const noise = Math.sin(slowT * (2 + col * 0.1) + freqBase);
+          const amp = Math.abs(noise) * (1.0 - Math.abs((col/16)-0.5));
+          const barHeight = 120 * amp * amp + 20;
+          const vSym = (row / 15 - 0.5) * 2;
+          const x = (col * spacing16) - offset16;
+          const y = vSym * barHeight * 0.8 + verticalShift;
+          tgtPos[idx3] = x;
+          tgtPos[idx3+1] = y;
+          tgtPos[idx3+2] = 0;
+          targetSz[i] = BASE_SIZE;
+        }
+      } else if (state === 'lena') {
+        for (let i = 0; i < GRID_SIZE; i++) {
+          for (let j = 0; j < GRID_SIZE; j++) {
+            const idx = i * GRID_SIZE + j;
+            const idx3 = idx * 3;
+            const x = (j * spacing32) - offset32;
+            const y = -((i * spacing32) - offset32) + verticalShift;
+            tgtPos[idx3] = x;
+            tgtPos[idx3+1] = y;
+            tgtPos[idx3+2] = 0;
+            const dataRow = GRID_SIZE - 1 - i;
+            const dataIdx = dataRow * GRID_SIZE + j;
+            const val = LENA_DATA[dataIdx] || 0;
+            targetSz[idx] = val > 4 ? BASE_SIZE : 0.0;
+          }
+        }
+      } else if (state === 'matrix') {
+        for (let i = 0; i < GRID_SIZE; i++) {
+          for (let j = 0; j < GRID_SIZE; j++) {
+            const idx = i * GRID_SIZE + j;
+            const pIdx = idx * 3;
+            const x = (j * spacing32) - offset32;
+            const y = -((i * spacing32) - offset32) + verticalShift;
+            tgtPos[pIdx] = x;
+            tgtPos[pIdx+1] = y;
+            tgtPos[pIdx+2] = 0;
+            const diff = Math.abs(i - j);
+            const isLocal = diff <= 2;
+            const isGlobal = j < 2 || i < 2;
+            const scanTime = t * 2;
+            const scanRow = Math.floor(scanTime % GRID_SIZE);
+            const isScanning = (i === scanRow) && (Math.abs(j - i) < 8);
+            let intensity = 0.0;
+            if (isLocal) intensity = 1.0;
+            else if (isGlobal) intensity = 0.5;
+            if (isScanning) intensity = 1.0;
+            if (j > i) intensity = 0.0;
+            targetSz[idx] = intensity > 0.1 ? BASE_SIZE : 0.0;
+          }
+        }
+      }
+    };
+
+    // --- Initialize positions to first state (no morph from center) ---
+    updateTargets("loss", 0);
+    for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+      positions[i] = targetPositions[i];
+      sourcePositions[i] = targetPositions[i];
+    }
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      sizes[i] = targetSizes[i];
+      sourceSizes[i] = targetSizes[i];
+    }
+    geometry.attributes.position.needsUpdate = true;
+    geometry.attributes.size.needsUpdate = true;
 
     // --- Animation Loop ---
     const clock = new THREE.Clock();
@@ -144,16 +261,28 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      
+
       const time = clock.getElapsedTime();
       const now = performance.now() / 1000;
 
-      // Morph logic
+      // Fade in effect
+      if (!fadeInComplete) {
+        const fadeProgress = Math.min(time / FADE_IN_DURATION, 1);
+        const fadeEase = 1 - Math.pow(1 - fadeProgress, 3);
+        material.opacity = fadeEase * TARGET_OPACITY;
+        if (fadeProgress >= 1) {
+          fadeInComplete = true;
+        }
+      }
+
+      // Morph logic - Apple-style smooth transitions
       if (!isHolding) {
         if (transitionStartTime === 0) transitionStartTime = now;
         const progress = Math.min((now - transitionStartTime) / MORPH_DURATION, 1);
-        
-        const ease = progress < 0.5 ? 4 * progress ** 3 : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        // Apple-style ease-out: smooth deceleration (cubic-bezier(0.25, 0.1, 0.25, 1))
+        // Using expo-out for more dramatic deceleration
+        const ease = 1 - Math.pow(1 - progress, 4);
 
         if (progress >= 1) {
           isHolding = true;
@@ -208,164 +337,17 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
       geometry.attributes.position.needsUpdate = true;
       geometry.attributes.size.needsUpdate = true;
       
+      // Apple-style subtle rotation - barely noticeable, elegant
       if (targetState === 'loss') {
-         particles.rotation.y = Math.sin(time * 0.1) * 0.15;
-         particles.rotation.x = 0.2; 
+         particles.rotation.y = Math.sin(time * 0.08) * 0.1;  // Slower, more subtle
+         particles.rotation.x = 0.15;  // Less tilt
       } else {
-         particles.rotation.y *= 0.95;
-         particles.rotation.x *= 0.95;
+         // Smooth ease back to neutral
+         particles.rotation.y *= 0.97;
+         particles.rotation.x *= 0.97;
       }
 
       renderer.render(scene, camera);
-    };
-
-    const updateTargets = (state: MorphState, t: number) => {
-      const positions = targetPositions;
-      const targetSz = targetSizes;
-      const slowT = t * 0.5;
-
-      // Base spacing for the visible grid
-      // For 16x16 view, we want spacing to be wider so it fills the same area
-      const spacing16 = 14; 
-      const offset16 = (16 * spacing16) / 2;
-
-      // For 32x32 view (Lena/Attention), spacing is tighter
-      const spacing32 = 7;
-      const offset32 = (32 * spacing32) / 2;
-      
-      // Shift everything up slightly to make room for bottom label
-      // Shift down slightly to center visually
-      const verticalShift = -15; // Align visual center with left text
-
-
-      // Helper to map 1024 index -> 256 position (Fold 2x2 -> 1)
-      const getFoldedIndices = (idx: number) => {
-        const row32 = Math.floor(idx / 32);
-        const col32 = idx % 32;
-        const row16 = Math.floor(row32 / 2); // 0..15
-        const col16 = Math.floor(col32 / 2); // 0..15
-        return { row: row16, col: col16, idx16: row16 * 16 + col16 };
-      };
-
-      if (state === 'loss') {
-        // 3D Loss Surface (Folded to 16x16)
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const { row, col } = getFoldedIndices(i);
-          const idx3 = i * 3;
-
-          // Map 0..15 to -1..1
-          const u = (col / 15) * 2 - 1;
-          const v = (row / 15) * 2 - 1;
-
-          const x = (col * spacing16) - offset16;
-          const zCoord = (row * spacing16) - offset16;
-
-          const r = Math.sqrt(u*u + v*v);
-          const height = 50 * Math.exp(-r*r * 2) 
-                       + 15 * Math.cos(u * 4 + slowT) * Math.sin(v * 4);
-
-          positions[idx3] = x;
-          positions[idx3+1] = height - 10 + verticalShift;
-          positions[idx3+2] = zCoord; 
-          
-          targetSz[i] = BASE_SIZE;
-        }
-      } 
-      else if (state === 'waveform') {
-        // 2D Waveform (Folded to 16x16)
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const { row, col } = getFoldedIndices(i);
-          const idx3 = i * 3;
-
-          // col is Frequency (X), row is Amplitude (Y)
-          const freqBase = col * 0.3;
-          const noise = Math.sin(slowT * (2 + col * 0.1) + freqBase);
-          const amp = Math.abs(noise) * (1.0 - Math.abs((col/16)-0.5));
-          const barHeight = 120 * amp * amp + 20;
-
-          const vSym = (row / 15 - 0.5) * 2; 
-
-          const x = (col * spacing16) - offset16;
-          const y = vSym * barHeight * 0.8 + verticalShift;
-
-          positions[idx3] = x;
-          positions[idx3+1] = y;
-          positions[idx3+2] = 0; 
-          
-          targetSz[i] = BASE_SIZE;
-        }
-      }
-      else if (state === 'lena') {
-        // 2D Image (Lena) - UNFOLDED to 32x32
-        // Use full 1024 resolution
-        for (let i = 0; i < GRID_SIZE; i++) { // 0..31
-          for (let j = 0; j < GRID_SIZE; j++) { // 0..31
-            const idx = i * GRID_SIZE + j;
-            const idx3 = idx * 3;
-            
-            const x = (j * spacing32) - offset32;
-            const y = -((i * spacing32) - offset32) + verticalShift; 
-            
-            positions[idx3] = x;
-            positions[idx3+1] = y;
-            positions[idx3+2] = 0; 
-            
-            // Hardcoded Data Logic
-            const dataRow = GRID_SIZE - 1 - i;
-            const dataIdx = dataRow * GRID_SIZE + j;
-            const val = LENA_DATA[dataIdx] || 0;
-            
-            // Threshold logic
-            // Use a mid-range threshold to create contrast
-            // Data range is 2-9. Midpoint ~5.5
-            // val > 5 means only brightness 6,7,8,9 are shown (Highlights)
-            // val > 4 means 5,6,7,8,9 are shown (Face + some hat)
-            targetSz[idx] = val > 4 ? BASE_SIZE : 0.0;
-          }
-        }
-      }
-      else if (state === 'matrix') {
-        // Attention Map (SWA / Sparse) - UNFOLDED to 32x32
-        for (let i = 0; i < GRID_SIZE; i++) {
-          for (let j = 0; j < GRID_SIZE; j++) {
-            const idx = i * GRID_SIZE + j;
-            const pIdx = idx * 3;
-            
-            const x = (j * spacing32) - offset32;
-            const y = -((i * spacing32) - offset32) + verticalShift; 
-            
-            positions[pIdx] = x;
-            positions[pIdx+1] = y;
-            positions[pIdx+2] = 0; 
-            
-            // Attention Pattern Logic (SWA + Global)
-            // i = Query, j = Key
-            
-            // 1. Sliding Window (Diagonal)
-            const diff = Math.abs(i - j);
-            const isLocal = diff <= 2; 
-            
-            // 2. Global Tokens (first 2 tokens)
-            const isGlobal = j < 2 || i < 2;
-            
-            // 3. Dynamic Scan
-            const scanTime = t * 2; 
-            const scanRow = Math.floor(scanTime % GRID_SIZE);
-            const isScanning = (i === scanRow) && (Math.abs(j - i) < 8);
-            
-            let intensity = 0.0;
-            if (isLocal) intensity = 1.0;
-            else if (isGlobal) intensity = 0.5;
-            
-            if (isScanning) intensity = 1.0;
-            
-            // Causal Mask
-            if (j > i) intensity = 0.0;
-            
-            targetSz[idx] = intensity > 0.1 ? BASE_SIZE : 0.0;
-          }
-        }
-      }
     };
 
     animate();
@@ -403,13 +385,10 @@ export function ParticleMorphThree({ onStateChange }: ParticleMorphThreeProps) {
 
   return (
     <div className="particle-morph-container">
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         style={{ width: '100%', height: '100%', minHeight: '400px' }}
       />
-      <div className="particle-morph-label">
-        <span className="label-text">{currentState}</span>
-      </div>
     </div>
   );
 }

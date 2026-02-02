@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import MotionLink from "@/components/motion/MotionLink";
@@ -37,156 +38,204 @@ export default function Header() {
 	};
 
 	return (
-		<header className="fixed top-0 left-0 right-0 z-[100] bg-[var(--background)] border-b-2 border-[var(--foreground)] h-16">
-			{/* Terminal Grid Layout */}
-			<div className="w-full h-full max-w-[80rem] mx-auto px-4 grid grid-cols-[auto_1fr_auto] items-center gap-4" style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', height: '100%', maxWidth: '80rem', margin: '0 auto', padding: '0 1rem' }}>
-				
-				{/* 1. Brand (Left) */}
-				<div className="flex items-center" style={{ display: 'flex', alignItems: 'center' }}>
-					<MotionLink href="/" className="flex items-center gap-2 group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: 'inherit' }}>
-						<div style={{ width: '2rem', height: '2rem', border: '1px solid var(--foreground)', position: 'relative', background: 'var(--foreground)' }}>
-							{/* 1-bit Icon Placeholder */}
-							<div style={{ position: 'absolute', inset: '2px', border: '1px solid var(--background)' }} />
-						</div>
-						<span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.125rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--foreground)' }}>
-							LMMS-LAB
-						</span>
+		<header className="masthead">
+			<div className="masthead-inner">
+				<div className="masthead-brand">
+					<MotionLink href="/" className="brand-link">
+						<Image
+							src="/assets/logo.png"
+							alt="LMMS Lab Logo"
+							width={144}
+							height={144}
+							className="brand-logo"
+							priority
+						/>
 					</MotionLink>
 				</div>
 
-				{/* 2. System Status (Center) - Decorative */}
-				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.5, fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.2em', color: 'var(--foreground)' }} className="hidden-mobile">
-					<span style={{ marginRight: '0.5rem', animation: 'pulse 2s infinite' }}>●</span> SYSTEM ONLINE
-				</div>
+				<button
+					onClick={() => setMenuOpen(!menuOpen)}
+					aria-label="Toggle menu"
+					aria-expanded={menuOpen}
+					className="mobile-menu-btn"
+				>
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth="2"
+						strokeLinecap="square"
+						strokeLinejoin="miter"
+					>
+						{menuOpen ? (
+							<path d="M18 6L6 18M6 6l12 12" />
+						) : (
+							<path d="M3 12h18M3 6h18M3 18h18" />
+						)}
+					</svg>
+				</button>
 
-				{/* 3. Navigation (Right) */}
-				<nav className="hidden-mobile" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+				{/* Desktop Nav */}
+				<nav className="nav-menu desktop-nav">
 					{navItems.map((item) => (
 						<MotionLink
 							key={item.href}
 							href={item.href}
-							style={{ 
-								fontFamily: 'var(--font-mono)', 
-								fontSize: '0.875rem', 
-								fontWeight: 700, 
-								textTransform: 'uppercase', 
-								letterSpacing: '0.05em',
-								textDecoration: isActive(item.href) ? 'underline' : 'none',
-								textUnderlineOffset: '4px',
-								color: 'var(--foreground)',
-								opacity: isActive(item.href) ? 1 : 0.6
-							}}
+							className={`nav-link ${isActive(item.href) ? "active" : ""}`}
 						>
-							[{item.label}]
+							{item.label}
 						</MotionLink>
 					))}
 				</nav>
-
-				{/* Mobile Menu Button */}
-				<button
-					onClick={() => setMenuOpen(!menuOpen)}
-					className="mobile-only"
-					style={{ 
-						background: 'transparent', 
-						border: '1px solid var(--foreground)', 
-						color: 'var(--foreground)', 
-						padding: '0.5rem 1rem', 
-						cursor: 'pointer',
-						fontFamily: 'var(--font-mono)',
-						fontSize: '0.75rem',
-						fontWeight: 700,
-						textTransform: 'uppercase'
-					}}
-					aria-label="Toggle menu"
-				>
-					{menuOpen ? "CLOSE" : "MENU"}
-				</button>
 			</div>
 
-			{/* Mobile Menu Overlay (Cyberpunk Curtain) */}
+			{/* Mobile Menu Overlay - Apple-style smooth reveal */}
 			<AnimatePresence>
 				{menuOpen && (
 					<motion.div
-						initial={{ clipPath: "inset(0 0 100% 0)" }}
-						animate={{ clipPath: "inset(0 0 0% 0)" }}
-						exit={{ clipPath: "inset(100% 0 0 0)" }}
-						transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-						style={{
-							position: 'fixed',
-							top: '64px', // Below header
-							left: 0,
-							right: 0,
-							bottom: 0,
-							backgroundColor: 'var(--background)',
-							zIndex: 50,
-							display: 'flex',
-							flexDirection: 'column',
-							padding: '2rem',
-							borderTop: '2px solid var(--foreground)'
+						initial={{ opacity: 0, y: -12 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -8 }}
+						transition={{
+							duration: 0.35,
+							ease: [0.25, 0.1, 0.25, 1]  // Apple ease-out
 						}}
+						className="mobile-nav-overlay"
 					>
-						{/* Background Grid */}
-						<div style={{ 
-								position: 'absolute',
-								inset: 0,
-								pointerEvents: 'none',
-								opacity: 0.1,
-								backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)`,
-								backgroundSize: '40px 40px'
-							}} 
-						/>
-
-						<nav style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative', zIndex: 10 }}>
+						<nav className="mobile-nav-content">
 							{navItems.map((item) => (
 								<MotionLink
 									key={item.href}
 									href={item.href}
 									onClick={() => setMenuOpen(false)}
-									style={{
-										fontFamily: 'var(--font-mono)',
-										fontSize: '2rem',
-										fontWeight: 900,
-										textTransform: 'uppercase',
-										letterSpacing: '-0.02em',
-										color: 'var(--foreground)',
-										textDecoration: 'none',
-										opacity: isActive(item.href) ? 1 : 0.5,
-										borderLeft: isActive(item.href) ? '4px solid var(--foreground)' : '4px solid transparent',
-										paddingLeft: isActive(item.href) ? '1rem' : '0',
-										transition: 'all 0.3s ease'
-									}}
+									className={`mobile-nav-link ${isActive(item.href) ? "active" : ""}`}
 								>
 									{item.label}
 								</MotionLink>
 							))}
 						</nav>
-
-						<div style={{ marginTop: 'auto', position: 'relative', zIndex: 10, borderTop: '1px solid var(--foreground)', paddingTop: '1.5rem', opacity: 0.6, fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--foreground)' }}>
-							<p>LMMS-LAB // VISUAL INTERFACE V2.0</p>
-							<p style={{ marginTop: '0.5rem' }}>EST. 2024</p>
-						</div>
 					</motion.div>
 				)}
 			</AnimatePresence>
 
-			<style jsx global>{`
-				.hidden-mobile {
+			<style jsx>{`
+				.masthead {
+					padding: 1.5rem 0;
+					border-bottom: 1px solid rgba(254, 215, 170, 0.1);
+					position: relative;
+					z-index: 100;
+					background: var(--background);
+				}
+
+				.masthead-inner {
 					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					width: 100%;
+					max-width: 80rem;
+					margin: 0 auto;
+					padding: 0 2rem;
 				}
-				.mobile-only {
+
+				.masthead-brand {
+					display: flex;
+					align-items: center;
+				}
+
+				.brand-link {
+					display: block;
+					line-height: 0;
+				}
+
+				.brand-logo {
+					width: auto;
+					height: 32px;
+					object-fit: contain;
+				}
+
+				.nav-menu {
+					display: flex;
+					gap: 2rem;
+					align-items: center;
+				}
+
+				/* Use :global to target MotionLink children */
+				/* Apple-style transitions: 200ms with smooth ease-out */
+				:global(.nav-link) {
+					font-family: var(--font-sans);
+					font-size: var(--text-caption);  /* Level 5: 16px minimum */
+					font-weight: 500;
+					text-transform: uppercase;
+					letter-spacing: 0.05em;
+					color: var(--foreground);
+					text-decoration: none;
+					opacity: 0.6;
+					transition: opacity 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+				}
+
+				:global(.nav-link:hover),
+				:global(.nav-link.active) {
+					opacity: 1;
+				}
+
+				.mobile-menu-btn {
 					display: none;
+					background: transparent;
+					border: none;
+					color: var(--foreground);
+					cursor: pointer;
+					padding: 0.5rem;
 				}
+
+				.mobile-nav-overlay {
+					position: absolute;
+					top: 100%;
+					left: 0;
+					right: 0;
+					background: var(--background);
+					border-bottom: 1px solid rgba(254, 215, 170, 0.1);
+					padding: 2rem;
+					box-shadow: 0 10px 30px -10px rgba(0,0,0,0.2);
+				}
+
+				.mobile-nav-content {
+					display: flex;
+					flex-direction: column;
+					gap: 1.5rem;
+					align-items: flex-start;
+				}
+
+				:global(.mobile-nav-link) {
+					font-family: var(--font-sans);
+					font-size: var(--text-subheading);  /* Level 3: 24px */
+					font-weight: 700;
+					text-transform: uppercase;
+					color: var(--foreground);
+					text-decoration: none;
+					opacity: 0.7;
+				}
+
+				:global(.mobile-nav-link.active) {
+					opacity: 1;
+					text-decoration: underline;
+					text-underline-offset: 4px;
+				}
+
 				@media (max-width: 768px) {
-					.hidden-mobile {
-						display: none !important;
+					.desktop-nav {
+						display: none;
 					}
-					.mobile-only {
-						display: block !important;
+					.mobile-menu-btn {
+						display: block;
 					}
-				}
-				@keyframes pulse {
-					0%, 100% { opacity: 1; }
-					50% { opacity: 0.3; }
+					.masthead {
+						padding: 1rem 0;
+					}
+					.masthead-inner {
+						padding: 0 1.5rem;
+					}
 				}
 			`}</style>
 		</header>
