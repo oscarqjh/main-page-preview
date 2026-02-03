@@ -1,6 +1,6 @@
 /* =============================================================================
- * Space Warp / Hyperspace Jump Transition
- * Heavy dithering + strong B/W line contrast
+ * Space-Time Rift Transition
+ * Canvas-rendered dithered data streams with central vertical beam
  * ============================================================================= */
 
 .overlay {
@@ -10,138 +10,32 @@
   pointer-events: none;
   background: #000;
   overflow: hidden;
+  animation: rift-reveal 180ms ease-out both;
 }
 
 .overlay.exiting {
-  animation: warp-fade-out 300ms ease forwards;
+  animation: rift-fade-out 300ms ease forwards;
 }
 
-/* ── 1-bit dithering noise (high contrast stipple) ── */
-
-.ditherNoise {
+.canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.18;
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* ── CRT scanlines ── */
-
-.scanlines {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 2px,
-    rgba(255, 255, 255, 0.06) 2px,
-    rgba(255, 255, 255, 0.06) 3px
-  );
-  z-index: 4;
-  pointer-events: none;
-}
-
-/* ── Center origin for all warp elements ── */
-
-.warpCenter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  z-index: 2;
-}
-
-/* ── Radial speed streaks (thicker, brighter) ── */
-
-.streak {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--length, 40vmax);
-  height: var(--thickness, 1px);
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, var(--streak-opacity, 0.35)) 15%,
-    rgba(255, 255, 255, var(--streak-opacity, 0.35)) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform-origin: 0% 50%;
-  transform: rotate(var(--angle, 0deg)) scaleX(0);
-  animation: streak-extend 550ms var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* ── Fragment shards (high contrast, sharp edges) ── */
-
-.fragment {
-  position: absolute;
-  top: calc(var(--size, 2px) * -0.5);
-  left: 0;
-  width: var(--length, 20px);
-  height: var(--size, 2px);
-  background: #fff;
-  opacity: var(--brightness, 0.5);
-  transform-origin: 0% 50%;
-  transform: rotate(var(--angle, 0deg)) translateX(var(--dist, 50vmax));
-  animation: warp-inward var(--duration, 500ms) var(--delay, 0ms) cubic-bezier(0.55, 0, 1, 0.45) both;
-}
-
-/* ── Central dark void (tighter vignette) ── */
-
-.vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.7) 10%,
-    rgba(0, 0, 0, 0.2) 35%,
-    transparent 55%
-  );
-  z-index: 5;
-  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 /* =============================================================================
  * Keyframes
  * ============================================================================= */
 
-@keyframes warp-inward {
-  0% {
-    transform: rotate(var(--angle, 0deg)) translateX(var(--dist, 50vmax));
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: rotate(var(--angle, 0deg)) translateX(1vmax);
-    opacity: 0;
-  }
+@keyframes rift-reveal {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-@keyframes streak-extend {
-  0% {
-    transform: rotate(var(--angle, 0deg)) scaleX(0);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(var(--angle, 0deg)) scaleX(1);
-    opacity: 0.7;
-  }
-}
-
-@keyframes warp-fade-out {
+@keyframes rift-fade-out {
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
@@ -151,16 +45,13 @@
  * ============================================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .fragment,
-  .streak,
-  .ditherNoise {
-    animation: none !important;
-    opacity: 0 !important;
-  }
-
   .overlay {
     animation: none !important;
     background: #000;
+  }
+
+  .canvas {
+    opacity: 0 !important;
   }
 
   .overlay.exiting {
