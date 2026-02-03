@@ -2114,7 +2114,7 @@ tbody tr:hover {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: var(--space-md);
-	padding: var(--space-lg) var(--space-md) var(--space-md);
+	padding: var(--space-md) var(--space-md) var(--space-lg);
 	align-content: center;
 	align-items: stretch;
 	overflow: hidden;
@@ -2127,7 +2127,7 @@ tbody tr:hover {
 @media (min-width: 1024px) {
 	.brutalist-hero {
 		grid-template-columns: 5fr 7fr;
-		padding: var(--space-lg) var(--space-lg) var(--space-md);
+		padding: var(--space-md) var(--space-lg) var(--space-lg);
 		gap: var(--space-lg);
 	}
 }
@@ -2161,7 +2161,7 @@ tbody tr:hover {
 }
 
 .brutalist-hero-title {
-	font-size: 4.5rem;
+	font-size: 3.5rem;
 	font-weight: 900;
 	line-height: 1.05;
 	letter-spacing: -0.03em;
@@ -2250,6 +2250,7 @@ tbody tr:hover {
 @media (min-width: 1024px) {
 	.brutalist-hero-visual {
 		min-height: unset;
+		max-height: 260px;
 	}
 }
 
