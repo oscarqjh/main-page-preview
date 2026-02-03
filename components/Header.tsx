@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import MotionLink from "@/components/motion/MotionLink";
 import { AnimatePresence, motion } from "framer-motion";
+import styles from "./Header.module.css";
 
 const navItems = [
 	{ label: "Home", href: "/" },
@@ -17,6 +18,8 @@ export default function Header() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const pathname = usePathname();
+	const menuRef = useRef<HTMLDivElement>(null);
+	const menuButtonRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		setMounted(true);
@@ -31,6 +34,46 @@ export default function Header() {
 		}
 	}, [menuOpen]);
 
+	// Focus trap and keyboard handling
+	const handleKeyDown = useCallback((e: KeyboardEvent) => {
+		if (!menuOpen) return;
+
+		if (e.key === "Escape") {
+			setMenuOpen(false);
+			menuButtonRef.current?.focus();
+			return;
+		}
+
+		if (e.key === "Tab" && menuRef.current) {
+			const focusableElements = menuRef.current.querySelectorAll<HTMLElement>(
+				'a[href], button:not([disabled])'
+			);
+			const firstElement = focusableElements[0];
+			const lastElement = focusableElements[focusableElements.length - 1];
+
+			if (e.shiftKey && document.activeElement === firstElement) {
+				e.preventDefault();
+				lastElement?.focus();
+			} else if (!e.shiftKey && document.activeElement === lastElement) {
+				e.preventDefault();
+				firstElement?.focus();
+			}
+		}
+	}, [menuOpen]);
+
+	useEffect(() => {
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [handleKeyDown]);
+
+	// Focus first menu item when opened
+	useEffect(() => {
+		if (menuOpen && menuRef.current) {
+			const firstLink = menuRef.current.querySelector<HTMLElement>('a[href]');
+			firstLink?.focus();
+		}
+	}, [menuOpen]);
+
 	const isActive = (href: string) => {
 		if (!mounted) return false;
 		if (href === "/") return pathname === "/";
@@ -38,26 +81,28 @@ export default function Header() {
 	};
 
 	return (
-		<header className="masthead">
-			<div className="masthead-inner">
-				<div className="masthead-brand">
-					<MotionLink href="/" className="brand-link">
+		<header className={styles.masthead}>
+			<div className={styles.mastheadInner}>
+				<div className={styles.mastheadBrand}>
+					<MotionLink href="/" className={styles.brandLink}>
 						<Image
 							src="/assets/logo.png"
 							alt="LMMS Lab Logo"
 							width={144}
 							height={144}
-							className="brand-logo"
+							className={styles.brandLogo}
 							priority
 						/>
 					</MotionLink>
 				</div>
 
 				<button
+					ref={menuButtonRef}
 					onClick={() => setMenuOpen(!menuOpen)}
 					aria-label="Toggle menu"
 					aria-expanded={menuOpen}
-					className="mobile-menu-btn"
+					aria-controls="mobile-nav-menu"
+					className={styles.mobileMenuBtn}
 				>
 					<svg
 						width="24"
@@ -78,12 +123,12 @@ export default function Header() {
 				</button>
 
 				{/* Desktop Nav */}
-				<nav className="nav-menu desktop-nav">
+				<nav className={`${styles.navMenu} ${styles.desktopNav}`}>
 					{navItems.map((item) => (
 						<MotionLink
 							key={item.href}
 							href={item.href}
-							className={`nav-link ${isActive(item.href) ? "active" : ""}`}
+							className={`${styles.navLink} ${isActive(item.href) ? styles.active : ""}`}
 						>
 							{item.label}
 						</MotionLink>
@@ -95,22 +140,26 @@ export default function Header() {
 			<AnimatePresence>
 				{menuOpen && (
 					<motion.div
+						ref={menuRef}
 						initial={{ opacity: 0, y: -12 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -8 }}
 						transition={{
 							duration: 0.35,
-							ease: [0.25, 0.1, 0.25, 1]  // Apple ease-out
+							ease: [0.25, 0.1, 0.25, 1]
 						}}
-						className="mobile-nav-overlay"
+						className={styles.mobileNavOverlay}
+						role="dialog"
+						aria-modal="true"
+						aria-label="Navigation menu"
 					>
-						<nav className="mobile-nav-content">
+						<nav id="mobile-nav-menu" className={styles.mobileNavContent}>
 							{navItems.map((item) => (
 								<MotionLink
 									key={item.href}
 									href={item.href}
 									onClick={() => setMenuOpen(false)}
-									className={`mobile-nav-link ${isActive(item.href) ? "active" : ""}`}
+									className={`${styles.mobileNavLink} ${isActive(item.href) ? styles.active : ""}`}
 								>
 									{item.label}
 								</MotionLink>
@@ -119,125 +168,6 @@ export default function Header() {
 					</motion.div>
 				)}
 			</AnimatePresence>
-
-			<style jsx>{`
-				.masthead {
-					padding: 1.5rem 0;
-					border-bottom: 1px solid rgba(254, 215, 170, 0.1);
-					position: relative;
-					z-index: 100;
-					background: var(--background);
-				}
-
-				.masthead-inner {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					width: 100%;
-					max-width: 80rem;
-					margin: 0 auto;
-					padding: 0 2rem;
-				}
-
-				.masthead-brand {
-					display: flex;
-					align-items: center;
-				}
-
-				.brand-link {
-					display: block;
-					line-height: 0;
-				}
-
-				.brand-logo {
-					width: auto;
-					height: 32px;
-					object-fit: contain;
-				}
-
-				.nav-menu {
-					display: flex;
-					gap: 2rem;
-					align-items: center;
-				}
-
-				/* Use :global to target MotionLink children */
-				/* Apple-style transitions: 200ms with smooth ease-out */
-				:global(.nav-link) {
-					font-family: var(--font-sans);
-					font-size: var(--text-caption);  /* Level 5: 16px minimum */
-					font-weight: 500;
-					text-transform: uppercase;
-					letter-spacing: 0.05em;
-					color: var(--foreground);
-					text-decoration: none;
-					opacity: 0.6;
-					transition: opacity 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
-				}
-
-				:global(.nav-link:hover),
-				:global(.nav-link.active) {
-					opacity: 1;
-				}
-
-				.mobile-menu-btn {
-					display: none;
-					background: transparent;
-					border: none;
-					color: var(--foreground);
-					cursor: pointer;
-					padding: 0.5rem;
-				}
-
-				.mobile-nav-overlay {
-					position: absolute;
-					top: 100%;
-					left: 0;
-					right: 0;
-					background: var(--background);
-					border-bottom: 1px solid rgba(254, 215, 170, 0.1);
-					padding: 2rem;
-					box-shadow: 0 10px 30px -10px rgba(0,0,0,0.2);
-				}
-
-				.mobile-nav-content {
-					display: flex;
-					flex-direction: column;
-					gap: 1.5rem;
-					align-items: flex-start;
-				}
-
-				:global(.mobile-nav-link) {
-					font-family: var(--font-sans);
-					font-size: var(--text-subheading);  /* Level 3: 24px */
-					font-weight: 700;
-					text-transform: uppercase;
-					color: var(--foreground);
-					text-decoration: none;
-					opacity: 0.7;
-				}
-
-				:global(.mobile-nav-link.active) {
-					opacity: 1;
-					text-decoration: underline;
-					text-underline-offset: 4px;
-				}
-
-				@media (max-width: 768px) {
-					.desktop-nav {
-						display: none;
-					}
-					.mobile-menu-btn {
-						display: block;
-					}
-					.masthead {
-						padding: 1rem 0;
-					}
-					.masthead-inner {
-						padding: 0 1.5rem;
-					}
-				}
-			`}</style>
 		</header>
 	);
 }
