@@ -22,13 +22,17 @@ export function useTransition() {
 // Max time before force-resetting to idle (deadman switch)
 const DEADMAN_MS = 6000
 
+let lastWasEasterEgg = false
+
 function pickCombo(): TransitionCombo {
   const punk = Math.random() < 0.2  // 20% punk text scramble (independent)
-  // 3% big easter egg: ~30% rift, ~70% hacking. 97% smooth black fade.
-  const big: BigTransitionType =
-    Math.random() < 0.03
-      ? (Math.random() < 0.3 ? 'strobing' : 'hacking')
-      : 'smooth'
+  // 3% big easter egg: ~30% rift, ~70% hacking. 97% smooth frosted fade.
+  // Never trigger easter egg twice in a row.
+  let big: BigTransitionType = 'smooth'
+  if (!lastWasEasterEgg && Math.random() < 0.03) {
+    big = Math.random() < 0.3 ? 'strobing' : 'hacking'
+  }
+  lastWasEasterEgg = big !== 'smooth'
 
   return { punk, big }
 }
