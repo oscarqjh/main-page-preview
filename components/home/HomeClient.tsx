@@ -3,7 +3,6 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedSection } from "@/components/home/FeaturedSection";
 import { CollectionSection } from "@/components/home/CollectionSection";
-import { StatsSection } from "@/components/home/StatsSection";
 import type { Post } from "@/lib/posts";
 
 interface HomeClientProps {
@@ -21,17 +20,6 @@ export default function HomeClient({ posts }: HomeClientProps) {
 			<FeaturedSection featuredPost={featuredPost} />
 
 			<CollectionSection posts={recentPosts} />
-
-			<StatsSection />
-
-			<section className="museum-quote dashboard-surface">
-				<blockquote>
-					&quot;Quiet assets, loud impact.&quot;
-				</blockquote>
-				<p className="museum-quote-sub">
-					We build with intention, not noise.
-				</p>
-			</section>
 		</div>
 	);
 }
