@@ -22,12 +22,15 @@ export function useTransition() {
 const DEADMAN_MS = 6000
 
 function pickCombo(): TransitionCombo | null {
-  // 97% normal navigation, 3% easter egg transition
-  if (Math.random() > 0.03) return null
+  const punk = Math.random() < 0.2  // 20% punk text scramble
+  // 3% big transition (easter egg): ~30% rift, ~70% hacking
+  const big: BigTransitionType | null =
+    Math.random() < 0.03
+      ? (Math.random() < 0.3 ? 'strobing' : 'hacking')
+      : null
 
-  // Within the 3%: ~30% rift, ~70% hacking
-  const big: BigTransitionType = Math.random() < 0.3 ? 'strobing' : 'hacking'
-  const punk = Math.random() < 0.5
+  // Nothing triggered -> plain navigation
+  if (!punk && !big) return null
   return { punk, big }
 }
 
@@ -113,7 +116,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         bigPhase: 'enter',
         hiddenElement: element,
       })
-    } else {
+    } else if (combo.big) {
       setState({
         phase: 'big-enter',
         combo,
@@ -124,6 +127,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         bigPhase: 'enter',
         hiddenElement: null,
       })
+    } else {
+      // punk was requested but no text available, no big -> plain navigate
+      router.push(href)
     }
   }, [router])
 
@@ -131,13 +137,21 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     if (stateRef.current.hiddenElement) {
       stateRef.current.hiddenElement.style.visibility = ''
     }
+    // If no big transition, just navigate and reset
+    if (!stateRef.current.combo?.big) {
+      if (stateRef.current.href) {
+        router.push(stateRef.current.href)
+      }
+      setState(IDLE_STATE)
+      return
+    }
     setState(prev => ({
       ...prev,
       phase: 'big-enter',
       bigPhase: 'enter',
       hiddenElement: null,
     }))
-  }, [])
+  }, [router])
 
   const onBigEnterComplete = useCallback(() => {
     if (stateRef.current.href) {
