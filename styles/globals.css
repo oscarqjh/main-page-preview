@@ -1692,6 +1692,7 @@ tbody tr:hover {
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	padding: 0;
 }
 
 .museum-featured-image > * {
@@ -1701,9 +1702,9 @@ tbody tr:hover {
 }
 
 .museum-featured-image img {
-	width: 85% !important;
-	height: auto !important;
-	object-fit: contain !important;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
 	object-position: center !important;
 }
 
@@ -2161,9 +2162,9 @@ tbody tr:hover {
 }
 
 .brutalist-hero-title {
-	font-size: var(--text-display);  /* Level 1: 48px */
+	font-size: clamp(4rem, 8vw, 7rem);
 	font-weight: 900;
-	line-height: 1.1;
+	line-height: 1.05;
 	letter-spacing: -0.03em;
 	margin: 0;
 	text-transform: uppercase;
