@@ -21,12 +21,14 @@ export function useTransition() {
 // Max time before force-resetting to idle (deadman switch)
 const DEADMAN_MS = 6000
 
-function pickCombo(): TransitionCombo {
-  const roll = Math.random()
-  // 3% strobing (easter egg), 97% hacking
-  const big: BigTransitionType = Math.random() < 0.03 ? 'strobing' : 'hacking'
-  // 50% punk+big, 50% big-only
-  return { punk: roll < 0.5, big }
+function pickCombo(): TransitionCombo | null {
+  // 97% normal navigation, 3% easter egg transition
+  if (Math.random() > 0.03) return null
+
+  // Within the 3%: ~30% rift, ~70% hacking
+  const big: BigTransitionType = Math.random() < 0.3 ? 'strobing' : 'hacking'
+  const punk = Math.random() < 0.5
+  return { punk, big }
 }
 
 interface ProviderState {
@@ -86,6 +88,13 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     if (stateRef.current.phase !== 'idle') return
 
     const combo = pickCombo()
+
+    // 97% of the time: plain navigation, no effects
+    if (!combo) {
+      router.push(href)
+      return
+    }
+
     const text = (element.textContent || '').trim()
     const computedStyles = window.getComputedStyle(element)
 
@@ -116,7 +125,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         hiddenElement: null,
       })
     }
-  }, [])
+  }, [router])
 
   const onPunkComplete = useCallback(() => {
     if (stateRef.current.hiddenElement) {
