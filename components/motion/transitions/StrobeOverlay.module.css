@@ -1,0 +1,142 @@
+/* =============================================================================
+ * Space Warp / Hyperspace Jump Transition
+ * Fragments converge radially toward a central vanishing point
+ * ============================================================================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  background: #000;
+  overflow: hidden;
+}
+
+.overlay.exiting {
+  animation: warp-fade-out 300ms ease forwards;
+}
+
+/* ── Center origin for all warp elements ── */
+
+.warpCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* ── Radial speed streaks ── */
+
+.streak {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--length, 40vmax);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, var(--streak-opacity, 0.25)) 20%,
+    rgba(255, 255, 255, calc(var(--streak-opacity, 0.25) * 0.6)) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform-origin: 0% 50%;
+  transform: rotate(var(--angle, 0deg)) scaleX(0);
+  animation: streak-extend 550ms var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Fragment shards flying inward ── */
+
+.fragment {
+  position: absolute;
+  top: calc(var(--size, 2px) * -0.5);
+  left: 0;
+  width: var(--length, 20px);
+  height: var(--size, 2px);
+  background: rgba(255, 255, 255, var(--brightness, 0.5));
+  transform-origin: 0% 50%;
+  transform: rotate(var(--angle, 0deg)) translateX(var(--dist, 50vmax));
+  animation: warp-inward var(--duration, 500ms) var(--delay, 0ms) cubic-bezier(0.55, 0, 1, 0.45) both;
+}
+
+/* ── Central dark void (vignette) ── */
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.6) 15%,
+    rgba(0, 0, 0, 0.15) 40%,
+    transparent 65%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =============================================================================
+ * Keyframes
+ * ============================================================================= */
+
+@keyframes warp-inward {
+  0% {
+    transform: rotate(var(--angle, 0deg)) translateX(var(--dist, 50vmax));
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotate(var(--angle, 0deg)) translateX(1.5vmax);
+    opacity: 0;
+  }
+}
+
+@keyframes streak-extend {
+  0% {
+    transform: rotate(var(--angle, 0deg)) scaleX(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle, 0deg)) scaleX(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes warp-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =============================================================================
+ * Accessibility
+ * ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .fragment,
+  .streak {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .overlay {
+    animation: none !important;
+    background: #000;
+  }
+
+  .overlay.exiting {
+    opacity: 0;
+  }
+}
