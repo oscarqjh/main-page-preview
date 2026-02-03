@@ -1489,8 +1489,8 @@ tbody tr:hover {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: var(--space-xl);
-	padding: var(--space-xl) var(--space-md);
-	min-height: 80vh;
+	padding: var(--space-lg) var(--space-md) var(--space-xl);
+	min-height: 60vh;
 	align-items: center;
 	max-width: 80rem;
 	margin: 0 auto;
@@ -1499,7 +1499,7 @@ tbody tr:hover {
 @media (min-width: 1024px) {
 	.museum-hero {
 		grid-template-columns: 1fr 1fr;
-		padding: var(--space-xl) var(--space-lg);
+		padding: var(--space-lg) var(--space-lg) var(--space-xl);
 	}
 }
 
@@ -1626,7 +1626,7 @@ tbody tr:hover {
 	display: flex;
 	align-items: center;
 	gap: var(--space-md);
-	margin-bottom: var(--space-xl);
+	margin-bottom: var(--space-lg);
 	padding: 0 var(--space-md);
 	max-width: 80rem;
 	margin-left: auto;
@@ -1690,6 +1690,17 @@ tbody tr:hover {
 
 .museum-featured-image {
 	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-lg);
+}
+
+.museum-featured-image img {
+	width: 85% !important;
+	height: auto !important;
+	object-fit: contain !important;
+	object-position: center !important;
 }
 
 .museum-featured-content {

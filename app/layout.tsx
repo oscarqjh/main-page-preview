@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
+import "katex/dist/katex.min.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { MotionProvider } from "@/components/motion/MotionProvider";
@@ -10,10 +11,7 @@ export const metadata: Metadata = {
 	title: "LMMs-Lab",
 	description: "Large Multimodal Models Research Lab",
 	icons: {
-		icon: [
-			{ url: '/icon.svg', type: 'image/svg+xml' },
-			{ url: '/favicon.ico', sizes: 'any' }
-		],
+		icon: '/icon.png',
 	}
 };
 

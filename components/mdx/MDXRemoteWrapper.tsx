@@ -12,7 +12,9 @@ import {
 } from "@/components/decorative";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
+import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 const components = {
   ResponsiveImage,
@@ -60,7 +62,7 @@ export function MDXRemoteWrapper({ source }: MDXRemoteWrapperProps) {
       components={components}
       options={{
         mdxOptions: {
-          remarkPlugins: [remarkGfm],
+          remarkPlugins: [remarkGfm, remarkMath],
           rehypePlugins: [
             [
               rehypePrettyCode,
@@ -69,6 +71,7 @@ export function MDXRemoteWrapper({ source }: MDXRemoteWrapperProps) {
                 keepBackground: false,
               },
             ],
+            rehypeKatex,
             rehypeSlug,
           ],
         },

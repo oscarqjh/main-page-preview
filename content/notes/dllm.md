@@ -220,7 +220,7 @@ $$
   - We reproduced the theorem’s exact procedure in code and carried out a small-scale test; in practice it **does work.**
   - Concrete algorithmic steps:
     - **Collect greedy-unmasking probabilities.**
-      For every masked region (block), perform one round of greedy unmasking at all masked positions and record the probability assigned to the selected token at each position. Example. For the sequence “今天吃 [mask1][mask2]”, suppose the model’s distribution for **[mask1]** is {“什”: 0.7, “鱼”: 0.2, “其他”: 0.1}. Greedy unmasking chooses the token “什” with probability 0.7.
+      For every masked region (block), perform one round of greedy unmasking at all masked positions and record the probability assigned to the selected token at each position. Example. For the sequence “今天吃 [mask1][mask2]”, suppose the model’s distribution for **[mask1]** is `{"什": 0.7, "鱼": 0.2, "其他": 0.1}`. Greedy unmasking chooses the token “什” with probability 0.7.
     - **Sort in descending order.**
       Gather the selected tokens across all masked positions and sort them by their probabilities.
       Let $a = [0.90,\,0.85,\,0.81,\,0.70,\,0.40,\,0.10,\,0.05,\,0.01]$, index $=[2, 3, 0, 1, 4, 6, 7, 5]$

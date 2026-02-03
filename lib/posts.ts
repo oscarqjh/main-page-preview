@@ -128,6 +128,36 @@ export function getPostBySlug(slug: string): Post | null {
 	};
 }
 
+export function getNoteBySlug(slug: string): Post | null {
+	ensureDirectoryExists(notesDirectory);
+
+	const mdPath = path.join(notesDirectory, `${slug}.md`);
+	const mdxPath = path.join(notesDirectory, `${slug}.mdx`);
+
+	let fullPath: string;
+	if (fs.existsSync(mdxPath)) {
+		fullPath = mdxPath;
+	} else if (fs.existsSync(mdPath)) {
+		fullPath = mdPath;
+	} else {
+		return null;
+	}
+
+	const fileContents = fs.readFileSync(fullPath, "utf8");
+	const { data, content } = matter(fileContents);
+
+	const dateStr = data.publishDate || data.date;
+
+	return {
+		slug,
+		title: data.title || slug,
+		date: dateStr ? new Date(dateStr).toISOString() : new Date().toISOString(),
+		description: data.description || "",
+		tags: data.tags || [],
+		content: transformHtmlStyleToJsx(stripMdxImports(content)),
+	};
+}
+
 export function getAllNotes(): Post[] {
 	ensureDirectoryExists(notesDirectory);
 
