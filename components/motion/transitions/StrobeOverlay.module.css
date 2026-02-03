@@ -1,6 +1,6 @@
 /* =============================================================================
  * Space Warp / Hyperspace Jump Transition
- * Fragments converge radially toward a central vanishing point
+ * Heavy dithering + strong B/W line contrast
  * ============================================================================= */
 
 .overlay {
@@ -16,6 +16,34 @@
   animation: warp-fade-out 300ms ease forwards;
 }
 
+/* ── 1-bit dithering noise (high contrast stipple) ── */
+
+.ditherNoise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.18;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ── CRT scanlines ── */
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.06) 2px,
+    rgba(255, 255, 255, 0.06) 3px
+  );
+  z-index: 4;
+  pointer-events: none;
+}
+
 /* ── Center origin for all warp elements ── */
 
 .warpCenter {
@@ -24,21 +52,22 @@
   left: 50%;
   width: 0;
   height: 0;
+  z-index: 2;
 }
 
-/* ── Radial speed streaks ── */
+/* ── Radial speed streaks (thicker, brighter) ── */
 
 .streak {
   position: absolute;
   top: 0;
   left: 0;
   width: var(--length, 40vmax);
-  height: 1px;
+  height: var(--thickness, 1px);
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, var(--streak-opacity, 0.25)) 20%,
-    rgba(255, 255, 255, calc(var(--streak-opacity, 0.25) * 0.6)) 60%,
+    rgba(255, 255, 255, var(--streak-opacity, 0.35)) 15%,
+    rgba(255, 255, 255, var(--streak-opacity, 0.35)) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   transform-origin: 0% 50%;
@@ -46,7 +75,7 @@
   animation: streak-extend 550ms var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ── Fragment shards flying inward ── */
+/* ── Fragment shards (high contrast, sharp edges) ── */
 
 .fragment {
   position: absolute;
@@ -54,13 +83,14 @@
   left: 0;
   width: var(--length, 20px);
   height: var(--size, 2px);
-  background: rgba(255, 255, 255, var(--brightness, 0.5));
+  background: #fff;
+  opacity: var(--brightness, 0.5);
   transform-origin: 0% 50%;
   transform: rotate(var(--angle, 0deg)) translateX(var(--dist, 50vmax));
   animation: warp-inward var(--duration, 500ms) var(--delay, 0ms) cubic-bezier(0.55, 0, 1, 0.45) both;
 }
 
-/* ── Central dark void (vignette) ── */
+/* ── Central dark void (tighter vignette) ── */
 
 .vignette {
   position: absolute;
@@ -68,11 +98,11 @@
   background: radial-gradient(
     circle at 50% 50%,
     rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.6) 15%,
-    rgba(0, 0, 0, 0.15) 40%,
-    transparent 65%
+    rgba(0, 0, 0, 0.7) 10%,
+    rgba(0, 0, 0, 0.2) 35%,
+    transparent 55%
   );
-  z-index: 1;
+  z-index: 5;
   pointer-events: none;
 }
 
@@ -85,14 +115,14 @@
     transform: rotate(var(--angle, 0deg)) translateX(var(--dist, 50vmax));
     opacity: 0;
   }
-  12% {
+  10% {
     opacity: 1;
   }
-  75% {
-    opacity: 0.7;
+  70% {
+    opacity: 0.85;
   }
   100% {
-    transform: rotate(var(--angle, 0deg)) translateX(1.5vmax);
+    transform: rotate(var(--angle, 0deg)) translateX(1vmax);
     opacity: 0;
   }
 }
@@ -102,22 +132,18 @@
     transform: rotate(var(--angle, 0deg)) scaleX(0);
     opacity: 0;
   }
-  25% {
+  20% {
     opacity: 1;
   }
   100% {
     transform: rotate(var(--angle, 0deg)) scaleX(1);
-    opacity: 0.5;
+    opacity: 0.7;
   }
 }
 
 @keyframes warp-fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* =============================================================================
@@ -126,7 +152,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fragment,
-  .streak {
+  .streak,
+  .ditherNoise {
     animation: none !important;
     opacity: 0 !important;
   }
