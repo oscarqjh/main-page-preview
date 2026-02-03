@@ -1691,9 +1691,13 @@ tbody tr:hover {
 .museum-featured-image {
 	overflow: hidden;
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: var(--space-lg);
+	flex-direction: column;
+}
+
+.museum-featured-image > * {
+	flex: 1;
+	height: 100%;
+	width: 100%;
 }
 
 .museum-featured-image img {
