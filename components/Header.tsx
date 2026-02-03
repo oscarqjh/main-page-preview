@@ -25,6 +25,11 @@ export default function Header() {
 		setMounted(true);
 	}, []);
 
+	// Close menu on route change (browser back/forward)
+	useEffect(() => {
+		setMenuOpen(false);
+	}, [pathname]);
+
 	// Lock body scroll when menu is open
 	useEffect(() => {
 		if (menuOpen) {
@@ -32,6 +37,9 @@ export default function Header() {
 		} else {
 			document.body.style.overflow = "";
 		}
+		return () => {
+			document.body.style.overflow = "";
+		};
 	}, [menuOpen]);
 
 	// Focus trap and keyboard handling
