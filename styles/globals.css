@@ -1704,6 +1704,7 @@ tbody tr:hover {
 .museum-featured-image img {
 	width: 100% !important;
 	height: 100% !important;
+	max-height: 320px;
 	object-fit: cover !important;
 	object-position: center !important;
 }
@@ -2113,10 +2114,10 @@ tbody tr:hover {
 	position: relative;
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--space-md);
-	padding: var(--space-xl) var(--space-md) var(--space-xl);
+	gap: var(--space-lg);
+	padding: var(--space-lg) var(--space-md);
 	align-content: center;
-	align-items: stretch;
+	align-items: center;
 	overflow: hidden;
 	background: transparent;
 	max-width: 80rem;
@@ -2126,9 +2127,10 @@ tbody tr:hover {
 
 @media (min-width: 1024px) {
 	.brutalist-hero {
-		grid-template-columns: 5fr 7fr;
+		grid-template-columns: 1fr 1fr;
+		min-height: 55vh;
 		padding: var(--space-xl) var(--space-lg);
-		gap: var(--space-lg);
+		gap: var(--space-xl);
 	}
 }
 
@@ -2137,10 +2139,9 @@ tbody tr:hover {
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
-	gap: var(--space-md);
+	justify-content: center;
+	gap: var(--space-lg);
 	max-width: 100%;
-	height: 100%;
 }
 
 .brutalist-hero-label {
@@ -2250,7 +2251,6 @@ tbody tr:hover {
 @media (min-width: 1024px) {
 	.brutalist-hero-visual {
 		min-height: unset;
-		max-height: 260px;
 	}
 }
 
