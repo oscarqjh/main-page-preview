@@ -13,7 +13,11 @@ interface DiffusionTextProps {
 }
 
 const GLYPHS = "█▓▒░>_[]{}—+*!#&";
-const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const SCRAMBLE = "アイ ウ エ オ カ キ ク ケ コ サ シ ス セ ソ タ チ ツ テ ト ナ ニ ヌ ネ ノ ハ ヒ フ ヘ ホ マ ミ ム メ モ ヤ ユ ヨ ラ リ ル レ ロ ワ ヲ ン".split(" ").join("")
+  + "ΣΩΨΞΔΛΠΘξψωφ"
+  + "░▒▓█▄▀▐▌╔╗╚╝║═╬┼"
+  + "∞≈≠±×÷«»¿¡§¶†‡"
+  + "꧁꧂ᚱᚲᚳᚴᛁᛉᛊᛋᛏᛟ";
 
 export function DiffusionText({ 
   text, 
@@ -87,7 +91,7 @@ export function DiffusionText({
             } else {
               // Show random alphabet during transition (Slot machine)
               // Change char every few frames
-              const randomChar = ALPHABET[Math.floor(Date.now() / 50) % ALPHABET.length];
+              const randomChar = SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
               chars.push(randomChar);
             }
           } else {
