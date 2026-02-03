@@ -2162,7 +2162,7 @@ tbody tr:hover {
 }
 
 .brutalist-hero-title {
-	font-size: clamp(4rem, 8vw, 7rem);
+	font-size: 4rem;
 	font-weight: 900;
 	line-height: 1.05;
 	letter-spacing: -0.03em;
@@ -2174,6 +2174,12 @@ tbody tr:hover {
 	font-size: var(--text-subheading);  /* Level 3: 24px */
 	display: block;
 	margin-top: 0.2em;
+	transition: opacity 0.5s ease;
+}
+
+.brutalist-hero-title-sub.hidden-sub {
+	opacity: 0;
+	pointer-events: none;
 }
 
 .brutalist-hero-subtitle {

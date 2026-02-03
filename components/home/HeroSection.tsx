@@ -39,8 +39,8 @@ export function HeroSection() {
 								/>
 							</div>
 							<span
-								className={`brutalist-hero-title-sub mt-4 text-2xl font-normal lowercase transition-all duration-500 ${
-									showSubtitle ? 'opacity-80' : 'opacity-0 pointer-events-none'
+								className={`brutalist-hero-title-sub lowercase ${
+									showSubtitle ? '' : 'hidden-sub'
 								}`}
 							>
 								the way to intelligence.
