@@ -88,14 +88,14 @@ export const shutterBarVariants: Variants = {
 export const linkVariants: Variants = {
   initial: { opacity: 1 },
   hover: {
-    opacity: 0.75,
+    opacity: 1,
     transition: {
       duration: 0.2,
       ease: EASE
     }
   },
   tap: {
-    scale: 0.97,  // More subtle
+    scale: 0.98,
     transition: {
       duration: 0.1,
       ease: EASE

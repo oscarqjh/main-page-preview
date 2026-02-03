@@ -1,7 +1,6 @@
 "use client";
 
-import { GradientDither } from "@/components/decorative/GradientDither";
-import { AnimatedCircuit } from "@/components/blog/AnimatedCircuit";
+import { PostThumbnail } from "@/components/blog/PostThumbnail";
 import MotionLink from "@/components/motion/MotionLink";
 import type { Post } from "@/lib/posts";
 
@@ -13,7 +12,7 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 	if (!featuredPost) return null;
 
 	return (
-		<section className="museum-featured">
+		<section className="museum-featured dashboard-surface">
 			<div className="museum-section-header">
 				<span className="museum-section-label">Featured Research</span>
 				<div className="museum-section-line" />
@@ -21,18 +20,18 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 
 			<MotionLink 
 				href={`/posts/${featuredPost.slug}`} 
-				className="museum-featured-card card-lift relative group"
+				className="museum-featured-card card-lift"
 				style={{ width: '100%', display: 'block' }}
+				aria-label={`Read featured article: ${featuredPost.title}`}
 			>
-				<GradientDither 
-					opacity={0} 
-					direction="to-bottom-right" 
-					className="transition-opacity duration-500 group-hover:opacity-10 mix-blend-overlay z-0"
-				/>
-				<div className="museum-featured-image relative z-10">
-					<AnimatedCircuit seed={featuredPost.slug} className="absolute inset-0 w-full h-full" />
+				<div className="museum-featured-image">
+					<PostThumbnail
+						title={featuredPost.title}
+						seed={featuredPost.slug}
+						hideTitle
+					/>
 				</div>
-				<div className="museum-featured-content relative z-10">
+				<div className="museum-featured-content">
 					<time className="museum-featured-date">
 						{new Date(featuredPost.date).toLocaleDateString("en-US", {
 							year: "numeric",

@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PageTransition from "@/components/motion/PageTransition";
+import { MotionProvider } from "@/components/motion/MotionProvider";
 
 export const metadata: Metadata = {
 	title: "LMMs-Lab",
@@ -17,19 +18,21 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						minHeight: "100vh",
-					}}
-				>
-					<Header />
-					<main style={{ flex: 1 }}>
-						<PageTransition>{children}</PageTransition>
-					</main>
-					<Footer />
-				</div>
+				<MotionProvider>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							minHeight: "100vh",
+						}}
+					>
+						<Header />
+						<main style={{ flex: 1 }}>
+							<PageTransition>{children}</PageTransition>
+						</main>
+						<Footer />
+					</div>
+				</MotionProvider>
 			</body>
 		</html>
 	);

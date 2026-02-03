@@ -1,7 +1,7 @@
 
 export function StatsSection() {
 	return (
-		<section className="museum-stats">
+		<section className="museum-stats dashboard-surface">
 			<div className="museum-stats-grid">
 				<div className="museum-stat">
 					<span className="museum-stat-number">16+</span>

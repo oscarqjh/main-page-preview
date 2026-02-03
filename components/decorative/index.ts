@@ -3,7 +3,6 @@ export { PixelShape } from "./PixelShape";
 export { PixelDivider } from "./PixelDivider";
 export { PixelRadar } from "./PixelRadar";
 export { DotMatrix } from "./DotMatrix";
-export { default as ParticleMorphWrapper } from "./ParticleMorphWrapper";
-export { ParticleMorphThree } from "./ParticleMorphThree";
+
 export { GradientDither } from "./GradientDither";
 export { TechContainer } from "./TechContainer";

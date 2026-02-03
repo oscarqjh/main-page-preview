@@ -1,5 +1,5 @@
 import { MDXRemoteWrapper } from "@/components/mdx/MDXRemoteWrapper";
-import { TableOfContents, ReadingProgress } from "@/components/blog";
+import { TableOfContents, MobileTableOfContents, ReadingProgress } from "@/components/blog";
 import { extractHeadings } from "@/lib/toc";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { notFound } from "next/navigation";
@@ -92,6 +92,8 @@ export default async function PostPage({
 									</div>
 								)}
 							</header>
+
+							<MobileTableOfContents headings={headings} />
 
 							<div className="blog-prose">
 								<MDXRemoteWrapper source={post.content} />

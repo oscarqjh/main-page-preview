@@ -24,7 +24,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
 			<StatsSection />
 
-			<section className="museum-quote">
+			<section className="museum-quote dashboard-surface">
 				<blockquote>
 					&quot;Quiet assets, loud impact.&quot;
 				</blockquote>

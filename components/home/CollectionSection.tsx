@@ -11,7 +11,7 @@ interface CollectionSectionProps {
 
 export function CollectionSection({ posts }: CollectionSectionProps) {
 	return (
-		<section className="museum-collection">
+		<section className="museum-collection dashboard-surface">
 			<div className="museum-section-header">
 				<span className="museum-section-label">Latest Publications</span>
 				<div className="museum-section-line" />
@@ -29,10 +29,11 @@ export function CollectionSection({ posts }: CollectionSectionProps) {
 						key={post.slug} 
 						href={`/posts/${post.slug}`} 
 						className="museum-card card-lift"
+						aria-label={`Read article: ${post.title}`}
 					>
 						<TechContainer className="h-full flex flex-col p-0! border-none!" label={`[${String(index + 1).padStart(2, '0')}]`}>
 							<div className="museum-card-image">
-								<PostThumbnail title={post.title} seed={post.slug} />
+								<PostThumbnail title={post.title} seed={post.slug} variant={index % 5} />
 							</div>
 							<div className="museum-card-content">
 								<time className="museum-card-date">

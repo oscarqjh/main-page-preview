@@ -10,7 +10,10 @@ interface TechContainerProps {
 
 export function TechContainer({ children, label, className = "" }: TechContainerProps) {
   return (
-    <div className={`relative p-4 md:p-6 ${className}`}>
+    <div className={`tech-container relative ${className}`}>
+      {/* Full border */}
+      <div className="absolute inset-0 border border-[var(--foreground)] opacity-20 pointer-events-none z-0" />
+      
       {/* Corner decorations - z-0 to stay behind content */}
       <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-[var(--foreground)] opacity-70 z-0 pointer-events-none" />
       <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-[var(--foreground)] opacity-70 z-0 pointer-events-none" />

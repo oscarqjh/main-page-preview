@@ -10,13 +10,14 @@ export default function Badge({ variant = "default", style, children, ...props }
 	const baseStyle: React.CSSProperties = {
 		display: "inline-flex",
 		alignItems: "center",
-		padding: "var(--space-xs) var(--space-sm)",
-		fontSize: "0.75rem",
-		fontWeight: 500,
-		lineHeight: 1,
+		padding: "0.375em 0.75em",
+		fontSize: "var(--text-caption)",
+		fontWeight: 600,
+		lineHeight: 1.2,
 		textTransform: "uppercase",
-		letterSpacing: "0.05em",
-		borderRadius: 0,
+		letterSpacing: "0.06em",
+		borderRadius: "2px",
+		whiteSpace: "nowrap",
 	};
 
 	const variantStyles: Record<BadgeVariant, React.CSSProperties> = {
@@ -25,9 +26,9 @@ export default function Badge({ variant = "default", style, children, ...props }
 			color: "var(--color-bg)",
 		},
 		outline: {
-			backgroundColor: "transparent",
+			backgroundColor: "rgba(254, 215, 170, 0.08)",
 			color: "inherit",
-			boxShadow: "0 0 0 1px currentColor",
+			boxShadow: "inset 0 0 0 1.5px currentColor",
 		},
 	};
 
