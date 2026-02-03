@@ -2100,7 +2100,7 @@ tbody tr:hover {
 	grid-template-columns: 1fr;
 	gap: var(--space-lg);
 	padding: var(--space-lg) var(--space-md);
-	align-items: center; /* Center align for visual balance */
+	align-items: start;
 	overflow: hidden;
 	background: transparent;
 	max-width: 80rem;
@@ -2121,7 +2121,6 @@ tbody tr:hover {
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	gap: var(--space-md);
 	max-width: 100%;
 }
@@ -2228,8 +2227,7 @@ tbody tr:hover {
 @media (min-width: 1024px) {
 	.brutalist-hero-visual {
 		min-height: unset;
-		/* Match the height of the content column for alignment */
-		align-self: center;
+		align-self: start;
 	}
 }
 
