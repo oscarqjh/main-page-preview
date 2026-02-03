@@ -14,6 +14,7 @@ interface DiffusionTextProps {
 
 const GLYPHS = "█▓▒░>_[]{}—+*!#&";
 const SCRAMBLE = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン"
+  + "智慧感知构建探索未来视觉语言模型認識機器學習預測訓練網絡運算維度張量梯度損失權重"
   + "░▒▓█▄▀▐▌╔╗╚╝║═╬┼┤├┴┬─│";
 
 export function DiffusionText({ 
