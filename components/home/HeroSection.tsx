@@ -1,17 +1,30 @@
 "use client";
 
-import { GradientDither } from "@/components/decorative/GradientDither";
-import MotionLink from "@/components/motion/MotionLink";
+import { useState, useEffect } from "react";
+import TransitionLink from "@/components/motion/TransitionLink";
 import { DiffusionText } from "@/components/motion/DiffusionText";
 
+const HERO_PHRASES = [
+  "Building",
+  "Feeling",
+  "Paving"
+];
+
 export function HeroSection() {
+	const [phraseIndex, setPhraseIndex] = useState(0);
+	
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setPhraseIndex((prev) => (prev + 1) % HERO_PHRASES.length);
+		}, 3000);
+		return () => clearInterval(interval);
+	}, []);
+
+	const currentPhrase = HERO_PHRASES[phraseIndex];
+	const showSubtitle = currentPhrase === "Paving";
+
 	return (
 		<div className="relative w-full overflow-hidden bg-[var(--background)]">
-			<GradientDither 
-				opacity={0.15} 
-				direction="to-bottom-right" 
-				className="mix-blend-overlay"
-			/>
 			<section className="brutalist-hero dashboard-hero">
 			<div className="dashboard-panel hero-panel">
 				
@@ -19,13 +32,17 @@ export function HeroSection() {
 						<h1 className="brutalist-hero-title fade-in-up animate-fill-both">
 							<div className="min-h-[1.2em]">
 								<DiffusionText 
-									text="Building" 
+									text={currentPhrase}
 									revealSpeed={1200} 
 									variant="morph"
 									scrambleSpeed={80}
 								/>
 							</div>
-							<span className="brutalist-hero-title-sub mt-4 text-2xl font-normal opacity-80 lowercase">
+							<span
+								className={`brutalist-hero-title-sub mt-4 text-2xl font-normal lowercase transition-all duration-500 ${
+									showSubtitle ? 'opacity-80' : 'opacity-0 pointer-events-none'
+								}`}
+							>
 								the way to intelligence.
 							</span>
 						</h1>
@@ -35,12 +52,12 @@ export function HeroSection() {
 						</p>
 
 						<div className="brutalist-hero-cta fade-in-up animate-fill-both stagger-2">
-							<MotionLink href="/posts" className="brutalist-btn-primary">
+							<TransitionLink href="/posts" className="brutalist-btn-primary">
 								Explore Research
-							</MotionLink>
-							<MotionLink href="/about" className="brutalist-btn-secondary">
+							</TransitionLink>
+							<TransitionLink href="/about" className="brutalist-btn-secondary">
 								About the Lab
-							</MotionLink>
+							</TransitionLink>
 						</div>
 					</div>
 				</div>
