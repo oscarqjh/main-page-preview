@@ -5,7 +5,7 @@ export type TransitionPhase =
   | 'page-swap'
   | 'big-exit'
 
-export type BigTransitionType = 'strobing' | 'hacking'
+export type BigTransitionType = 'strobing' | 'hacking' | 'smooth'
 
 export interface TransitionCombo {
   punk: boolean

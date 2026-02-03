@@ -7,6 +7,7 @@ import { TRANSITION_TIMING } from './variants'
 import PunkScramble from './transitions/PunkScramble'
 import StrobeOverlay from './transitions/StrobeOverlay'
 import HackingOverlay from './transitions/HackingOverlay'
+import SmoothOverlay from './transitions/SmoothOverlay'
 import AmbientGlitch from './transitions/AmbientGlitch'
 
 const TransitionCtx = createContext<TransitionContextValue>({
@@ -21,16 +22,14 @@ export function useTransition() {
 // Max time before force-resetting to idle (deadman switch)
 const DEADMAN_MS = 6000
 
-function pickCombo(): TransitionCombo | null {
-  const punk = Math.random() < 0.2  // 20% punk text scramble
-  // 3% big transition (easter egg): ~30% rift, ~70% hacking
-  const big: BigTransitionType | null =
+function pickCombo(): TransitionCombo {
+  const punk = Math.random() < 0.2  // 20% punk text scramble (independent)
+  // 3% big easter egg: ~30% rift, ~70% hacking. 97% smooth black fade.
+  const big: BigTransitionType =
     Math.random() < 0.03
       ? (Math.random() < 0.3 ? 'strobing' : 'hacking')
-      : null
+      : 'smooth'
 
-  // Nothing triggered -> plain navigation
-  if (!punk && !big) return null
   return { punk, big }
 }
 
@@ -91,13 +90,6 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
     if (stateRef.current.phase !== 'idle') return
 
     const combo = pickCombo()
-
-    // 97% of the time: plain navigation, no effects
-    if (!combo) {
-      router.push(href)
-      return
-    }
-
     const text = (element.textContent || '').trim()
     const computedStyles = window.getComputedStyle(element)
 
@@ -116,7 +108,8 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         bigPhase: 'enter',
         hiddenElement: element,
       })
-    } else if (combo.big) {
+    } else {
+      // No punk (or no text) -> go straight to big overlay
       setState({
         phase: 'big-enter',
         combo,
@@ -127,31 +120,21 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         bigPhase: 'enter',
         hiddenElement: null,
       })
-    } else {
-      // punk was requested but no text available, no big -> plain navigate
-      router.push(href)
     }
-  }, [router])
+  }, [])
 
   const onPunkComplete = useCallback(() => {
     if (stateRef.current.hiddenElement) {
       stateRef.current.hiddenElement.style.visibility = ''
     }
-    // If no big transition, just navigate and reset
-    if (!stateRef.current.combo?.big) {
-      if (stateRef.current.href) {
-        router.push(stateRef.current.href)
-      }
-      setState(IDLE_STATE)
-      return
-    }
+    // Always proceed to big overlay (smooth, hacking, or strobing)
     setState(prev => ({
       ...prev,
       phase: 'big-enter',
       bigPhase: 'enter',
       hiddenElement: null,
     }))
-  }, [router])
+  }, [])
 
   const onBigEnterComplete = useCallback(() => {
     if (stateRef.current.href) {
@@ -201,6 +184,16 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
           onExitComplete={onBigExitComplete}
         />
       )}
+
+      {/* Smooth black fade overlay (default for 97% of navigations) */}
+      {(state.phase === 'big-enter' || state.phase === 'big-exit') && state.combo?.big === 'smooth' && (
+        <SmoothOverlay
+          phase={state.bigPhase}
+          onEnterComplete={onBigEnterComplete}
+          onExitComplete={onBigExitComplete}
+        />
+      )}
+
       {/* Ambient idle glitch (only when no transition running) */}
       <AmbientGlitch active={state.phase === 'idle'} />
     </TransitionCtx.Provider>

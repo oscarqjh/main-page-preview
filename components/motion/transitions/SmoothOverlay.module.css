@@ -1,0 +1,43 @@
+/* =============================================================================
+ * Smooth Black Fade Overlay
+ * Masks page swap to prevent color flash between different-colored pages
+ * ============================================================================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+  animation: smooth-enter 200ms ease-out forwards;
+}
+
+.overlay.exiting {
+  animation: smooth-exit 250ms ease-in forwards;
+}
+
+/* =============================================================================
+ * Keyframes
+ * ============================================================================= */
+
+@keyframes smooth-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes smooth-exit {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* =============================================================================
+ * Accessibility
+ * ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}

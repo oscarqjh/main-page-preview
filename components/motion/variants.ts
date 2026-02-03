@@ -1,5 +1,16 @@
 import { Variants, BezierDefinition } from 'framer-motion';
 
+// Transition timing constants (ms)
+export const TRANSITION_TIMING = {
+  PUNK_DURATION: 350,
+  STROBE_ENTER: 700,
+  STROBE_EXIT: 300,
+  HACKING_EXIT: 450,
+  SMOOTH_ENTER: 200,
+  SMOOTH_EXIT: 250,
+  PAGE_SWAP_BUFFER: 80,
+} as const;
+
 // Easing curves
 export const EASE: BezierDefinition = [0.25, 0.1, 0.25, 1];
 export const EASE_EXPO: BezierDefinition = [0.16, 1, 0.3, 1];
