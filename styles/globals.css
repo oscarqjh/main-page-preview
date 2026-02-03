@@ -1704,7 +1704,6 @@ tbody tr:hover {
 .museum-featured-image img {
 	width: 100% !important;
 	height: 100% !important;
-	max-height: 320px;
 	object-fit: cover !important;
 	object-position: center !important;
 }
