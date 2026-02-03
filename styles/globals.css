@@ -2095,7 +2095,7 @@ tbody tr:hover {
 
 .brutalist-hero {
 	position: relative;
-	min-height: calc(100vh - 280px);
+	min-height: calc(100vh - 320px);
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: var(--space-lg);
@@ -2111,9 +2111,9 @@ tbody tr:hover {
 
 @media (min-width: 1024px) {
 	.brutalist-hero {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 5fr 7fr;
 		padding: var(--space-lg) var(--space-md);
-		gap: var(--space-md);
+		gap: var(--space-lg);
 	}
 }
 
@@ -2122,8 +2122,8 @@ tbody tr:hover {
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-	gap: var(--space-md);
+	justify-content: flex-end;
+	gap: var(--space-lg);
 	max-width: 100%;
 	height: 100%;
 }
@@ -2173,7 +2173,6 @@ tbody tr:hover {
 	display: flex;
 	gap: var(--space-md);
 	flex-wrap: wrap;
-	margin-top: var(--space-md);
 }
 
 .brutalist-btn-primary {
