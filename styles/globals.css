@@ -2367,6 +2367,9 @@ tbody tr:hover {
 	box-shadow: none;
 	backdrop-filter: none;
 	cursor: ns-resize;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
 	transition: opacity 180ms ease, transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 	will-change: transform, opacity;
 	overflow: visible;
@@ -2381,8 +2384,8 @@ tbody tr:hover {
 	place-items: center;
 }
 
-/* Rotary wheel knob - minimal, tactile, no extra UI layers. */
-.hero-volume-knob {
+/* Thumbwheel knob - simple linework, detents. */
+.hero-volume-wheel {
 	position: relative;
 	width: 30px;
 	height: 118px;
@@ -2390,68 +2393,55 @@ tbody tr:hover {
 	overflow: hidden;
 	pointer-events: none;
 	isolation: isolate;
-	background: linear-gradient(90deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.34));
-	box-shadow:
-		inset 0 0 0 1px rgba(254, 215, 170, 0.16),
-		inset 0 14px 18px rgba(0, 0, 0, 0.34),
-		inset 0 -14px 18px rgba(254, 215, 170, 0.06);
 	opacity: 0.55;
-	transition: opacity 160ms ease, box-shadow 160ms ease;
+	transition: opacity 160ms ease;
+	--wheel-shift: 0px;
 }
 
-.hero-volume-knob-grooves {
+.hero-volume-wheel::before {
+	content: '';
 	position: absolute;
-	left: 0;
-	right: 0;
-	top: -68px;
-	bottom: -68px;
+	inset: 0;
+	border-radius: inherit;
+	box-shadow:
+		inset 1px 0 0 rgba(254, 215, 170, 0.28),
+		inset -1px 0 0 rgba(254, 215, 170, 0.18);
+	opacity: 0.9;
+}
+
+.hero-volume-wheel-grooves {
+	position: absolute;
+	left: 3px;
+	right: 3px;
+	top: -70px;
+	bottom: -70px;
+	transform: translateY(var(--wheel-shift));
+	will-change: transform;
 	background: repeating-linear-gradient(
 		180deg,
-		rgba(254, 215, 170, 0.16) 0px,
-		rgba(254, 215, 170, 0.16) 1px,
+		rgba(254, 215, 170, 0.26) 0px,
+		rgba(254, 215, 170, 0.26) 1px,
 		rgba(0, 0, 0, 0) 1px,
 		rgba(0, 0, 0, 0) 6px
 	);
-	opacity: 0.35;
-	transform: translateY(0px);
-	transition: transform 260ms cubic-bezier(0.12, 0.9, 0.22, 1);
-	will-change: transform;
-	-webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
-	mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
+	opacity: 0.32;
+	transition: transform 240ms cubic-bezier(0.12, 0.9, 0.22, 1);
+	-webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+	mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
 }
 
-.hero-volume-knob-notch {
+/* Fixed panel marker - wheel moves behind it. */
+.hero-volume-wheel-notch {
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	width: 68%;
+	width: 78%;
 	height: 2px;
 	border-radius: 999px;
-	background: rgba(254, 215, 170, 0.72);
-	box-shadow: 0 0 10px rgba(254, 215, 170, 0.18);
-	opacity: 0.65;
-}
-
-.hero-volume-readout {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, calc(-50% - 78px));
-	min-width: 38px;
-	text-align: center;
-	font-family: var(--font-mono);
-	font-size: 0.9rem;
-	font-variant-numeric: tabular-nums;
-	letter-spacing: 0.12em;
-	color: rgba(254, 215, 170, 0.9);
-	text-shadow:
-		0 0 10px rgba(254, 215, 170, 0.35),
-		0 0 18px rgba(254, 215, 170, 0.18);
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 140ms ease;
-	z-index: 3;
+	background: rgba(254, 215, 170, 0.86);
+	opacity: 0.7;
+	box-shadow: 0 0 10px rgba(254, 215, 170, 0.14);
 }
 
 .hero-video-shell:hover .hero-volume-btn,
@@ -2464,14 +2454,8 @@ tbody tr:hover {
 }
 
 
-
-.hero-volume-btn[data-dragging="true"] .hero-volume-readout,
-.hero-volume-btn:focus-visible .hero-volume-readout {
-	opacity: 1;
-}
-
-.hero-volume-btn[data-dragging="true"] .hero-volume-knob-grooves {
-	transition: none;
+.hero-volume-btn[data-dragging="true"] .hero-volume-wheel-grooves {
+	transition-duration: 120ms;
 }
 
 .hero-volume-btn:focus-visible {
@@ -2480,14 +2464,17 @@ tbody tr:hover {
 	border-radius: 18px;
 }
 
-.hero-video-shell:hover .hero-volume-knob,
-.hero-video-shell:focus-within .hero-volume-knob,
-.hero-volume-btn:active .hero-volume-knob {
+.hero-video-shell:hover .hero-volume-wheel,
+.hero-video-shell:focus-within .hero-volume-wheel,
+.hero-volume-btn:active .hero-volume-wheel {
 	opacity: 0.8;
-	box-shadow:
-		inset 0 0 0 1px rgba(254, 215, 170, 0.22),
-		inset 0 14px 20px rgba(0, 0, 0, 0.38),
-		inset 0 -14px 20px rgba(254, 215, 170, 0.08);
+}
+
+.hero-video-shell:hover .hero-volume-wheel-notch,
+.hero-video-shell:focus-within .hero-volume-wheel-notch,
+.hero-volume-btn:active .hero-volume-wheel-notch {
+	opacity: 1;
+	box-shadow: 0 0 12px rgba(254, 215, 170, 0.22);
 }
 
 @media (min-width: 1024px) {

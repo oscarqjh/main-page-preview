@@ -13,7 +13,9 @@ const HERO_PHRASES = [
 
 	const MAX_VOLUME = 0.35;
 	const KNOB_DETENTS = 24;
-	const KNOB_SPIN_PX = 168;
+	const DRAG_PX_PER_DETENT = 10;
+	const WHEEL_GROOVE_STEP_PX = 6;
+	const WHEEL_DELTA_PER_DETENT = 28;
 
 export function HeroSection() {
 	const { phase } = useTransition();
@@ -28,16 +30,33 @@ export function HeroSection() {
 	const draggingRef = useRef(false);
 	const lastY = useRef<number | null>(null);
 	const volumeRef = useRef(0);
+	const detentIndexRef = useRef(0);
+	const detentCarryPx = useRef(0);
+	const wheelCarry = useRef(0);
 
 	useEffect(() => {
 		volumeRef.current = volume;
+		if (!draggingRef.current) {
+			detentIndexRef.current = Math.round((volume / MAX_VOLUME) * KNOB_DETENTS);
+		}
 	}, [volume]);
+
+	function applyDetentIndex(nextDetent: number) {
+		const clamped = Math.max(0, Math.min(KNOB_DETENTS, nextDetent));
+		if (clamped === detentIndexRef.current) return;
+		detentIndexRef.current = clamped;
+		const newVol = (clamped / KNOB_DETENTS) * MAX_VOLUME;
+		volumeRef.current = newVol;
+		setVolume(newVol);
+		persistVolume(newVol);
+		ensurePlayback();
+	}
 	
 	useEffect(() => {
 		if (transitioning) return;
 		const interval = setInterval(() => {
 			setPhraseIndex((prev) => (prev + 1) % HERO_PHRASES.length);
-		}, 18000);
+		}, 28000);
 		return () => clearInterval(interval);
 	}, [transitioning]);
 
@@ -90,6 +109,8 @@ export function HeroSection() {
 		draggingRef.current = true;
 		setDragging(true);
 		lastY.current = e.clientY;
+		detentIndexRef.current = Math.round((volumeRef.current / MAX_VOLUME) * KNOB_DETENTS);
+		detentCarryPx.current = 0;
 	}
 
 	function handlePointerMove(e: React.PointerEvent<HTMLButtonElement>) {
@@ -98,14 +119,12 @@ export function HeroSection() {
 		
 		const deltaY = lastY.current - e.clientY;
 		lastY.current = e.clientY;
-		
-		const sensitivity = 0.003;
-		const newVol = Math.max(0, Math.min(MAX_VOLUME, volumeRef.current + deltaY * sensitivity));
-		volumeRef.current = newVol;
-		
-		setVolume(newVol);
-		persistVolume(newVol);
-		ensurePlayback();
+		detentCarryPx.current += deltaY;
+
+		const stepDelta = Math.trunc(detentCarryPx.current / DRAG_PX_PER_DETENT);
+		if (stepDelta === 0) return;
+		detentCarryPx.current -= stepDelta * DRAG_PX_PER_DETENT;
+		applyDetentIndex(detentIndexRef.current + stepDelta);
 	}
 
 	function handlePointerUp(e?: React.PointerEvent<HTMLButtonElement>) {
@@ -121,6 +140,16 @@ export function HeroSection() {
 		}
 	}
 
+	function handleWheel(e: React.WheelEvent<HTMLButtonElement>) {
+		e.preventDefault();
+		e.stopPropagation();
+		wheelCarry.current += e.deltaY;
+		const steps = Math.trunc(wheelCarry.current / WHEEL_DELTA_PER_DETENT);
+		if (steps === 0) return;
+		wheelCarry.current -= steps * WHEEL_DELTA_PER_DETENT;
+		applyDetentIndex(detentIndexRef.current - steps);
+	}
+
 	function toggleMute() {
 		const newVol = volume === 0 ? MAX_VOLUME * 0.5 : 0;
 		setVolume(newVol);
@@ -130,11 +159,10 @@ export function HeroSection() {
 
 	const currentPhrase = HERO_PHRASES[phraseIndex];
 	const showSubtitle = currentPhrase === "Paving";
-	const volumePct = Math.round((volume / MAX_VOLUME) * 100);
-	const volumeReadout = String(volumePct).padStart(3, "0");
 	const volumeNorm = Math.max(0, Math.min(1, volume / MAX_VOLUME));
-	const detentedNorm = Math.round(volumeNorm * KNOB_DETENTS) / KNOB_DETENTS;
-	const grooveShift = Math.round(detentedNorm * KNOB_SPIN_PX);
+	const detentIndex = Math.round(volumeNorm * KNOB_DETENTS);
+	const wheelShift = -detentIndex * WHEEL_GROOVE_STEP_PX;
+	const wheelStyle = { "--wheel-shift": `${wheelShift}px` } as React.CSSProperties;
 
 	return (
 		<div className="relative w-full overflow-hidden bg-[var(--background)]">
@@ -209,19 +237,28 @@ export function HeroSection() {
 								if (e.key === "Enter" || e.key === " ") {
 									e.preventDefault();
 									toggleMute();
+									return;
+								}
+								if (e.key === "ArrowUp" || e.key === "ArrowRight") {
+									e.preventDefault();
+									applyDetentIndex(detentIndexRef.current + 1);
+									return;
+								}
+								if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
+									e.preventDefault();
+									applyDetentIndex(detentIndexRef.current - 1);
+									return;
 								}
 							}}
 							onDoubleClick={(e) => {
 								e.preventDefault();
 								toggleMute();
 							}}
+							onWheel={handleWheel}
 						>
-							<span className="hero-volume-knob" aria-hidden="true">
-								<span className="hero-volume-knob-grooves" style={{ transform: `translateY(${grooveShift}px)` }} />
-								<span className="hero-volume-knob-notch" />
-							</span>
-							<span className="hero-volume-readout" aria-hidden="true">
-								{volumeReadout}
+							<span className="hero-volume-wheel" aria-hidden="true" style={wheelStyle}>
+								<span className="hero-volume-wheel-grooves" />
+								<span className="hero-volume-wheel-notch" />
 							</span>
 						</button>
 					</div>

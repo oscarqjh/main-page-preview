@@ -102,12 +102,12 @@ export function DiffusionText({
           const t = elapsed - charDelay;
 
           const entryFlicker   = 200 + _hash(i * 11) * 150;
-          const cjk1Hold       = 1100 + _hash(i * 13) * 800;
+          const cjk1Hold       = 1600 + _hash(i * 13) * 1200;
           const hasFlickerBack = _hash(i * 17) > 0.2;
           const flickerBack    = hasFlickerBack ? 140 + _hash(i * 19) * 120 : 0;
-          const cjk2Hold       = hasFlickerBack ? 800 + _hash(i * 23) * 600 : 0;
+          const cjk2Hold       = hasFlickerBack ? 1200 + _hash(i * 23) * 900 : 0;
           const hasStutter     = _hash(i * 53) > 0.55;
-          const stutterHold    = hasStutter ? 350 + _hash(i * 59) * 350 : 0;
+          const stutterHold    = hasStutter ? 500 + _hash(i * 59) * 500 : 0;
           const settleGlitch   = 100 + _hash(i * 29) * 80;
 
           const t1 = entryFlicker;
