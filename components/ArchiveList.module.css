@@ -9,7 +9,7 @@
 /* ── Header ── */
 .header {
   margin-bottom: var(--space-xl);
-  padding: 0 var(--space-lg);
+  padding: 0 var(--space-md);
   max-width: 80rem;
   margin-left: auto;
   margin-right: auto;
@@ -57,7 +57,17 @@
   gap: 0;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--space-md);
+}
+
+@media (min-width: 641px) {
+  .header {
+    padding: 0 var(--space-lg);
+  }
+
+  .grid {
+    padding: 0 var(--space-lg);
+  }
 }
 
 /* ── Individual entry ── */

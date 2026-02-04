@@ -181,7 +181,7 @@ export function HeroSection() {
 				
 					<div className="brutalist-hero-content">
 						<h1 className="brutalist-hero-title fade-in-up animate-fill-both">
-							<div className="min-h-[1.2em]">
+							<div className="min-h-[1.2em] overflow-hidden" style={{ whiteSpace: "nowrap" }}>
 							<DiffusionText 
 								text={currentPhrase}
 								revealSpeed={4000} 

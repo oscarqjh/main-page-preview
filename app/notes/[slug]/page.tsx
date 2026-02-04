@@ -38,7 +38,7 @@ export default async function NotePage({
 
 	return (
 		<div className="blog-content-wrapper">
-			<div className="blog-layout">
+			<div className="blog-layout blog-layout-single">
 				<main className="blog-main">
 					<article className="blog-article">
 						<header className="blog-header-grid">

@@ -1262,11 +1262,19 @@ tbody tr:hover {
 	.blog-layout {
 		grid-template-columns: 240px 1fr;
 	}
+
+	.blog-layout.blog-layout-single {
+		grid-template-columns: 1fr;
+	}
 }
 
 @media (min-width: 1280px) {
 	.blog-layout {
 		grid-template-columns: 280px 1fr;
+	}
+
+	.blog-layout.blog-layout-single {
+		grid-template-columns: 1fr;
 	}
 }
 
@@ -1695,6 +1703,18 @@ tbody tr:hover {
 
 .museum-view-all:hover {
 	opacity: 1;
+}
+
+@media (max-width: 640px) {
+	.museum-section-header {
+		flex-wrap: wrap;
+		row-gap: var(--space-sm);
+	}
+
+	.museum-view-all {
+		width: 100%;
+		justify-content: flex-end;
+	}
 }
 
 .museum-featured {
@@ -2306,6 +2326,7 @@ tbody tr:hover {
 @media (min-width: 1024px) {
 	.brutalist-hero-visual {
 		min-height: unset;
+		justify-content: flex-start;
 	}
 }
 
@@ -2339,7 +2360,7 @@ tbody tr:hover {
 	transform-style: preserve-3d;
 }
 
-/* Hover sensor area to the right of the video, so the control reveals where it will appear. */
+/* Hover sensor area to the right of the video. */
 .hero-video-shell::after {
 	content: '';
 	position: absolute;
@@ -2347,6 +2368,7 @@ tbody tr:hover {
 	left: 100%;
 	width: var(--hero-vol-sensor);
 	height: 100%;
+	pointer-events: none;
 }
 
 /* 3D volume control - shown on hover, placed outside the video frame */
@@ -2372,9 +2394,9 @@ tbody tr:hover {
 	will-change: transform, opacity;
 	overflow: visible;
 
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
+	opacity: 0.5;
+	visibility: visible;
+	pointer-events: auto;
 }
 
 .hero-volume-btn {
@@ -2468,10 +2490,9 @@ tbody tr:hover {
 
 .hero-video-shell:hover .hero-volume-btn,
 .hero-video-shell:focus-within .hero-volume-btn,
-.hero-volume-btn:focus-visible {
+.hero-volume-btn:focus-visible,
+.hero-volume-btn[data-dragging="true"] {
 	opacity: 1;
-	visibility: visible;
-	pointer-events: auto;
 	transform: translateY(-50%);
 }
 
@@ -2508,9 +2529,6 @@ tbody tr:hover {
 @media (hover: none) {
 	.hero-volume-btn {
 		opacity: 1;
-		visibility: visible;
-		pointer-events: auto;
-		transform: translateY(-50%);
 	}
 }
 
