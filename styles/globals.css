@@ -879,11 +879,6 @@ tbody tr:hover {
   padding: var(--space-xl) var(--space-md);
 }
 
-.blog-article {
-  max-width: 52rem;
-  margin: 0 auto;
-}
-
 .blog-header {
   margin-bottom: var(--space-xl);
 }
@@ -972,6 +967,27 @@ tbody tr:hover {
   font-size: var(--text-body); /* Level 4: 18px */
   line-height: 1.8;
   color: #1a1a1a;
+  /* Prevent long equations from stretching the container */
+  overflow-wrap: break-word;
+}
+
+/* KaTeX block equations - scrollable on overflow */
+.blog-prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.5em 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.blog-prose .katex-display > .katex {
+  max-width: none;
+  text-align: center;
+}
+
+/* Inline KaTeX - allow wrapping */
+.blog-prose .katex {
+  font-size: 1.1em;
 }
 
 .blog-prose > * + * {
@@ -1260,22 +1276,6 @@ tbody tr:hover {
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 var(--space-md);
-}
-
-@media (min-width: 1024px) {
-  .blog-layout {
-    grid-template-columns: 240px 1fr;
-  }
-}
-
-@media (min-width: 1280px) {
-  .blog-layout {
-    grid-template-columns: 280px 1fr;
-  }
-}
-
-.blog-main {
-  min-width: 0;
 }
 
 .blog-sidebar {
