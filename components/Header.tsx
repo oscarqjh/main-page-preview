@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef, useCallback } from "react";
-import MotionLink from "@/components/motion/MotionLink";
+import TransitionLink from "@/components/motion/TransitionLink";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Header.module.css";
 
@@ -92,7 +92,7 @@ export default function Header() {
 		<header className={styles.masthead}>
 			<div className={styles.mastheadInner}>
 				<div className={styles.mastheadBrand}>
-					<MotionLink href="/" className={styles.brandLink}>
+					<TransitionLink href="/" className={styles.brandLink}>
 						<Image
 							src="/assets/logo.png"
 							alt="LMMS Lab Logo"
@@ -101,7 +101,7 @@ export default function Header() {
 							className={styles.brandLogo}
 							priority
 						/>
-					</MotionLink>
+					</TransitionLink>
 				</div>
 
 				<button
@@ -133,13 +133,13 @@ export default function Header() {
 				{/* Desktop Nav */}
 				<nav className={`${styles.navMenu} ${styles.desktopNav}`}>
 					{navItems.map((item) => (
-						<MotionLink
+						<TransitionLink
 							key={item.href}
 							href={item.href}
 							className={`${styles.navLink} ${isActive(item.href) ? styles.active : ""}`}
 						>
 							{item.label}
-						</MotionLink>
+						</TransitionLink>
 					))}
 				</nav>
 			</div>
@@ -163,14 +163,14 @@ export default function Header() {
 					>
 						<nav id="mobile-nav-menu" className={styles.mobileNavContent}>
 							{navItems.map((item) => (
-								<MotionLink
+								<TransitionLink
 									key={item.href}
 									href={item.href}
 									onClick={() => setMenuOpen(false)}
 									className={`${styles.mobileNavLink} ${isActive(item.href) ? styles.active : ""}`}
 								>
 									{item.label}
-								</MotionLink>
+								</TransitionLink>
 							))}
 						</nav>
 					</motion.div>

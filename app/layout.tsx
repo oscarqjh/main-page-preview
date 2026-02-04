@@ -22,6 +22,11 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
+			<head>
+				<link rel="preload" href="/videos/hero-promo.mp4" as="video" type="video/mp4" />
+				<link rel="preconnect" href="/" />
+				<link rel="dns-prefetch" href="/" />
+			</head>
 			<body>
 				<MotionProvider>
 					<TransitionProvider>

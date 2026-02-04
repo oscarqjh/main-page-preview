@@ -1,4 +1,4 @@
-import MotionLink from '@/components/motion/MotionLink';
+import Link from 'next/link';
 import styles from './page.module.css';
 
 export const metadata = {
@@ -10,6 +10,17 @@ interface Project {
 	name: string;
 	authors: string;
 }
+
+interface BoardMember {
+	name: string;
+	href: string;
+	affiliation: string;
+}
+
+const board: BoardMember[] = [
+	{ name: "Bo Li", href: "https://brianboli.com/", affiliation: "Nanyang Technological University" },
+	{ name: "Ziwei Liu", href: "https://liuziwei7.github.io/", affiliation: "Nanyang Technological University" },
+];
 
 const projects: Project[] = [
 	{ name: "Aero-1-Audio", authors: "Kaichen Zhang, Bo Li, Yezhen Wang" },
@@ -26,62 +37,58 @@ const projects: Project[] = [
 export default function AboutPage() {
 	return (
 		<main className={styles.container}>
-			<div className={`${styles.contentWrapper} ${styles.animateIn}`}>
-				
+			<div className={styles.contentWrapper}>
+
+				{/* ── Intro ── */}
 				<section>
-					<h1 className={styles.title}>
-						About Us
-					</h1>
+					<div className={styles.sectionHeader}>
+						<span className={styles.sectionLabel}>About</span>
+						<div className={styles.sectionLine} />
+					</div>
 					<p className={styles.description}>
 						LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers, we share the sincere passion for developing multimodal intelligence.
 					</p>
 				</section>
 
-				<section className={styles.section}>
-					<h2 className={styles.sectionTitle}>
-						Scientific Board
-					</h2>
-					<div className={styles.scientificBoardGrid}>
-						<div className={styles.card}>
-							<MotionLink 
-								href="https://brianboli.com/" 
-								target="_blank"
-								className={styles.cardName}
-							>
-								Bo Li
-							</MotionLink>
-							<p className={styles.cardAffiliation}>Nanyang Technological University</p>
-						</div>
-						<div className={styles.card}>
-							<MotionLink 
-								href="https://liuziwei7.github.io/" 
-								target="_blank"
-								className={styles.cardName}
-							>
-								Ziwei Liu
-							</MotionLink>
-							<p className={styles.cardAffiliation}>Nanyang Technological University</p>
-						</div>
+				{/* ── Scientific Board ── */}
+				<section>
+					<div className={styles.sectionHeader}>
+						<span className={styles.sectionLabel}>Scientific Board</span>
+						<div className={styles.sectionLine} />
+					</div>
+					<div className={styles.boardGrid}>
+						{board.map((member, i) => (
+							<div key={member.name} className={styles.boardCard}>
+								<span className={styles.boardIndex}>{String(i + 1).padStart(2, "0")}</span>
+								<div>
+									<Link
+										href={member.href}
+										target="_blank"
+										className={styles.boardName}
+									>
+										{member.name}
+									</Link>
+									<p className={styles.boardAffiliation}>{member.affiliation}</p>
+								</div>
+							</div>
+						))}
 					</div>
 				</section>
 
-				<section className={styles.section}>
-					<h2 className={styles.sectionTitle}>
-						Members of Core Projects
-					</h2>
+				{/* ── Core Projects ── */}
+				<section>
+					<div className={styles.sectionHeader}>
+						<span className={styles.sectionLabel}>Core Projects</span>
+						<div className={styles.sectionLine} />
+					</div>
 					<div className={styles.projectsGrid}>
 						{projects.map((project, index) => (
-							<div 
-								key={project.name}
-								className={styles.projectCard}
-								style={{ animationDelay: `${index * 100}ms` }}
-							>
-								<h3 className={styles.projectTitle}>
-									{project.name}
-								</h3>
-								<p className={styles.projectAuthors}>
-									{project.authors}
-								</p>
+							<div key={project.name} className={styles.projectCard}>
+								<div className={styles.projectHeader}>
+									<span className={styles.projectIndex}>{String(index + 1).padStart(2, "0")}</span>
+									<h3 className={styles.projectTitle}>{project.name}</h3>
+								</div>
+								<p className={styles.projectAuthors}>{project.authors}</p>
 							</div>
 						))}
 					</div>

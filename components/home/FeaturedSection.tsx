@@ -1,7 +1,8 @@
 "use client";
 
 import { PostThumbnail } from "@/components/blog/PostThumbnail";
-import MotionLink from "@/components/motion/MotionLink";
+import TransitionLink from "@/components/motion/TransitionLink";
+import { getPostHref } from "@/lib/links";
 import type { Post } from "@/lib/posts";
 
 interface FeaturedSectionProps {
@@ -18,8 +19,8 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 				<div className="museum-section-line" />
 			</div>
 
-			<MotionLink 
-				href={`/posts/${featuredPost.slug}`} 
+			<TransitionLink 
+				href={getPostHref(featuredPost.slug)} 
 				className="museum-featured-card card-lift"
 				style={{ width: '100%', display: 'block' }}
 				aria-label={`Read featured article: ${featuredPost.title}`}
@@ -29,6 +30,7 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 						title={featuredPost.title}
 						seed={featuredPost.slug}
 						hideTitle
+						thumbnail={featuredPost.thumbnail}
 					/>
 				</div>
 				<div className="museum-featured-content">
@@ -58,7 +60,7 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 						</span>
 					</div>
 				</div>
-			</MotionLink>
+			</TransitionLink>
 		</section>
 	);
 }

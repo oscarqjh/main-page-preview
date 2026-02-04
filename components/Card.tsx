@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import type { HTMLAttributes, ReactNode } from "react";
+import TransitionLink from "@/components/motion/TransitionLink";
 
 interface CardProps extends HTMLAttributes<HTMLElement> {
 	href?: string;
@@ -20,9 +20,9 @@ export default function Card({ href, style, children, ...props }: CardProps) {
 
 	if (href) {
 		return (
-			<Link href={href} style={cardStyle} className="card-lift" {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+			<TransitionLink href={href} style={cardStyle} className="card-lift" {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
 				{children}
-			</Link>
+			</TransitionLink>
 		);
 	}
 

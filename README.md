@@ -148,6 +148,92 @@ thumbnail: "https://example.com/image.jpg"
 ---
 ```
 
+### Generating Midjourney Thumbnails (Retro-Futurism Style)
+
+For custom thumbnails with a consistent visual identity, use the following meta-prompt with Midjourney (or any image generation model). Feed it the paper title + abstract and it will output a ready-to-use prompt.
+
+#### Visual Style Constraints
+
+| Constraint | Specification |
+|------------|---------------|
+| Aesthetic | 1-bit Pixel Art + Dithering |
+| Color | Strictly black and white monochrome. No greyscale - use dithering for shading |
+| Vibe | Retro Macintosh 1984, Glitch Art, High-Tech but Lo-Fi, Cold, Rational |
+| Composition | Minimalist but textured. Heavy negative space or dense noise patterns |
+| Aspect Ratio | `--ar 16:9` |
+
+#### Meta-Prompt
+
+Copy the following system prompt into ChatGPT / Claude, then feed it your paper's title and abstract:
+
+````text
+# Role: Technical Visual Director (Retro-Futurism Specialist)
+
+## Goal
+Read a provided title and abstract of a technical AI paper (especially related to
+LLMs, RL, or Computer Vision) and generate a specific Midjourney Prompt to create
+a cover image for it.
+
+## Visual Style Constraints (MUST FOLLOW)
+1. **Aesthetic:** "1-bit Pixel Art" & "Dithering".
+2. **Color:** Strictly Black and White (Monochrome). No greyscale, use dithering for shading.
+3. **Vibe:** Retro Macintosh 1984, Glitch Art, High-Tech but Lo-Fi, Cold, Rational.
+4. **Composition:** Minimalist but textured. Heavy use of negative space or dense noise patterns.
+
+## Workflow
+1. **Analyze the Input:** Identify 2-3 core technical concepts
+   (e.g., "Optimization," "Fusion," "Speed," "Reasoning").
+2. **Translate to Metaphors:**
+   - *Reinforcement Learning* -> Mazes, Feedback loops, Climbing mountains, Paths emerging from chaos.
+   - *Multimodal* -> Eyes made of text, Hands touching digital interfaces, Fusion of geometry and organic shapes.
+   - *Lightweight/Efficiency* -> Thin lines, Floating geometric crystals, Feathers made of wireframe.
+   - *Hallucination/Noise* -> Static fog, Glitch, Broken pixels.
+   - *Video/Temporal* -> Film strips, Timelines, Mechanical arms extracting frames.
+   - *Audio/Speech* -> Waveforms, Prisms refracting sound, Frequency spectra.
+   - *High-Resolution/Grounding* -> Recursive zoom boxes, Crosshairs, Fractal clarity.
+   - *Open-Source/Democratization* -> Open gates, Exposed blueprints, Visible architecture.
+   - *Data Diversity* -> Multiple converging streams, Mosaic textures, Assembled crystals.
+3. **Construct the Prompt:**
+   - [Subject Description with Metaphor]
+   - [Environment/Background]
+   - [Style Tags: 1-bit pixel art, dithered, grainy, stark black and white, etc.]
+
+## Output Format
+**Analysis:** [Briefly explain the metaphor you chose]
+**Midjourney Prompt:** `/imagine prompt: [Your generated prompt] --ar 16:9 --v 6.0`
+````
+
+#### Example
+
+**Input:**
+> Paper Title: DeepSeek-V3: Optimizing Latent Attention for Faster Inference
+
+**Output:**
+
+> **Analysis:** Focus on "Faster Inference" and "Attention". Metaphor: a laser beam cutting through a fog of latency.
+>
+> **Midjourney Prompt:**
+> `/imagine prompt: A sharp, focused beam of white light piercing through a dense cloud of dark, dithering static noise. The beam creates a tunnel of clarity. Concept: "Optimized Attention cutting through latency". Style: 1-bit pixel art, heavy dithering texture, retro-futurism, stark contrast, clean geometric lines against chaotic background. --ar 16:9 --v 6.0`
+
+#### Metaphor Reference Table
+
+Use this as a quick lookup when writing prompts manually:
+
+| Technical Concept | Visual Metaphor |
+|-------------------|-----------------|
+| Reinforcement Learning | Mazes, feedback loops, mountains, paths from chaos |
+| Multimodal | Eyes made of text, geometry-organic fusion |
+| Lightweight / Efficiency | Thin lines, wireframe crystals, floating feathers |
+| Hallucination / Noise | Static fog, glitch, broken pixels |
+| Video / Temporal | Film strips, timelines, mechanical frame extraction |
+| Audio / Speech | Waveforms, prisms refracting sound, frequency bars |
+| High-Resolution / Grounding | Recursive zoom boxes, crosshairs, fractal clarity |
+| Open-Source / Democratization | Open gates, exposed blueprints, visible internals |
+| Data Diversity / Curation | Converging streams, mosaic textures, assembled crystals |
+| Reasoning / Chain-of-Thought | Spiral staircases, branching paths, ascending steps |
+| Speed / Inference | Laser beams, tunnels of clarity, motion blur |
+| Scaling | Fractal repetition, nested structures, horizon vanishing points |
+
 ### Animation Details
 
 All thumbnails include subtle CSS animations:

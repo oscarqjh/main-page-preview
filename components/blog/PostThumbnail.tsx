@@ -8,6 +8,7 @@ interface PostThumbnailProps {
 	className?: string;
 	variant?: number;
 	hideTitle?: boolean;
+	thumbnail?: string;
 }
 
 function hashString(str: string): number {
@@ -268,6 +269,7 @@ export function PostThumbnail({
 	className = "",
 	variant: forcedVariant,
 	hideTitle = false,
+	thumbnail,
 }: PostThumbnailProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const hash = useMemo(() => hashString(seed || title), [seed, title]);
@@ -275,10 +277,42 @@ export function PostThumbnail({
 		forcedVariant !== undefined ? forcedVariant : hash % SCENES.length;
 
 	useEffect(() => {
+		if (thumbnail) return;
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 		renderHalftone(canvas, CW, CH, hash, variant);
-	}, [hash, variant]);
+	}, [hash, variant, thumbnail]);
+
+	if (thumbnail) {
+		return (
+			<div className={`post-thumbnail-v2 ${className}`}>
+				<div className="post-thumbnail-v2-bg">
+					<img
+						src={thumbnail}
+						alt={title}
+						style={{
+							width: "100%",
+							height: "100%",
+							display: "block",
+							objectFit: "cover",
+						}}
+					/>
+				</div>
+				{!hideTitle && (
+					<>
+						<div className="post-thumbnail-v2-overlay" />
+						<div className="post-thumbnail-v2-content">
+							<span className="post-thumbnail-v2-title">
+								{title.length > 40
+									? title.slice(0, 37) + "..."
+									: title}
+							</span>
+						</div>
+					</>
+				)}
+			</div>
+		);
+	}
 
 	return (
 		<div className={`post-thumbnail-v2 ${className}`}>

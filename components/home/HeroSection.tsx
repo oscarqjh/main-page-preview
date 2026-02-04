@@ -64,18 +64,19 @@ export function HeroSection() {
 
 			<div className="dashboard-panel hero-panel hero-panel-visual">
 				
-					<div className="brutalist-hero-visual fade-in animate-fill-both stagger-2">
-						<video
-							autoPlay
-							loop
-							muted
-							playsInline
-							className="hero-promo-video"
-							aria-label="LMMS Lab promotional video"
-						>
-							<source src="/videos/hero-promo.mp4" type="video/mp4" />
-						</video>
-					</div>
+				<div className="brutalist-hero-visual fade-in animate-fill-both stagger-2">
+					<video
+						autoPlay
+						loop
+						muted
+						playsInline
+						preload="auto"
+						className="hero-promo-video"
+						aria-label="LMMS Lab promotional video"
+					>
+						<source src="/videos/hero-promo.mp4" type="video/mp4" />
+					</video>
+				</div>
 				</div>
 			</section>
 		</div>
