@@ -2242,6 +2242,12 @@ tbody tr:hover {
 	text-transform: uppercase;
 }
 
+@media (max-width: 420px) {
+	.brutalist-hero-title {
+		font-size: 4rem;
+	}
+}
+
 .brutalist-hero-title-sub {
 	font-size: var(--text-subheading);  /* Level 3: 24px */
 	display: block;
