@@ -135,11 +135,14 @@
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border: 1px solid currentColor;
-  opacity: 0.4;
+  letter-spacing: 0.05em;
+  padding: 0.2em 0.5em;
+  background: rgba(var(--foreground-rgb), 0.1);
+  border: 1px solid rgba(var(--foreground-rgb), 0.2);
+  color: var(--foreground);
+  opacity: 0.8;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 .entryTitle {
