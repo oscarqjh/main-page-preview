@@ -1685,7 +1685,6 @@ tbody tr:hover {
 	.museum-featured-card {
 		grid-template-columns: 1fr 1fr;
 		align-items: stretch;
-		max-height: 280px;
 	}
 }
 
@@ -1694,6 +1693,7 @@ tbody tr:hover {
 	display: flex;
 	flex-direction: column;
 	padding: 0;
+	min-height: 300px;
 }
 
 .museum-featured-image > * {
@@ -1707,6 +1707,20 @@ tbody tr:hover {
 	height: 100% !important;
 	object-fit: cover !important;
 	object-position: center !important;
+}
+
+.museum-featured-image .post-thumbnail-v2 {
+	height: 100%;
+}
+
+.museum-featured-image .post-thumbnail-v2-bg {
+	height: 100%;
+}
+
+.museum-featured-image .post-thumbnail-v2-bg img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
 }
 
 .museum-featured-content {
