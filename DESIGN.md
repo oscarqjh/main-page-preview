@@ -30,16 +30,16 @@ Sourced from [randoma11y.com](https://randoma11y.com) with APCA accessibility al
 
 | Role | Color | HEX | Usage |
 |------|-------|-----|-------|
-| **Background** | Deep Teal | `#0369a1` | Header, footer, dark sections |
+| **Background** | Deep Teal | `#03639a` | Header, footer, dark sections |
 | **Foreground** | Warm Cream | `#fed7aa` | Text on dark, blog content bg |
 
 ### Color Formats (for advanced usage)
 
 ```css
 /* Background - Deep Teal */
---background: #0369a1;
---background-hsl: 201.27 96.341% 32.157%;
---background-oklch: 49.998% 0.11929 242.75;
+--background: #03639a;
+--background-hsl: 201.85 96.18% 30.78%;
+--background-oklch: 48.087% 0.11659 243.64;
 
 /* Foreground - Warm Cream */
 --foreground: #fed7aa;
@@ -51,8 +51,8 @@ Sourced from [randoma11y.com](https://randoma11y.com) with APCA accessibility al
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| APCA Contrast | -62.729 | Passes Lc 60 (body text) |
-| WCAG 2.1 Ratio | 4.4:1 | AA for large text, UI |
+| APCA Contrast | Lc 60+ | Passes for body text |
+| WCAG 2.1 Ratio | 4.77:1 | AA for normal text |
 
 ### Derived Colors
 

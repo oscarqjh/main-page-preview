@@ -8,10 +8,10 @@ A modern research blog built with Next.js 14, featuring a brutalist/sci-fi desig
 
 | Role | Color | Hex |
 |------|-------|-----|
-| Background | Deep Teal | `#0369a1` |
+| Background | Deep Teal | `#03639a` |
 | Foreground | Warm Cream | `#fed7aa` |
 
-APCA Contrast: -62.729 (passes Lc 60 for body text)
+APCA Contrast: passes Lc 60 for body text
 
 ### Visual Style
 
@@ -280,7 +280,7 @@ Animations respect `prefers-reduced-motion` for accessibility.
 
 ```css
 :root {
-  --background: #0369a1;
+  --background: #03639a;
   --foreground: #fed7aa;
   --font-sans: system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, monospace;

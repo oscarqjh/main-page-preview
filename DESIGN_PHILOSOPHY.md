@@ -25,7 +25,7 @@ We strip away gradients, shadows, and anti-aliasing to reveal the raw truth of c
 - **Texture**: Halftone patterns, dithered gradients, and discrete point clouds.
 
 ### 2. Palette: Deep Sea & Warm Light
-- **Void (`#0369a1`)**: A deep, rich teal that feels like the ocean floor or deep space.
+- **Void (`#03639a`)**: A deep, rich teal that feels like the ocean floor or deep space.
 - **Signal (`#fed7aa`)**: A warm, organic cream color. It's the light of intelligence in the dark.
 - **Contrast**: Absolute high contrast. No muddiness.
 
