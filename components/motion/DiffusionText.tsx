@@ -10,29 +10,45 @@ interface DiffusionTextProps {
   scrambleSpeed?: number;
   revealSpeed?: number;
   variant?: DiffusionVariant;
+  paused?: boolean;
 }
 
 const GLYPHS = "█▓▒░>_[]{}—+*!#&";
-const SCRAMBLE = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン"
-  + "智慧感知构建探索未来视觉语言模型認識機器學習預測訓練網絡運算維度張量梯度損失權重"
-  + "░▒▓█▄▀▐▌╔╗╚╝║═╬┼┤├┴┬─│";
+
+const CJK    = "感觉构建探索未来智慧视觉语言模型认识思维预测";
+const KANA   = "アイウエオカキクケコサシスセソタチツテト";
+const BLOCKS = "░▒▓█▄▀";
+
+const _hash = (seed: number) => {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+};
 
 export function DiffusionText({ 
   text, 
   className = "", 
   revealSpeed = 1500,
-  variant = "diffusion"
+  variant = "diffusion",
+  paused = false,
 }: DiffusionTextProps) {
   const [displayText, setDisplayText] = useState(text);
   const prevTextRef = useRef(text);
   const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (paused) {
+      setDisplayText(text);
+      return;
+    }
+  }, [paused, text]);
   
   useEffect(() => {
-    // Skip animation on first mount to show initial text immediately
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
+
+    if (paused) return;
 
     const prevText = prevTextRef.current;
     prevTextRef.current = text;
@@ -46,6 +62,7 @@ export function DiffusionText({
       const rawProgress = Math.min(elapsed / revealSpeed, 1);
       
       let currentString = "";
+      let morphDuration = 0;
 
       if (variant === "diffusion") {
         // --- Variant A: Diffusion (Matrix/Glitch style) ---
@@ -65,54 +82,100 @@ export function DiffusionText({
         }).join('');
 
       } else {
-        // --- Variant B: Character Morph (Slot Machine / Flip) ---
-        // Transition from old char to new char
-        // Slower, character-by-character transformation
+        // --- Variant B: Broken neon / malfunctioning CJK display ---
         const length = Math.max(prevText.length, text.length);
         const chars: string[] = [];
-        
+        const stagger = 680;
+        let morphEnd = 0;
+
         for (let i = 0; i < length; i++) {
           const targetChar = text[i] || "";
           const oldChar = prevText[i] || "";
-          
-          // Each character has its own "done" time
-          // Stagger effect: left to right (or random)
-          // Let's do random staggered finish
-          const charProgress = Math.min((elapsed - i * 30) / (revealSpeed * 0.6), 1);
-          
-          if (charProgress >= 1) {
+
+          if (targetChar === oldChar) {
             chars.push(targetChar);
-          } else if (charProgress > 0) {
-            // In transition
-            if (targetChar === oldChar) {
-              chars.push(targetChar);
-            } else {
-              // Show random alphabet during transition (Slot machine)
-              // Change char every few frames
-              const randomChar = SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
-              chars.push(randomChar);
-            }
-          } else {
-            // Not started yet
+            continue;
+          }
+
+          const jitter = (_hash(i * 7 + 3) - 0.5) * 260;
+          const charDelay = i * stagger + jitter;
+          const t = elapsed - charDelay;
+
+          const entryFlicker   = 200 + _hash(i * 11) * 150;
+          const cjk1Hold       = 1100 + _hash(i * 13) * 800;
+          const hasFlickerBack = _hash(i * 17) > 0.2;
+          const flickerBack    = hasFlickerBack ? 140 + _hash(i * 19) * 120 : 0;
+          const cjk2Hold       = hasFlickerBack ? 800 + _hash(i * 23) * 600 : 0;
+          const hasStutter     = _hash(i * 53) > 0.55;
+          const stutterHold    = hasStutter ? 350 + _hash(i * 59) * 350 : 0;
+          const settleGlitch   = 100 + _hash(i * 29) * 80;
+
+          const t1 = entryFlicker;
+          const t2 = t1 + cjk1Hold;
+          const t3 = t2 + flickerBack;
+          const t4 = t3 + cjk2Hold;
+          const t5 = t4 + stutterHold;
+          const t6 = t5 + settleGlitch;
+
+          const charEnd = charDelay + t6;
+          if (charEnd > morphEnd) morphEnd = charEnd;
+
+          if (t < 0) {
             chars.push(oldChar);
+          } else if (t < t1) {
+            const tick = Math.floor(t / 80);
+            chars.push(
+              tick % 2 === 0
+                ? oldChar
+                : BLOCKS[Math.floor(_hash(i * 31 + tick) * BLOCKS.length)]
+            );
+          } else if (t < t2) {
+            chars.push(CJK[Math.floor(_hash(i * 37 + 1) * CJK.length)]);
+          } else if (t < t3 && hasFlickerBack) {
+            chars.push(oldChar);
+          } else if (t < t4 && hasFlickerBack) {
+            const pool = _hash(i * 41) > 0.5 ? KANA : CJK;
+            chars.push(pool[Math.floor(_hash(i * 43 + 2) * pool.length)]);
+          } else if (t < t5 && hasStutter) {
+            const tick = Math.floor((t - t4) / 160);
+            chars.push(
+              tick % 2 === 0
+                ? targetChar
+                : CJK[Math.floor(_hash(i * 61 + 3) * CJK.length)]
+            );
+          } else if (t < t6) {
+            const tick = Math.floor((t - t5) / 50);
+            chars.push(
+              tick % 2 === 0
+                ? targetChar
+                : BLOCKS[Math.floor(_hash(i * 47 + tick) * BLOCKS.length)]
+            );
+          } else {
+            chars.push(targetChar);
           }
         }
+
         currentString = chars.join('');
+        morphDuration = morphEnd;
       }
       
       setDisplayText(currentString);
-      
-      if (rawProgress < 1) {
-        animationFrameId = requestAnimationFrame(animate);
+
+      const done = variant === "morph"
+        ? elapsed >= morphDuration
+        : rawProgress >= 1;
+
+      if (done) {
+        setDisplayText(text);
       } else {
-        setDisplayText(text); // Finalize
+        animationFrameId = requestAnimationFrame(animate);
       }
     };
     
     animationFrameId = requestAnimationFrame(animate);
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [text, revealSpeed, variant]);
+  }, [text, revealSpeed, variant, paused]);
 
   return (
     <span className={className}>
