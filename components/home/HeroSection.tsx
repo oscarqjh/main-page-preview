@@ -12,9 +12,9 @@ const HERO_PHRASES = [
 ];
 
 	const MAX_VOLUME = 0.35;
-	const KNOB_DETENTS = 24;
-	const DRAG_PX_PER_DETENT = 10;
-	const WHEEL_GROOVE_STEP_PX = 6;
+	const KNOB_DETENTS = 100;
+	const DRAG_PX_PER_DETENT = 4;
+	const WHEEL_GROOVE_STEP_PX = 4;
 	const WHEEL_DELTA_PER_DETENT = 28;
 
 export function HeroSection() {
@@ -27,6 +27,7 @@ export function HeroSection() {
 	const HERO_AUDIO_STORAGE_KEY = "lmms.heroAudio.v1";
 	const [volume, setVolume] = useState(0);
 	const [dragging, setDragging] = useState(false);
+	const [wheelTurns, setWheelTurns] = useState(0);
 	const draggingRef = useRef(false);
 	const lastY = useRef<number | null>(null);
 	const volumeRef = useRef(0);
@@ -51,6 +52,12 @@ export function HeroSection() {
 		persistVolume(newVol);
 		ensurePlayback();
 	}
+
+	function spinDetents(delta: number) {
+		if (delta === 0) return;
+		setWheelTurns((prev) => prev + delta);
+		applyDetentIndex(detentIndexRef.current + delta);
+	}
 	
 	useEffect(() => {
 		if (transitioning) return;
@@ -68,7 +75,9 @@ export function HeroSection() {
 			if (!parsed || typeof parsed !== "object") return;
 			const p = parsed as { volume?: unknown };
 			if (typeof p.volume === "number" && Number.isFinite(p.volume)) {
-				setVolume(Math.max(0, Math.min(MAX_VOLUME, p.volume)));
+				const v = Math.max(0, Math.min(MAX_VOLUME, p.volume));
+				setVolume(v);
+				setWheelTurns(Math.round((v / MAX_VOLUME) * KNOB_DETENTS));
 			}
 		} catch {
 			// ignore
@@ -124,7 +133,7 @@ export function HeroSection() {
 		const stepDelta = Math.trunc(detentCarryPx.current / DRAG_PX_PER_DETENT);
 		if (stepDelta === 0) return;
 		detentCarryPx.current -= stepDelta * DRAG_PX_PER_DETENT;
-		applyDetentIndex(detentIndexRef.current + stepDelta);
+		spinDetents(stepDelta);
 	}
 
 	function handlePointerUp(e?: React.PointerEvent<HTMLButtonElement>) {
@@ -147,7 +156,7 @@ export function HeroSection() {
 		const steps = Math.trunc(wheelCarry.current / WHEEL_DELTA_PER_DETENT);
 		if (steps === 0) return;
 		wheelCarry.current -= steps * WHEEL_DELTA_PER_DETENT;
-		applyDetentIndex(detentIndexRef.current - steps);
+		spinDetents(-steps);
 	}
 
 	function toggleMute() {
@@ -160,8 +169,9 @@ export function HeroSection() {
 	const currentPhrase = HERO_PHRASES[phraseIndex];
 	const showSubtitle = currentPhrase === "Paving";
 	const volumeNorm = Math.max(0, Math.min(1, volume / MAX_VOLUME));
-	const detentIndex = Math.round(volumeNorm * KNOB_DETENTS);
-	const wheelShift = -detentIndex * WHEEL_GROOVE_STEP_PX;
+	const volumeStep = Math.round(volumeNorm * KNOB_DETENTS);
+	const volumeReadout = String(volumeStep).padStart(3, "0");
+	const wheelShift = -wheelTurns * WHEEL_GROOVE_STEP_PX;
 	const wheelStyle = { "--wheel-shift": `${wheelShift}px` } as React.CSSProperties;
 
 	return (
@@ -241,12 +251,12 @@ export function HeroSection() {
 								}
 								if (e.key === "ArrowUp" || e.key === "ArrowRight") {
 									e.preventDefault();
-									applyDetentIndex(detentIndexRef.current + 1);
+									spinDetents(1);
 									return;
 								}
 								if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
 									e.preventDefault();
-									applyDetentIndex(detentIndexRef.current - 1);
+									spinDetents(-1);
 									return;
 								}
 							}}
@@ -260,6 +270,7 @@ export function HeroSection() {
 								<span className="hero-volume-wheel-grooves" />
 								<span className="hero-volume-wheel-notch" />
 							</span>
+							<span className="hero-volume-readout" aria-hidden="true">{volumeReadout}</span>
 						</button>
 					</div>
 				</div>

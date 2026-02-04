@@ -2214,7 +2214,7 @@ tbody tr:hover {
 }
 
 .brutalist-hero-title {
-	font-size: 3.5rem;
+	font-size: 4.2rem;
 	font-weight: 900;
 	line-height: 1.05;
 	letter-spacing: -0.03em;
@@ -2239,7 +2239,7 @@ tbody tr:hover {
 	font-weight: 400;
 	line-height: 1.5;
 	opacity: 1;
-	max-width: 560px;
+	max-width: 620px;
 	margin: 0;
 }
 
@@ -2262,7 +2262,6 @@ tbody tr:hover {
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	transition: all var(--duration-fast) var(--ease-out);
-	box-shadow: 0 0 0 2px var(--foreground);
 }
 
 .brutalist-btn-primary:hover {
@@ -2287,7 +2286,6 @@ tbody tr:hover {
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	transition: all var(--duration-fast) var(--ease-out);
-	box-shadow: 0 0 0 2px var(--foreground);
 }
 
 .brutalist-btn-secondary:hover {
@@ -2335,7 +2333,7 @@ tbody tr:hover {
 	--hero-vol-gap: 12px;
 	--hero-vol-w: 46px;
 	--hero-vol-sensor: calc(var(--hero-vol-gap) + var(--hero-vol-w));
-	width: min(560px, 100%);
+	width: calc(100% - var(--hero-vol-sensor));
 	max-width: 100%;
 	overflow: visible;
 	transform-style: preserve-3d;
@@ -2357,7 +2355,7 @@ tbody tr:hover {
 	left: calc(100% + var(--hero-vol-gap));
 	right: auto;
 	top: 50%;
-	transform: translateY(-50%) rotateY(-18deg) rotateX(6deg);
+	transform: translateY(-50%);
 	transform-origin: left center;
 	width: 46px;
 	height: 148px;
@@ -2387,9 +2385,9 @@ tbody tr:hover {
 /* Thumbwheel knob - simple linework, detents. */
 .hero-volume-wheel {
 	position: relative;
-	width: 30px;
+	width: 32px;
 	height: 118px;
-	border-radius: 999px;
+	border-radius: 10px;
 	overflow: hidden;
 	pointer-events: none;
 	isolation: isolate;
@@ -2403,29 +2401,26 @@ tbody tr:hover {
 	position: absolute;
 	inset: 0;
 	border-radius: inherit;
-	box-shadow:
-		inset 1px 0 0 rgba(254, 215, 170, 0.28),
-		inset -1px 0 0 rgba(254, 215, 170, 0.18);
+	box-shadow: none;
 	opacity: 0.9;
 }
 
 .hero-volume-wheel-grooves {
 	position: absolute;
-	left: 3px;
-	right: 3px;
-	top: -70px;
-	bottom: -70px;
-	transform: translateY(var(--wheel-shift));
-	will-change: transform;
+	left: 5px;
+	right: 5px;
+	top: 0;
+	bottom: 0;
 	background: repeating-linear-gradient(
 		180deg,
-		rgba(254, 215, 170, 0.26) 0px,
-		rgba(254, 215, 170, 0.26) 1px,
-		rgba(0, 0, 0, 0) 1px,
-		rgba(0, 0, 0, 0) 6px
+		rgba(254, 215, 170, 0.42) 0px,
+		rgba(254, 215, 170, 0.42) 3px,
+		rgba(0, 0, 0, 0) 3px,
+		rgba(0, 0, 0, 0) 12px
 	);
-	opacity: 0.32;
-	transition: transform 240ms cubic-bezier(0.12, 0.9, 0.22, 1);
+	background-position: 0 var(--wheel-shift);
+	opacity: 0.55;
+	transition: background-position 240ms cubic-bezier(0.12, 0.9, 0.22, 1);
 	-webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
 	mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
 }
@@ -2436,12 +2431,39 @@ tbody tr:hover {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	width: 78%;
-	height: 2px;
-	border-radius: 999px;
+	width: 76%;
+	height: 3px;
+	border-radius: 2px;
 	background: rgba(254, 215, 170, 0.86);
 	opacity: 0.7;
 	box-shadow: 0 0 10px rgba(254, 215, 170, 0.14);
+}
+
+.hero-volume-readout {
+	position: absolute;
+	left: 50%;
+	bottom: -28px;
+	transform: translateX(-50%);
+	padding: 2px 6px;
+	font-family: var(--font-mono);
+	font-size: 0.9rem;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.16em;
+	line-height: 1;
+	color: rgba(254, 215, 170, 0.96);
+	text-shadow:
+		0 0 10px rgba(254, 215, 170, 0.26),
+		0 0 18px rgba(254, 215, 170, 0.14);
+	background: repeating-linear-gradient(
+		180deg,
+		rgba(254, 215, 170, 0.10) 0px,
+		rgba(254, 215, 170, 0.10) 1px,
+		rgba(0, 0, 0, 0) 1px,
+		rgba(0, 0, 0, 0) 3px
+	);
+	opacity: 0.92;
+	pointer-events: none;
+	z-index: 2;
 }
 
 .hero-video-shell:hover .hero-volume-btn,
@@ -2450,7 +2472,7 @@ tbody tr:hover {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
-	transform: translateY(-50%) rotateY(-12deg) rotateX(5deg);
+	transform: translateY(-50%);
 }
 
 
@@ -2478,9 +2500,8 @@ tbody tr:hover {
 }
 
 @media (min-width: 1024px) {
-	/* Keep the 3D control inside the hero bounds (hero wrapper has overflow hidden). */
 	.brutalist-hero-visual {
-		padding-right: 72px;
+		padding-right: 0;
 	}
 }
 
@@ -2489,7 +2510,7 @@ tbody tr:hover {
 		opacity: 1;
 		visibility: visible;
 		pointer-events: auto;
-		transform: translateY(-50%) rotateY(-10deg) rotateX(4deg);
+		transform: translateY(-50%);
 	}
 }
 
@@ -2502,11 +2523,11 @@ tbody tr:hover {
 		left: auto;
 		right: 0;
 		top: calc(100% + 14px);
-		transform: rotateY(-14deg) rotateX(6deg);
+		transform: none;
 		transform-origin: right top;
 	}
 
 	.hero-video-shell:hover .hero-volume-btn {
-		transform: rotateY(-10deg) rotateX(5deg);
+		transform: none;
 	}
 }
