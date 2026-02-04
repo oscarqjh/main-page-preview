@@ -1,0 +1,167 @@
+/* =============================================================================
+ * About Page - Clean layout with cyberpunk accents
+ * ============================================================================= */
+
+.container {
+  min-height: 100vh;
+  padding: var(--space-xl) 0;
+}
+
+.contentWrapper {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: 0 var(--space-md);
+}
+
+/* ── Section header (reusable label + line pattern) ── */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.sectionLabel {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+
+.sectionLine {
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+.sectionCount {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  opacity: 0.4;
+  white-space: nowrap;
+}
+
+/* ── Description ── */
+.description {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  max-width: 60ch;
+}
+
+/* ── Board grid ── */
+.boardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.boardCard {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-top: 1px solid rgba(254, 215, 170, 0.12);
+}
+
+.boardCard:last-child {
+  border-bottom: 1px solid rgba(254, 215, 170, 0.12);
+}
+
+.boardIndex {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  opacity: 0.3;
+  letter-spacing: 0.05em;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.boardName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.boardName:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+
+.boardAffiliation {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* ── Projects grid ── */
+.projectsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 640px) {
+  .projectsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .projectsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.projectCard {
+  padding: var(--space-md);
+  border: 1px solid rgba(254, 215, 170, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.projectCard:hover {
+  border-color: rgba(254, 215, 170, 0.3);
+  background: rgba(254, 215, 170, 0.03);
+}
+
+.projectHeader {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.projectIndex {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0.25;
+  letter-spacing: 0.05em;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.projectTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.projectAuthors {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  opacity: 0.5;
+  line-height: 1.6;
+}
