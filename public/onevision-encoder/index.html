@@ -257,13 +257,23 @@
             border-left: 1px solid rgba(254, 215, 170, 0.10);
         }
 
+        /*
+          Rowspan-safe header separators:
+          In the first results table, the first two header cells use rowspan=2.
+          That makes the first cell in the `.sub-header` row not adjacent to a
+          sibling in the same row, so `th + th` won't draw the left separator.
+        */
+        .results-table thead tr.sub-header th:first-child {
+            border-left: 1px solid rgba(254, 215, 170, 0.10);
+        }
+
         /* Group header rows */
         .results-table tr.header-group th {
-            background-color: rgba(3, 105, 161, 0.65);
+            background-color: rgba(3, 105, 161, 0.78);
             border-bottom: 1px solid rgba(254, 215, 170, 0.22);
         }
         .results-table tr.sub-header th {
-            background-color: rgba(3, 105, 161, 0.55);
+            background-color: rgba(3, 105, 161, 0.68);
             font-size: 0.75rem;
             color: rgba(254, 215, 170, 0.95);
         }
@@ -369,18 +379,13 @@
             transition: opacity 160ms ease, border-color 160ms ease;
         }
 
-        /* Hover scan shimmer - camera focus style */
+        /* Hover scan shimmer - camera focus style (no fade-out while emphasizing) */
         @keyframes focusFrameScan {
             0% {
-                background-position: 120% 0;
-                opacity: 0;
-            }
-            15% {
-                opacity: 1;
+                background-position: 0 0, 120% 0;
             }
             100% {
-                background-position: -120% 0;
-                opacity: 0;
+                background-position: 0 0, -120% 0;
             }
         }
 
@@ -406,17 +411,20 @@
         .results-table td.marked-val:hover,
         .results-table td.best-val:focus-visible,
         .results-table td.marked-val:focus-visible {
-            background-image: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(254, 215, 170, 0.00) 25%,
-                rgba(254, 215, 170, 0.16) 45%,
-                rgba(254, 215, 170, 0.00) 65%,
-                transparent 100%
-            );
-            background-size: 220% 100%;
+            /* Base highlight stays; scan is an additional moving layer */
+            background-image:
+                linear-gradient(0deg, rgba(254, 215, 170, 0.06), rgba(254, 215, 170, 0.06)),
+                linear-gradient(
+                    90deg,
+                    transparent 0%,
+                    rgba(254, 215, 170, 0.00) 26%,
+                    rgba(254, 215, 170, 0.16) 48%,
+                    rgba(254, 215, 170, 0.00) 70%,
+                    transparent 100%
+                );
+            background-size: 100% 100%, 220% 100%;
             background-repeat: no-repeat;
-            background-position: 120% 0;
+            background-position: 0 0, 120% 0;
             animation: focusFrameScan 680ms ease-out 1;
         }
 
@@ -434,7 +442,10 @@
             .results-table td.best-val:focus-visible,
             .results-table td.marked-val:focus-visible {
                 animation: none;
-                background-image: none;
+                /* Keep emphasis without motion */
+                background-image: linear-gradient(0deg, rgba(254, 215, 170, 0.06), rgba(254, 215, 170, 0.06));
+                background-size: 100% 100%;
+                background-position: 0 0;
             }
         }
 
