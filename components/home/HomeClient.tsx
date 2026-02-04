@@ -3,6 +3,7 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedSection } from "@/components/home/FeaturedSection";
 import { CollectionSection } from "@/components/home/CollectionSection";
+import OneVisionEncoderPreloader from "@/components/preload/OneVisionEncoderPreloader";
 import type { Post } from "@/lib/posts";
 
 const PINNED_SLUGS = [
@@ -25,6 +26,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
 	return (
 		<div className="museum-home">
+			<OneVisionEncoderPreloader />
 			<HeroSection />
 
 			<FeaturedSection featuredPost={featuredPost} />

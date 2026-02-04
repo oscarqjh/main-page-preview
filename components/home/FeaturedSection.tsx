@@ -2,6 +2,7 @@
 
 import { PostThumbnail } from "@/components/blog/PostThumbnail";
 import TransitionLink from "@/components/motion/TransitionLink";
+import { preloadOneVisionEncoder } from "@/components/preload/onevisionEncoderPreload";
 import { getPostHref } from "@/lib/links";
 import type { Post } from "@/lib/posts";
 
@@ -11,6 +12,7 @@ interface FeaturedSectionProps {
 
 export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 	if (!featuredPost) return null;
+	const href = getPostHref(featuredPost.slug);
 
 	return (
 		<section className="museum-featured dashboard-surface">
@@ -20,10 +22,13 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 			</div>
 
 			<TransitionLink 
-				href={getPostHref(featuredPost.slug)} 
+				href={href} 
 				className="museum-featured-card card-lift"
 				style={{ width: '100%', display: 'block' }}
 				aria-label={`Read featured article: ${featuredPost.title}`}
+				onMouseEnter={() => {
+					if (href === "/onevision-encoder/index.html") preloadOneVisionEncoder("hot");
+				}}
 			>
 				<div className="museum-featured-image">
 					<PostThumbnail

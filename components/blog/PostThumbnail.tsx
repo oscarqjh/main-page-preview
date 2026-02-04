@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef } from "react";
 
 interface PostThumbnailProps {
@@ -287,15 +288,12 @@ export function PostThumbnail({
 		return (
 			<div className={`post-thumbnail-v2 ${className}`}>
 				<div className="post-thumbnail-v2-bg">
-					<img
+					<Image
 						src={thumbnail}
 						alt={title}
-						style={{
-							width: "100%",
-							height: "100%",
-							display: "block",
-							objectFit: "cover",
-						}}
+						fill
+						sizes="(max-width: 768px) 100vw, 50vw"
+						style={{ objectFit: "cover" }}
 					/>
 				</div>
 				{!hideTitle && (
