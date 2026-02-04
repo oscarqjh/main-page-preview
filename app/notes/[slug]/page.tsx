@@ -41,28 +41,37 @@ export default async function NotePage({
 			<div className="blog-layout">
 				<main className="blog-main">
 					<article className="blog-article">
-						<header className="blog-header">
-							<time className="blog-date">
-								{new Date(note.date).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								}).toUpperCase()}
-							</time>
-
-							<h1 className="blog-title">{note.title}</h1>
-
-							{note.description && (
-								<p className="blog-description">{note.description}</p>
-							)}
-
-							{note.tags && note.tags.length > 0 && (
-								<div className="blog-main-tags">
-									{note.tags.map((tag) => (
-										<span key={tag} className="blog-main-tag">{tag}</span>
-									))}
+						<header className="blog-header-grid">
+							<div className="blog-header-meta">
+								<div className="blog-meta-group">
+									<time className="blog-date">
+										{new Date(note.date).toLocaleDateString("en-US", {
+											year: "numeric",
+											month: "short",
+											day: "numeric",
+										}).toUpperCase()}
+									</time>
 								</div>
-							)}
+
+								{note.tags && note.tags.length > 0 && (
+									<div className="blog-meta-group">
+										<span className="opacity-50 mx-2">/</span>
+										<div className="blog-main-tags">
+											{note.tags.map((tag) => (
+												<span key={tag} className="blog-main-tag">{tag}</span>
+											))}
+										</div>
+									</div>
+								)}
+							</div>
+
+							<div className="blog-header-main">
+								<h1 className="blog-title">{note.title}</h1>
+
+								{note.description && (
+									<p className="blog-description">{note.description}</p>
+								)}
+							</div>
 						</header>
 
 						<div className="blog-prose">
