@@ -477,6 +477,12 @@
             padding: 12px 12px;
         }
 
+        /* Separator line for LMM table - gold/orange vertical divider */
+        .results-table th.separator-left,
+        .results-table td.separator-left {
+            border-left: 2px solid #fed7aa !important;
+        }
+
         /* Mobile-specific visual enhancements */
         @media (max-width: 768px) {
             /* Add visual separator between sections */
@@ -697,95 +703,10 @@
                 word-break: break-word;
             }
 
-        /* Video container - Mobile optimized sizing */
-        #pipelineGifContainer {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Pipeline volume control (fixed, right side) */
-        .volume-control {
-            position: fixed;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 70;
-            user-select: none;
-        }
-
-        .volume-button {
-            width: 44px;
-            height: 128px;
-            border-radius: 14px;
-            background: rgba(254, 215, 170, 0.06);
-            border: 1px solid rgba(254, 215, 170, 0.22);
-            box-shadow: 0 12px 26px -18px rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 8px;
-            cursor: pointer;
-            transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
-        }
-
-        .volume-button:hover {
-            background: rgba(254, 215, 170, 0.10);
-            box-shadow: 0 18px 34px -20px rgba(0, 0, 0, 0.75);
-            transform: translateY(-1px);
-        }
-
-        .volume-button:focus-visible {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(254, 215, 170, 0.28), 0 18px 34px -20px rgba(0, 0, 0, 0.75);
-        }
-
-        .volume-bars {
-            display: grid;
-            grid-template-rows: repeat(6, 1fr);
-            gap: 8px;
-            width: 100%;
-        }
-
-        .volume-bar {
-            height: 2px;
-            border-radius: 999px;
-            background: rgba(254, 215, 170, 0.22);
-            width: 100%;
-            transform-origin: left center;
-        }
-
-        .volume-bar.is-on {
-            background: rgba(254, 215, 170, 0.92);
-            box-shadow: 0 0 0 1px rgba(254, 215, 170, 0.12);
-        }
-
-        .volume-button[data-muted='true'] .volume-bar.is-on {
-            background: rgba(254, 215, 170, 0.34);
-        }
-
-        .volume-hint {
-            margin-top: 10px;
-            font-size: 10px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: rgba(254, 215, 170, 0.65);
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        @media (max-width: 768px) {
-            .volume-control {
-                right: 12px;
-                top: auto;
-                bottom: 14px;
-                transform: none;
+            /* Video container - Mobile optimized sizing */
+            #pipelineGifContainer {
+                margin-bottom: 0.5rem;
             }
-
-            .volume-button {
-                width: 42px;
-                height: 116px;
-            }
-        }
 
             /* Pipeline video container wrapper - reduce padding on mobile */
             .mt-16 > div[style*="max-width: 1100px"] > div[style*="border-radius: 0.75rem"] {
@@ -1290,13 +1211,13 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 class="text-2xl font-bold text-[#fed7aa] mb-4">Introduction</h3>
             <p class="text-[#fed7aa]/90 text-base mb-4">
-                Video understanding models face a fundamental trade-off: processing more frames captures richer temporal information but increases computation quadratically. Traditional approaches address this through sparse frame sampling, but this discards fine-grained motion dynamics and treats all spatial regions equally—wasting computation on static backgrounds.
+                <strong>Hypothesis.</strong> Artificial general intelligence is, at its core, a compression problem. Effective compression demands resonance: deep learning scales best when its architecture aligns with the fundamental structure of the data. These are the fundamental principles. Yet, modern vision architectures have strayed from these truths: visual signals are highly redundant, while discriminative information, the <em>surprise</em>, is sparse. Current models process dense pixel grids uniformly, wasting vast compute on static background rather than focusing on the predictive residuals that define motion and meaning. We argue that to solve visual understanding, we must align our architectures with the information-theoretic principles of video, i.e., Codecs.
             </p>
             <p class="text-[#fed7aa]/90 text-base mb-4">
-                We present <strong>OneVision Encoder</strong>, a vision transformer that resolves this trade-off using principles from HEVC video compression. Instead of sampling sparse frames densely (all patches from few frames), we sample dense frames sparsely (important patches from many frames). Our codec-style patch selection identifies temporally-salient regions—areas with motion, object interactions, or semantic changes—and processes only these informative patches.
+                <strong>Method.</strong> OneVision-Encoder encodes video by compressing predictive visual structure into semantic meaning. By adopting Codec Patchification, OneVision-Encoder abandons uniform computation to focus exclusively on the 3.1%-25% of regions rich in signal entropy. To unify spatial and temporal reasoning under irregular token layouts, OneVision-Encoder employs a shared 3D RoPE and is trained with a large-scale cluster discrimination objective over more than one million semantic concepts, jointly capturing object permanence and motion dynamics.
             </p>
             <p class="text-[#fed7aa]/90 text-base mb-6">
-                Combined with global contrastive learning using a 2M concept bank, OneVision Encoder achieves state-of-the-art results on video benchmarks (MVBench, VideoMME, Perception Test) and image understanding tasks (DocVQA, ChartQA, OCRBench).
+                <strong>Evidence.</strong> The results validate our core hypothesis: efficiency and accuracy are not a trade-off; they are positively correlated. By resolving the dichotomy between dense grids and sparse semantics, OneVision-Encoder redefines the performance frontier. When integrated into large multimodal models, it consistently outperforms strong vision backbones such as Qwen3-ViT and SigLIP2 across 16 image, video, and document understanding benchmarks, despite using substantially fewer visual tokens and pretraining data. Notably, on video understanding tasks, OneVision-Encoder achieves an average improvement of 4.1% over Qwen3-ViT. Under attentive probing, it achieves state-of-the-art representation quality, with 17.1% and 8.1% Top-1 accuracy improvements over SigLIP2 and DINOv3, respectively, on Diving-48 under identical patch budgets. These results demonstrate that codec-aligned, patch-level sparsity is not an optimization trick, but a foundational principle for next-generation visual generalists, positioning OneVision-Encoder as a scalable engine for universal multimodal intelligence.
             </p>
             <figure class="mt-8 mb-12 flex flex-col items-center">
                 <img src="images/method.png" alt="OneVision Encoder Method Overview" class="block w-full max-w-4xl rounded-lg">
@@ -1305,7 +1226,7 @@
                  </figcaption> -->
             </figure>
         </div>
-    <!-- </section> -->
+    </section>
 
     <!-- Method Section -->
     <!-- <section id="method" class="py-20 bg-[#0369a1]"> -->
@@ -1386,29 +1307,6 @@
                     </p>
                 </div>
 
-                <!-- Fixed right-side volume control (drag to set, click to toggle) -->
-                <div class="volume-control" aria-hidden="false">
-                    <button
-                        id="pipelineVolumeBtn"
-                        type="button"
-                        class="volume-button"
-                        aria-label="Sound muted"
-                        aria-pressed="false"
-                        data-muted="true"
-                        title="Drag to set volume / click to mute"
-                    >
-                        <span class="volume-bars" aria-hidden="true">
-                            <span class="volume-bar" style="width: 34%;"></span>
-                            <span class="volume-bar" style="width: 48%;"></span>
-                            <span class="volume-bar" style="width: 62%;"></span>
-                            <span class="volume-bar" style="width: 76%;"></span>
-                            <span class="volume-bar" style="width: 90%;"></span>
-                            <span class="volume-bar" style="width: 100%;"></span>
-                        </span>
-                    </button>
-                    <div id="pipelineVolumeHint" class="volume-hint">Muted</div>
-                </div>
-
                 <!-- Pagination Dots with Arrows -->
                 <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem;">
                     <!-- Left Arrow -->
@@ -1460,28 +1358,27 @@
                 <p class="text-[#fed7aa]/90 leading-relaxed text-sm">
                     Our experiments utilize an 8-frame full attention input mechanism with comprehensive training on 740K samples from LLaVA-NeXT and 800K samples from LLaVA-Video SFT datasets. The training pipeline bypasses Stage 1.5 and proceeds directly to Stage 2 fine-tuning. We implement a streamlined native resolution strategy based on LLaVA-NeXT's resolution matching approach: when a resolution match is found, frames are directly input to the model without image tiling or cropping, maintaining spatial integrity while ensuring computational efficiency.
                 </p>
-            </div> -->
+            <!-- </div> -->
 
 
             <div class="mt-8">
                 <h3 class="text-2xl font-bold text-[#fed7aa] mb-4">LMM Probe Results</h3>
                 <p class="text-[#fed7aa]/90 mb-6 text-base">
-                    <span class="font-bold">Training on a mixed dataset of 740K samples from LLaVA-OneVision and 800K samples from LLaVA-Video SFT.</span> The training pipeline proceeds directly to Stage 2 fine-tuning. Following a streamlined native-resolution strategy inspired by LLaVA-OneVision, input frames whose resolution matches the model’s native input size are fed directly into the model without tiling or cropping, enabling an explicit evaluation of the ViT’s native-resolution representation capability. Furthermore, incorporating codec-style patch selection during training consistently improves visual–language performance across image, OCR, and video benchmarks. In codec-based experiments, the token budget is strictly controlled and set equal to the number of sampled frames, ensuring a fair comparison.                </p>
+                    <span class="font-bold">Comparison of different vision encoders on multimodal benchmarks.</span> All models are evaluated on a unified multimodal setting using Qwen3-4B-Instruct2507 as the language backbone. OV-Encoder-Lang denotes the language-aligned variant of the OV-Encoder architecture. Qwen3-ViT is extracted from Qwen3-VL-4B. SigLIP2 uses siglip2-so400m-patch16-naflex. <span class="font-bold">(Codec)</span> indicates codec-guided visual encoding using motion vectors and residual signals, while <span class="font-bold">(Frame)</span> indicates frame-based visual encoding with dense spatial patchification. Bold values indicate the best performance under the same evaluation setting. Results reported in the left columns correspond to encoders trained with caption supervision, whereas results in the right columns correspond to encoders trained without caption supervision.                </p>
                 <div class="table-wrapper">
                     <table class="results-table" style="float:left;">
                         <thead>
-                            <tr class="header-group">
+                            <tr>
                                 <th rowspan="2" style="vertical-align: middle; min-width: 140px;">Task</th>
                                 <th rowspan="2" style="vertical-align: middle; min-width: 220px;">Benchmark</th>
-                                <th colspan="3" style="min-width: 140px;">Qwen3-4B-Instruct2507</th>
-                                <th colspan="2" style="min-width: 140px;">Qwen2.5-1.5B</th>
+                                <th colspan="5" style="min-width: 140px;">Qwen3-4B-Instruct2507</th>
                             </tr>
                             <tr class="sub-header">
-                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder<br>(Codec)</th>
-                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder<br>(Frame)</th>
-                                <th style="min-width: 140px;">SigLIP2<br>(Frame)</th>
-                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder<br>(Frame)</th>
-                                <th style="min-width: 140px;">SigLIP2<br>(Frame)</th>
+                                <th class="highlight-ours" style="min-width: 140px;">OV-Encoder-Lang<br><span class="font-bold">(Codec)</span></th>
+                                <th style="min-width: 140px;">Qwen3-ViT<br><span class="font-bold">(Frame)</span></th>
+                                <th class="highlight-ours separator-left" style="min-width: 140px;">OV-Encoder<br><span class="font-bold">(Codec)</span></th>
+                                <th style="min-width: 140px;">OV-Encoder-Frame<br><span class="font-bold">(Frame)</span></th>
+                                <th style="min-width: 140px;">SigLIP2<br><span class="font-bold">(Frame)</span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1489,160 +1386,303 @@
                             <tr>
                                 <td rowspan="7" class="task-group-cell">Video</td>
                                 <td class="row-header">MVBench</td>
-                                <td class="best-val highlight-ours">52.4</td>
-                                <td class="highlight-ours">49.8</td>
+                                <td class="best-val highlight-ours">53.2</td>
+                                <td>47.4</td>
+                                <td class="best-val highlight-ours separator-left">52.4</td>
+                                <td>49.8</td>
                                 <td>47.2</td>
-                                <td class="highlight-ours">46.8</td>
-                                <td>45.9</td>
                             </tr>
                             <tr>
                                 <td class="row-header">MLVU-dev</td>
-                                <td class="highlight-ours">46.3</td>
-                                <td class="best-val highlight-ours">49.4</td>
+                                <td class="best-val highlight-ours">47.4</td>
+                                <td>47.2</td>
+                                <td class="highlight-ours separator-left">46.3</td>
+                                <td class="best-val">49.4</td>
                                 <td>48.4</td>
-                                <td class="best-val highlight-ours">48.5</td>
-                                <td>41.4</td>
                             </tr>
                             <tr>
                                 <td class="row-header">NExT-QA (MC)</td>
-                                <td class="best-val highlight-ours">75.6</td>
-                                <td class="highlight-ours">71.9</td>
+                                <td class="best-val highlight-ours">76.1</td>
+                                <td>70.1</td>
+                                <td class="best-val highlight-ours separator-left">75.6</td>
+                                <td>71.9</td>
                                 <td>70.6</td>
-                                <td class="best-val highlight-ours">67.6</td>
-                                <td>66.8</td>
                             </tr>
                             <tr>
                                 <td class="row-header">VideoMME</td>
-                                <td class="best-val highlight-ours">53.4</td>
-                                <td class="highlight-ours">49.3</td>
+                                <td class="best-val highlight-ours">54.1</td>
+                                <td>47.2</td>
+                                <td class="best-val highlight-ours separator-left">53.4</td>
+                                <td>49.3</td>
                                 <td>46.8</td>
-                                <td class="best-val highlight-ours">44.2</td>
-                                <td>42.7</td>
                             </tr>
                             <tr>
                                 <td class="row-header">Perception Test</td>
-                                <td class="best-val highlight-ours">60.3</td>
-                                <td class="highlight-ours">56.7</td>
+                                <td class="best-val highlight-ours">60.6</td>
+                                <td>57.1</td>
+                                <td class="best-val highlight-ours separator-left">60.3</td>
+                                <td>56.7</td>
                                 <td>56.0</td>
-                                <td class="best-val highlight-ours">55.2</td>
-                                <td>54.7</td>
                             </tr>
                             <tr>
                                 <td class="row-header">TOMATO</td>
-                                <td class="highlight-ours">22.2</td>
                                 <td class="highlight-ours">21.8</td>
+                                <td class="best-val">22.2</td>
+                                <td class="highlight-ours separator-left">22.2</td>
+                                <td>21.8</td>
                                 <td class="best-val">22.3</td>
-                                <td class="best-val highlight-ours">20.6</td>
-                                <td>20.2</td>
                             </tr>
                             <tr>
-                                <td class="row-header">LongVideoBench-Val</td>
-                                <td class="best-val highlight-ours">50.4</td>
-                                <td class="highlight-ours">45.5</td>
+                                <td class="row-header">LongVideoBench-Val-Video</td>
+                                <td class="best-val highlight-ours">51.6</td>
+                                <td>45.0</td>
+                                <td class="best-val highlight-ours separator-left">50.4</td>
+                                <td>45.5</td>
                                 <td>45.2</td>
-                                <td class="highlight-ours">45.2</td>
-                                <td>45.3</td>
                             </tr>
                             <!-- Image Tasks -->
                             <tr>
-                                <td rowspan="8" class="task-group-cell">Image</td>
+                                <td rowspan="9" class="task-group-cell">Image</td>
+                                <td class="row-header">AI2D</td>
+                                <td class="best-val highlight-ours">80.2</td>
+                                <td>77.8</td>
+                                <td class="highlight-ours separator-left">75.7</td>
+                                <td>76.5</td>
+                                <td class="best-val">78.6</td>
+                            </tr>
+                            <tr>
                                 <td class="row-header">ChartQA</td>
-                                <td class="best-val highlight-ours">76.5</td>
-                                <td class="highlight-ours">77.8</td>
+                                <td class="best-val highlight-ours">80.1</td>
+                                <td>79.6</td>
+                                <td class="highlight-ours separator-left">76.5</td>
+                                <td class="best-val">77.8</td>
                                 <td>76.4</td>
-                                <td class="best-val highlight-ours">67.4</td>
-                                <td>67.2</td>
                             </tr>
                             <tr>
                                 <td class="row-header">DocVQA</td>
-                                <td class="highlight-ours">78.4</td>
-                                <td class="best-val highlight-ours">79.5</td>
+                                <td class="highlight-ours">83.2</td>
+                                <td class="best-val">85.1</td>
+                                <td class="highlight-ours separator-left">78.4</td>
+                                <td class="best-val">79.5</td>
                                 <td>75.0</td>
-                                <td class="best-val highlight-ours">73.2</td>
-                                <td>70.8</td>
                             </tr>
                             <tr>
                                 <td class="row-header">InfoVQA</td>
-                                <td class="highlight-ours">43.1</td>
-                                <td class="best-val highlight-ours">45.5</td>
+                                <td class="best-val highlight-ours">51.6</td>
+                                <td>49.0</td>
+                                <td class="highlight-ours separator-left">43.1</td>
+                                <td class="best-val">45.5</td>
                                 <td>42.0</td>
-                                <td class="best-val highlight-ours">33.1</td>
-                                <td>32.6</td>
-                            </tr>
-                            <tr>
-                                <td class="row-header">OCRBench</td>
-                                <td class="highlight-ours">605</td>
-                                <td class="best-val highlight-ours">630</td>
-                                <td>621</td>
-                                <td class="highlight-ours">533</td>
-                                <td class="best-val">560</td>
-                            </tr>
-                            <tr>
-                                <td class="row-header">OCRBench v2</td>
-                                <td class="best-val highlight-ours">26.3</td>
-                                <td class="highlight-ours">26.1</td>
-                                <td>26.1</td>
-                                <td class="best-val highlight-ours">20.5</td>
-                                <td>20.2</td>
                             </tr>
                             <tr>
                                 <td class="row-header">MMBench-EN</td>
-                                <td class="highlight-ours">77.2</td>
-                                <td class="highlight-ours">78.5</td>
+                                <td class="best-val highlight-ours">80.2</td>
+                                <td>79.4</td>
+                                <td class="highlight-ours separator-left">77.2</td>
+                                <td>78.5</td>
                                 <td class="best-val">79.6</td>
-                                <td class="highlight-ours">68.6</td>
-                                <td class="best-val">71.2</td>
+                            </tr>
+                            <tr>
+                                <td class="row-header">OCRBench</td>
+                                <td class="highlight-ours">657</td>
+                                <td class="best-val">706</td>
+                                <td class="highlight-ours separator-left">605</td>
+                                <td class="best-val">630</td>
+                                <td>621</td>
+                            </tr>
+                            <tr>
+                                <td class="row-header">OCRBench v2</td>
+                                <td class="best-val highlight-ours">30.8</td>
+                                <td>30.6</td>
+                                <td class="best-val highlight-ours separator-left">26.3</td>
+                                <td>26.1</td>
+                                <td>26.1</td>
                             </tr>
                             <tr>
                                 <td class="row-header">MMStar</td>
-                                <td class="highlight-ours">52.1</td>
-                                <td class="highlight-ours">54.3</td>
+                                <td class="best-val highlight-ours">56.6</td>
+                                <td class="best-val">56.6</td>
+                                <td class="highlight-ours separator-left">52.1</td>
+                                <td>54.3</td>
                                 <td class="best-val">55.0</td>
-                                <td class="highlight-ours">43.5</td>
-                                <td class="best-val">46.8</td>
                             </tr>
                             <tr>
                                 <td class="row-header">RealWorldQA</td>
-                                <td class="highlight-ours">60.8</td>
-                                <td class="highlight-ours">61.2</td>
+                                <td class="best-val highlight-ours">66.1</td>
+                                <td>63.3</td>
+                                <td class="highlight-ours separator-left">60.8</td>
+                                <td>61.2</td>
                                 <td class="best-val">62.1</td>
-                                <td class="highlight-ours">57.7</td>
-                                <td class="best-val">61.3</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <p class="text-xs text-[#fed7aa]/70 mt-2 text-left">
-                    * OV-Encoder (Codec) variants use OneVision encoder architecture. SigLIP2 uses <a href="https://huggingface.co/google/siglip2-so400m-patch16-naflex" class="text-[#fed7aa] hover:underline">siglip2-so400m-patch16-naflex</a>. Bold values indicate the best performance within each model size category.
+                    * Bold values indicate the best performance under the same evaluation setting.
                 </p>
             </div>
 
+                            
+
+            <!-- Attentive Probe Results Section -->
+            <div class="mt-8">
+                                <h3 class="text-2xl font-bold text-[#fed7aa] mb-4">Attentive Probe Results</h3>
+                                <p class="text-[#fed7aa]/90 mb-6 text-base">
+                                    Performance comparison of different vision encoders using Attentive Probe evaluation. Models are evaluated using <strong>single clip</strong> input and trained for <strong>10 epochs</strong> across 8 action recognition datasets. Results show average performance and per-dataset scores for 8-frame and 16-frame configurations.
+                                </p>
+                                <p class="text-[#fed7aa]/90 mb-6 text-base">
+                                OV-Encoder (Codec) refers to a variant of OV-Encoder that replaces traditional frame sampling with codec-style input, where dense full-frame inputs are substituted by codec-guided patch reorganization. Under the same attentive probe setting and token budget, patches are selectively reallocated across the input clip based on codec-native motion vectors and residuals, without changing the backbone architecture or training protocol. This results in stronger performance on motion-sensitive datasets, particularly Diving48 and Perception Test.</p>
+                                </p>
+                                <div class="table-wrapper">
+                                <table class="results-table" style="float:left;">
+                                    <colgroup>
+                                        <col style="width:25%">
+                                        <col style="width:10.71%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                        <col style="width:6.79%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="sticky-col">Method</th>
+                                            <th scope="col">Arch.</th>
+                                            <th scope="col">Res.</th>
+                                            <th scope="col">AVG</th>
+                                            <th scope="col">SSV2</th>
+                                            <th scope="col">Diving48</th>
+                                            <th scope="col">Perce. Test</th>
+                                            <th scope="col">CharEgo</th>
+                                            <th scope="col">Epic Verb</th>
+                                            <th scope="col">Epic Noun</th>
+                                            <th scope="col">K400</th>
+                                            <th scope="col">HMDB51</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <!-- Group: 8 Frames -->
+                                        <tr class="section-header">
+                                            <td colspan="12">
+                                                <i class="fa-solid fa-film mr-2 text-[#fed7aa]/60"></i> 8 Frames
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">MetaCLIP2</td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">46.3</td>
+                                            <td>45.9</td><td>30.7</td><td>46.4</td><td>10.2</td><td>44.4</td><td>36.6</td><td>79.1</td><td>77.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">AIMv2</td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">52.6</td>
+                                            <td>53.8</td><td>45.3</td><td>52.9</td><td>11.5</td><td>54.4</td><td>42.7</td><td>79.0</td><td>81.5</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sticky-col">DINOv3</td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">56.0</td>
+                                            <td>56.1</td><td>50.7</td><td>58.1</td><td>12.4</td><td>60.0</td><td>47.9</td><td>81.4</td><td>81.4</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sticky-col">SigLIP2</td>
+                                            <td>ViT-L/16</td><td>256</td><td class="row-avg">56.0</td>
+                                            <td>57.9</td><td>53.2</td><td>56.3</td><td class="best-val">12.8</td><td>58.8</td><td>45.2</td><td>81.3</td><td>82.1</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sticky-col">
+                                                OV-Encoder <span class="text-[10px] font-normal opacity-80">(Frame)</span>
+                                            </td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">58.4</td>
+                                            <td>57.7</td><td>57.6</td><td>58.3</td><td>12.1</td><td>61.4</td><td>52.5</td><td>84.3</td><td>83.1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">
+                                                OV-Encoder <span class="text-[10px] font-normal opacity-80">(Codec)</span>
+                                            </td>
+                                            <td>ViT-L/14</td><td>224</td><td class="best-val">60.2</td>
+                                            <td class="best-val">58.5</td><td class="best-val">67.2</td><td class="best-val">60.0</td><td>12.3</td><td class="best-val">62.3</td><td class="best-val">53.9</td><td class="best-val">84.4</td><td class="best-val">83.4</td>
+                                        </tr>
+
+                                        <!-- Group: 16 Frames -->
+                                        <tr class="section-header">
+                                            <td colspan="12">
+                                                <i class="fa-solid fa-film mr-2 text-[#fed7aa]/60"></i> 16 Frames
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">MetaCLIP2</td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">49.7</td>
+                                            <td>51.6</td><td>47.1</td><td>47.3</td><td>10.4</td><td>49.0</td><td>35.7</td><td>80.1</td><td>76.1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">AIMv2</td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">53.7</td>
+                                            <td>54.8</td><td>50.0</td><td>55.0</td><td>12.2</td><td>55.0</td><td>42.1</td><td>79.3</td><td>80.9</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">DINOv3</td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">57.7</td>
+                                            <td>57.8</td><td>61.1</td><td>57.5</td><td>12.2</td><td>61.3</td><td>48.8</td><td>82.6</td><td>79.8</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">SigLIP2</td>
+                                            <td>ViT-L/16</td><td>256</td><td class="row-avg">57.3</td>
+                                            <td>59.6</td><td>59.1</td><td>56.0</td><td class="best-val">13.1</td><td>59.3</td><td>46.2</td><td>82.5</td><td>82.3</td>
+                                        </tr>                        <tr>
+                                            <td class="sticky-col">
+                                                OV-Encoder <span class="text-[10px] font-normal opacity-80">(Frame)</span>
+                                            </td>
+                                            <td>ViT-L/14</td><td>224</td><td class="row-avg">59.9</td>
+                                            <td>58.7</td><td>63.2</td><td>60.3</td><td>12.6</td><td>62.9</td><td class="best-val">54.5</td><td>85.1</td><td>81.6</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sticky-col">
+                                                OV-Encoder <span class="text-[10px] font-normal opacity-80">(Codec)</span>
+                                            </td>
+                                            <td>ViT-L/14</td><td>224</td><td class="best-val">61.4</td>
+                                            <td class="best-val">60.1</td><td class="best-val">69.4</td><td class="best-val">60.9</td><td>12.9</td><td class="best-val">63.3</td><td>54.4</td><td class="best-val">85.4</td><td class="best-val">85.3</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-xs text-[#fed7aa]/70 mt-2 text-left max-w-5xl mx-auto">* Evaluation under Attentive Probe settings using single clip input, trained for 10 epochs.</p>
+                            </div>
+
+            <!-- Clear float from previous section -->
+            <div style="clear: both;"></div>
                             
             <!-- Video Compression Performance Section -->
             <div class="mt-8">
                 <h3 class="text-2xl font-bold text-[#fed7aa] mb-4">Patch-Efficient Video Understanding Comparison</h3>
                 <p class="text-[#fed7aa]/90 mb-3 text-base">
-                    Efficiency analysis comparing SigLIP2 with dense full-frame patch processing and OV-Encoder-Codec under a fixed token budget. It is important to emphasize that OV-Encoder-Codec does not perform temporal downsampling of the input video. All results are obtained from the same 64-frame (16384 patches) source video, where codec-native motion vectors and residuals are used to selectively extract a fixed number of spatiotemporal patches distributed across the entire temporal extent.
+                    Efficiency analysis comparing SigLIP2 with dense full-frame patch processing and OV-Encoder (Codec) under a fixed token budget. It is important to emphasize that OV-Encoder (Codec) does not perform temporal downsampling of the input video. All results are obtained from the same 64-frame (16384 patches) source video, where codec-native motion vectors and residuals are used to selectively extract a fixed number of spatiotemporal patches distributed across the entire temporal extent.
                 </p>
                 <p class="text-[#fed7aa]/90 mb-6 text-base">
-                    For a fair comparison, SigLIP2 is evaluated under the same token budgets and adopts a traditional frame sampling strategy, where each group of 256 patches corresponds to a contiguous RGB frame. Under a fixed token budget, OV-Encoder-Codec redistributes patches across time while preserving their spatial positions, enabling long-range temporal coverage. As a result, it outperforms SigLIP2 on Diving48 and Perception Test while reducing patch processing by 75.0%–98.4% compared to dense processing of 16,384 patches.                </p>
-                <div class="table-wrapper" role="region" aria-label="Scrollable comparison table">
-                    <table class="results-table" style="float:left;">
+                    For a fair comparison, SigLIP2 is evaluated under the same token budgets and adopts a traditional frame sampling strategy, where each group of 256 patches corresponds to a contiguous RGB frame. Under a fixed token budget, OV-Encoder (Codec) redistributes patches across time while preserving their spatial positions, enabling long-range temporal coverage. As a result, it outperforms SigLIP2 on Diving48 and Perception Test while reducing patch processing by 75.0%–96.9% compared to dense processing of 16,384 patches.                </p>
+                <div class="table-wrapper" role="region" aria-label="Scrollable comparison table" style="max-width: 1100px; margin: 0 auto;">
+                    <table class="results-table" style="float:left; table-layout: fixed; max-width: 100%;">
                         <colgroup>
-                            <col style="width:22%">
-                            <col style="width:18%">
-                            <col style="width:12%">
-                            <col style="width:12%">
-                            <col style="width:12%">
-                            <col style="width:12%">
-                            <col style="width:12%">
+                            <col style="width:25%">
+                            <col style="width:20%">
+                            <col style="width:13.75%">
+                            <col style="width:13.75%">
+                            <col style="width:13.75%">
+                            <col style="width:13.75%">
                         </colgroup>
                         <thead>
-                            <tr class="header-group">
+                            <tr>
                                 <th scope="col" class="text-left">Dataset</th>
                                 <th scope="col" class="text-center">Model</th>
-                                <th scope="col" class="text-center">256 Patches</th>
                                 <th scope="col" class="text-center">512 Patches</th>
                                 <th scope="col" class="text-center">1024 Patches</th>
                                 <th scope="col" class="text-center">2048 Patches</th>
@@ -1652,99 +1692,89 @@
                             <tbody>
                             <!-- Diving48 Dataset -->
                             <tr>
-                                <td class="sticky-col text-[#fed7aa] font-medium" rowspan="2">
-                                    <i class="fa-solid fa-water mr-2 text-[#fed7aa]/70"></i>Diving48
+                                <td class="sticky-col" rowspan="2">
+                                    <i class="fa-solid fa-water mr-2"></i>Diving48
                                 </td>
-                                <td class="text-[#fed7aa]">
+                                <td style="word-wrap: break-word; overflow-wrap: break-word;">
                                     <div class="font-medium">SigLIP2</div>
-                                    <div class="text-xs text-[#fed7aa]/70">(ViT-L/16, 256px)</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-1"><i class="fa-solid fa-check-circle mr-1"></i>Traditional Frame Sampling (dense patch processing)</div>
+                                    <div class="text-xs">(ViT-L/16, 256px)</div>
+                                    <div class="text-xs mt-1"><i class="fa-solid fa-check-circle mr-1"></i>Traditional Frame Sampling (dense patch processing)</div>
                                 </td>
-                                <td class="text-center">19.9</td>
                                 <td class="text-center">28.1</td>
                                 <td class="text-center">38.7</td>
                                 <td class="text-center">53.2</td>
                                 <td class="text-center">59.1</td>
                             </tr>
                             <tr>
-                                <td class="text-[#fed7aa]">
-                                    <div class="font-medium">OneVision Encoder-Codec</div>
-                                    <div class="text-xs text-[#fed7aa]/70">(ViT-L/14, 224px)</div>
-                                    <div class="text-xs text-[#4ade80] mt-1 font-medium"><i class="fa-solid fa-compress mr-1"></i>16384 patches -> N patches</div>
+                                <td style="word-wrap: break-word; overflow-wrap: break-word;">
+                                    <div class="font-medium">OV-Encoder (Codec)</div>
+                                    <div class="text-xs">(ViT-L/14, 224px)</div>
+                                    <div class="text-xs mt-1"><i class="fa-solid fa-compress mr-1"></i>16384 patches -> N patches</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">36.0</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">98.4% ↓ *</div>
-                                </td>
-                                <td class="text-center best-val">
-                                    <div class="font-semibold">45.5</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">96.9% ↓</div>
+                                    <div class="font-semibold">46.5</div>
+                                    <div class="text-xs mt-0.5">96.9% ↓</div>
                                 </td>
                                 <td class="text-center best-val">
                                     <div class="font-semibold">54.9</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">93.8% ↓</div>
+                                    <div class="text-xs mt-0.5">93.8% ↓</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">65.9</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">87.5% ↓</div>
+                                    <div class="font-semibold">58.5</div>
+                                    <div class="text-xs mt-0.5">87.5% ↓</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">68.7</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">75.0% ↓</div>
+                                    <div class="font-semibold">60.1</div>
+                                    <div class="text-xs mt-0.5">75.0% ↓</div>
                                 </td>
                             </tr>
 
                             <!-- Perception Test Dataset -->
                             <tr>
-                                <td class="sticky-col text-[#fed7aa] font-medium" rowspan="2">
-                                    <i class="fa-solid fa-eye mr-2 text-[#fed7aa]/70"></i>Perception Test
+                                <td class="sticky-col" rowspan="2">
+                                    <i class="fa-solid fa-eye mr-2"></i>Perception Test
                                 </td>
-                                <td class="text-[#fed7aa]">
+                                <td style="word-wrap: break-word; overflow-wrap: break-word;">
                                     <div class="font-medium">SigLIP2</div>
-                                    <div class="text-xs text-[#fed7aa]/70">(ViT-L/16, 256px)</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-1"><i class="fa-solid fa-check-circle mr-1"></i>Traditional Frame Sampling (dense patch processing)</div>
+                                    <div class="text-xs">(ViT-L/16, 256px)</div>
+                                    <div class="text-xs mt-1"><i class="fa-solid fa-check-circle mr-1"></i>Traditional Frame Sampling (dense patch processing)</div>
                                 </td>
-                                <td class="text-center text-[#fed7aa]/50">-</td>
                                 <td class="text-center">48.7</td>
                                 <td class="text-center">53.1</td>
                                 <td class="text-center">56.3</td>
                                 <td class="text-center">56.0</td>
                             </tr>
                             <tr>
-                                <td class="text-[#fed7aa]">
-                                    <div class="font-medium">OneVision Encoder-Codec</div>
-                                    <div class="text-xs text-[#fed7aa]/70">(ViT-L/14, 224px)</div>
-                                    <div class="text-xs text-[#4ade80] mt-1 font-medium"><i class="fa-solid fa-compress mr-1"></i>16384 patches -> N patches</div>
+                                <td style="word-wrap: break-word; overflow-wrap: break-word;">
+                                    <div class="font-medium">OV-Encoder (Codec)</div>
+                                    <div class="text-xs">(ViT-L/14, 224px)</div>
+                                    <div class="text-xs mt-1"><i class="fa-solid fa-compress mr-1"></i>16384 patches -> N patches</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">41.2</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">98.4% ↓ </div>
+                                    <div class="font-semibold">50.5</div>
+                                    <div class="text-xs mt-0.5">96.9% ↓</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">49.5</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">96.9% ↓</div>
+                                    <div class="font-semibold">61.6</div>
+                                    <div class="text-xs mt-0.5">93.8% ↓</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">54.9</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">93.8% ↓</div>
+                                    <div class="font-semibold">67.2</div>
+                                    <div class="text-xs mt-0.5">87.5% ↓</div>
                                 </td>
                                 <td class="text-center best-val">
-                                    <div class="font-semibold">59.6</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">87.5% ↓</div>
-                                </td>
-                                <td class="text-center best-val">
-                                    <div class="font-semibold">60.8</div>
-                                    <div class="text-xs text-[#fed7aa]/70 mt-0.5">75.0% ↓</div>
+                                    <div class="font-semibold">60.9</div>
+                                    <div class="text-xs mt-0.5">75.0% ↓</div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <p class="text-xs text-[#fed7aa]/70 mt-2 text-left max-w-full">
+                <p class="text-xs text-[#fed7aa]/70 mt-2 text-left max-w-5xl mx-auto">
                   * Percentages under OV-Encoder-Codec indicate patch reduction relative to dense processing of all 16384 patches.
                 </p>
 
-                <p class="text-xs text-[#fed7aa]/70 mt-2 text-left max-w-full">
+                <p class="text-xs text-[#fed7aa]/70 mt-2 text-left max-w-5xl mx-auto">
                   '<span class="text-xs text-[#4ade80] font-medium">
                     <i class="fa-solid fa-compress mr-1"></i>
                     16384 patches -> N patches
@@ -1755,7 +1785,7 @@
 
 
         </div>
-    </section>
+    <!-- </section> -->
 
     <!-- BibTeX Section -->
     <section id="bibtex" class="py-16 bg-[#0369a1]">
@@ -2498,145 +2528,6 @@
         let isAutoPlaying = true;
         const AUTO_PLAY_DELAY = 5000; // 5 seconds between auto-switches
 
-        // ------------------------------------------------------------------
-        // Pipeline audio + volume UI
-        // Browsers generally block autoplay-with-sound; we start muted and only
-        // enable sound after a user interaction with the control.
-        // ------------------------------------------------------------------
-        const PIPELINE_AUDIO_STORAGE_KEY = 'onevision.pipelineAudio.v1';
-
-        const pipelineAudio = {
-            volume: 0.6,
-            muted: true,
-            activated: false
-        };
-
-        function clamp01(n) {
-            if (Number.isNaN(n)) return 0;
-            return Math.max(0, Math.min(1, n));
-        }
-
-        function loadPipelineAudioPref() {
-            try {
-                const raw = localStorage.getItem(PIPELINE_AUDIO_STORAGE_KEY);
-                if (!raw) return;
-                const parsed = JSON.parse(raw);
-                if (typeof parsed === 'object' && parsed) {
-                    if (typeof parsed.volume === 'number') pipelineAudio.volume = clamp01(parsed.volume);
-                    if (typeof parsed.muted === 'boolean') pipelineAudio.muted = parsed.muted;
-                    if (typeof parsed.activated === 'boolean') pipelineAudio.activated = parsed.activated;
-                }
-            } catch (_) {
-                // ignore
-            }
-        }
-
-        function savePipelineAudioPref() {
-            try {
-                localStorage.setItem(
-                    PIPELINE_AUDIO_STORAGE_KEY,
-                    JSON.stringify({ volume: pipelineAudio.volume, muted: pipelineAudio.muted, activated: pipelineAudio.activated })
-                );
-            } catch (_) {
-                // ignore
-            }
-        }
-
-        function getEffectiveMuted() {
-            if (!pipelineAudio.activated) return true;
-            return pipelineAudio.muted;
-        }
-
-        function applyPipelineAudioToVideo(videoEl) {
-            if (!videoEl) return;
-            videoEl.volume = clamp01(pipelineAudio.volume);
-            videoEl.muted = getEffectiveMuted();
-        }
-
-        function syncPipelineVolumeUI() {
-            const btn = document.getElementById('pipelineVolumeBtn');
-            const hint = document.getElementById('pipelineVolumeHint');
-            if (!btn) return;
-
-            const bars = Array.from(btn.querySelectorAll('.volume-bar'));
-            const steps = bars.length || 6;
-
-            const effMuted = getEffectiveMuted();
-            const effVol = clamp01(pipelineAudio.volume);
-            const level = effMuted ? 0 : Math.max(1, Math.round(effVol * steps));
-
-            bars.forEach((bar, idx) => {
-                const stepIdx = idx + 1;
-                bar.classList.toggle('is-on', stepIdx <= level && level > 0);
-            });
-
-            btn.dataset.muted = String(effMuted);
-            btn.setAttribute('aria-pressed', String(!effMuted));
-            btn.setAttribute('aria-label', effMuted ? 'Sound muted' : `Sound volume ${Math.round(effVol * 100)}%`);
-
-            if (hint) {
-                hint.textContent = effMuted ? 'Muted' : `${Math.round(effVol * 100)}%`;
-            }
-        }
-
-        function ensurePipelinePlayback() {
-            const videoEl = document.getElementById('pipelineGifImage');
-            if (!videoEl) return;
-            const p = videoEl.play();
-            if (p && typeof p.catch === 'function') p.catch(() => {});
-        }
-
-        function setPipelineVolumeFromPointer(btn, clientY) {
-            const rect = btn.getBoundingClientRect();
-            const y = clientY - rect.top;
-            const t = 1 - clamp01(y / rect.height);
-
-            const bars = Array.from(btn.querySelectorAll('.volume-bar'));
-            const steps = bars.length || 6;
-            const step = Math.round(t * steps);
-
-            pipelineAudio.activated = true;
-
-            if (step <= 0) {
-                pipelineAudio.muted = true;
-                pipelineAudio.volume = Math.max(0.15, pipelineAudio.volume);
-            } else {
-                pipelineAudio.muted = false;
-                pipelineAudio.volume = clamp01(step / steps);
-            }
-
-            savePipelineAudioPref();
-            const videoEl = document.getElementById('pipelineGifImage');
-            applyPipelineAudioToVideo(videoEl);
-            syncPipelineVolumeUI();
-            ensurePipelinePlayback();
-        }
-
-        function bumpPipelineVolume(deltaSteps) {
-            const btn = document.getElementById('pipelineVolumeBtn');
-            if (!btn) return;
-            const bars = Array.from(btn.querySelectorAll('.volume-bar'));
-            const steps = bars.length || 6;
-
-            pipelineAudio.activated = true;
-
-            const current = getEffectiveMuted() ? 0 : Math.max(1, Math.round(clamp01(pipelineAudio.volume) * steps));
-            const next = Math.max(0, Math.min(steps, current + deltaSteps));
-
-            if (next === 0) {
-                pipelineAudio.muted = true;
-            } else {
-                pipelineAudio.muted = false;
-                pipelineAudio.volume = clamp01(next / steps);
-            }
-
-            savePipelineAudioPref();
-            const videoEl = document.getElementById('pipelineGifImage');
-            applyPipelineAudioToVideo(videoEl);
-            syncPipelineVolumeUI();
-            ensurePipelinePlayback();
-        }
-
         function displayPipelineCase(caseIndex) {
             if (isTransitioning) return;
             isTransitioning = true;
@@ -2651,7 +2542,6 @@
             setTimeout(() => {
                 // Update content
                 imageElement.src = caseData.image;
-                applyPipelineAudioToVideo(imageElement);
                 if (caseData.description) {
                     descElement.textContent = caseData.description;
                 }
@@ -2662,68 +2552,9 @@
                 // Fade in
                 setTimeout(() => {
                     imageElement.style.opacity = '1';
-                    const p = imageElement.play();
-                    if (p && typeof p.catch === 'function') p.catch(() => {});
                     isTransitioning = false;
                 }, 100);
             }, 300);
-        }
-
-        function initPipelineAudioControls() {
-            loadPipelineAudioPref();
-
-            const videoEl = document.getElementById('pipelineGifImage');
-            applyPipelineAudioToVideo(videoEl);
-
-            const btn = document.getElementById('pipelineVolumeBtn');
-            if (!btn) return;
-            syncPipelineVolumeUI();
-
-            btn.addEventListener('pointerdown', (e) => {
-                e.preventDefault();
-                try {
-                    btn.setPointerCapture?.(e.pointerId);
-                } catch (_) {}
-                setPipelineVolumeFromPointer(btn, e.clientY);
-            });
-
-            btn.addEventListener('pointermove', (e) => {
-                if (e.buttons !== 1) return;
-                setPipelineVolumeFromPointer(btn, e.clientY);
-            });
-
-            btn.addEventListener('click', (e) => {
-                // Single click toggles mute
-                e.preventDefault();
-                pipelineAudio.activated = true;
-                pipelineAudio.muted = !pipelineAudio.muted;
-                savePipelineAudioPref();
-                const v = document.getElementById('pipelineGifImage');
-                applyPipelineAudioToVideo(v);
-                syncPipelineVolumeUI();
-                ensurePipelinePlayback();
-            });
-
-            btn.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    bumpPipelineVolume(1);
-                }
-                if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    bumpPipelineVolume(-1);
-                }
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    pipelineAudio.activated = true;
-                    pipelineAudio.muted = !pipelineAudio.muted;
-                    savePipelineAudioPref();
-                    const v = document.getElementById('pipelineGifImage');
-                    applyPipelineAudioToVideo(v);
-                    syncPipelineVolumeUI();
-                    ensurePipelinePlayback();
-                }
-            });
         }
 
         function nextPipelineCase() {
@@ -2796,8 +2627,6 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             updatePipelineDots(0);
-
-            initPipelineAudioControls();
 
             // Arrow button handlers
             const prevBtn = document.getElementById('pipelinePrevBtn');
