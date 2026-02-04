@@ -12,7 +12,8 @@ const HERO_PHRASES = [
 ];
 
 	const MAX_VOLUME = 0.35;
-	const WHEEL_BARS = 21;
+	const KNOB_DETENTS = 24;
+	const KNOB_SPIN_PX = 168;
 
 export function HeroSection() {
 	const { phase } = useTransition();
@@ -23,7 +24,14 @@ export function HeroSection() {
 
 	const HERO_AUDIO_STORAGE_KEY = "lmms.heroAudio.v1";
 	const [volume, setVolume] = useState(0);
+	const [dragging, setDragging] = useState(false);
+	const draggingRef = useRef(false);
 	const lastY = useRef<number | null>(null);
+	const volumeRef = useRef(0);
+
+	useEffect(() => {
+		volumeRef.current = volume;
+	}, [volume]);
 	
 	useEffect(() => {
 		if (transitioning) return;
@@ -79,25 +87,38 @@ export function HeroSection() {
 		} catch {
 			// ignore
 		}
+		draggingRef.current = true;
+		setDragging(true);
 		lastY.current = e.clientY;
 	}
 
 	function handlePointerMove(e: React.PointerEvent<HTMLButtonElement>) {
-		if (e.buttons !== 1 || lastY.current === null) return;
+		if (!draggingRef.current || lastY.current === null) return;
+		e.preventDefault();
 		
 		const deltaY = lastY.current - e.clientY;
 		lastY.current = e.clientY;
 		
 		const sensitivity = 0.003;
-		const newVol = Math.max(0, Math.min(MAX_VOLUME, volume + deltaY * sensitivity));
+		const newVol = Math.max(0, Math.min(MAX_VOLUME, volumeRef.current + deltaY * sensitivity));
+		volumeRef.current = newVol;
 		
 		setVolume(newVol);
 		persistVolume(newVol);
 		ensurePlayback();
 	}
 
-	function handlePointerUp() {
+	function handlePointerUp(e?: React.PointerEvent<HTMLButtonElement>) {
+		draggingRef.current = false;
+		setDragging(false);
 		lastY.current = null;
+		if (e) {
+			try {
+				e.currentTarget.releasePointerCapture(e.pointerId);
+			} catch {
+				// ignore
+			}
+		}
 	}
 
 	function toggleMute() {
@@ -112,6 +133,8 @@ export function HeroSection() {
 	const volumePct = Math.round((volume / MAX_VOLUME) * 100);
 	const volumeReadout = String(volumePct).padStart(3, "0");
 	const volumeNorm = Math.max(0, Math.min(1, volume / MAX_VOLUME));
+	const detentedNorm = Math.round(volumeNorm * KNOB_DETENTS) / KNOB_DETENTS;
+	const grooveShift = Math.round(detentedNorm * KNOB_SPIN_PX);
 
 	return (
 		<div className="relative w-full overflow-hidden bg-[var(--background)]">
@@ -172,6 +195,7 @@ export function HeroSection() {
 						<button
 							type="button"
 							className="hero-volume-btn"
+							data-dragging={dragging ? "true" : "false"}
 							aria-label={
 								volume === 0
 									? "Sound muted - drag up to unmute"
@@ -192,28 +216,12 @@ export function HeroSection() {
 								toggleMute();
 							}}
 						>
-							<span className="hero-volume-core" aria-hidden="true">
-								<span className="hero-volume-readout">{volumeReadout}</span>
-								<span className="hero-volume-bars">
-									{Array.from({ length: WHEEL_BARS }).map((_, idx) => {
-										const center = (WHEEL_BARS - 1) / 2;
-										const distFromCenter = Math.abs(idx - center);
-										const t = center === 0 ? 0 : distFromCenter / center;
-										const widthPercent = 28 + (1 - t ** 1.6) * 72;
-										const threshold = 1 - (idx + 1) / WHEEL_BARS;
-										const isOn = volumeNorm > threshold;
-										const isCenter = idx === Math.floor(WHEEL_BARS / 2);
-										const isMid = distFromCenter <= 2;
-
-										return (
-											<span
-												key={idx}
-												className={`hero-volume-bar${isOn ? " is-on" : ""}${isCenter ? " is-center" : ""}${isMid ? " is-mid" : ""}`}
-												style={{ width: `${widthPercent}%` }}
-											/>
-										);
-									})}
-								</span>
+							<span className="hero-volume-knob" aria-hidden="true">
+								<span className="hero-volume-knob-grooves" style={{ transform: `translateY(${grooveShift}px)` }} />
+								<span className="hero-volume-knob-notch" />
+							</span>
+							<span className="hero-volume-readout" aria-hidden="true">
+								{volumeReadout}
 							</span>
 						</button>
 					</div>

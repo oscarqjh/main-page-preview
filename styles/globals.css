@@ -2376,80 +2376,72 @@ tbody tr:hover {
 	pointer-events: none;
 }
 
-.hero-volume-btn:focus-visible {
-	outline: none;
+.hero-volume-btn {
+	display: grid;
+	place-items: center;
 }
 
-.hero-volume-core {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	display: grid;
-	grid-template-rows: auto 1fr;
-	gap: 10px;
-	align-items: center;
-	justify-items: center;
-	width: 44px;
-	height: 128px;
-	padding: 0;
-	border: 0;
-	background: transparent;
-	box-shadow: none;
+/* Rotary wheel knob - minimal, tactile, no extra UI layers. */
+.hero-volume-knob {
+	position: relative;
+	width: 30px;
+	height: 118px;
+	border-radius: 999px;
+	overflow: hidden;
 	pointer-events: none;
 	isolation: isolate;
-}
-
-/* Knob body - engraved horizontal grooves, no outer frame. */
-.hero-volume-core::before {
-	content: '';
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	width: 28px;
-	height: 112px;
-	border-radius: 999px;
-	background:
-		linear-gradient(180deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.12)),
-		repeating-linear-gradient(
-			180deg,
-			rgba(254, 215, 170, 0.08) 0px,
-			rgba(254, 215, 170, 0.08) 1px,
-			rgba(0, 0, 0, 0) 1px,
-			rgba(0, 0, 0, 0) 5px
-		);
+	background: linear-gradient(90deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.34));
 	box-shadow:
 		inset 0 0 0 1px rgba(254, 215, 170, 0.16),
-		inset 0 10px 18px rgba(0, 0, 0, 0.35),
-		inset 0 -10px 18px rgba(254, 215, 170, 0.06);
+		inset 0 14px 18px rgba(0, 0, 0, 0.34),
+		inset 0 -14px 18px rgba(254, 215, 170, 0.06);
 	opacity: 0.55;
 	transition: opacity 160ms ease, box-shadow 160ms ease;
 }
 
-/* Middle-only emphasis window (no box) */
-.hero-volume-core::after {
-	content: '';
+.hero-volume-knob-grooves {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: -68px;
+	bottom: -68px;
+	background: repeating-linear-gradient(
+		180deg,
+		rgba(254, 215, 170, 0.16) 0px,
+		rgba(254, 215, 170, 0.16) 1px,
+		rgba(0, 0, 0, 0) 1px,
+		rgba(0, 0, 0, 0) 6px
+	);
+	opacity: 0.35;
+	transform: translateY(0px);
+	transition: transform 260ms cubic-bezier(0.12, 0.9, 0.22, 1);
+	will-change: transform;
+	-webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
+	mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
+}
+
+.hero-volume-knob-notch {
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	width: 34px;
-	height: 46px;
+	width: 68%;
+	height: 2px;
 	border-radius: 999px;
-	background: radial-gradient(circle at 50% 50%, rgba(254, 215, 170, 0.22), rgba(254, 215, 170, 0));
-	filter: blur(0.2px);
-	opacity: 0;
-	transition: opacity 160ms ease;
+	background: rgba(254, 215, 170, 0.72);
+	box-shadow: 0 0 10px rgba(254, 215, 170, 0.18);
+	opacity: 0.65;
 }
 
 .hero-volume-readout {
-	position: relative;
-	transform: translateY(1px);
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, calc(-50% - 78px));
 	min-width: 38px;
 	text-align: center;
 	font-family: var(--font-mono);
-	font-size: 0.95rem;
+	font-size: 0.9rem;
 	font-variant-numeric: tabular-nums;
 	letter-spacing: 0.12em;
 	color: rgba(254, 215, 170, 0.9);
@@ -2459,7 +2451,7 @@ tbody tr:hover {
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity 140ms ease;
-	z-index: 2;
+	z-index: 3;
 }
 
 .hero-video-shell:hover .hero-volume-btn,
@@ -2472,94 +2464,30 @@ tbody tr:hover {
 }
 
 
-.hero-video-shell:hover .hero-volume-readout,
-.hero-video-shell:focus-within .hero-volume-readout,
-.hero-volume-btn:focus-visible .hero-volume-readout,
-.hero-volume-btn:active .hero-volume-readout {
+
+.hero-volume-btn[data-dragging="true"] .hero-volume-readout,
+.hero-volume-btn:focus-visible .hero-volume-readout {
 	opacity: 1;
 }
 
-.hero-volume-bars {
-	position: relative;
-	z-index: 2;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	width: 44px;
-	height: 94px;
-	padding: 0;
+.hero-volume-btn[data-dragging="true"] .hero-volume-knob-grooves {
+	transition: none;
 }
 
-.hero-volume-bar {
-	display: block;
-	height: 1px;
-	border-radius: 999px;
-	background: rgba(254, 215, 170, 0.22);
-	box-shadow: none;
-	opacity: 0.75;
-	transition: opacity 140ms ease, background 150ms ease, box-shadow 150ms ease;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.hero-volume-bar.is-on {
-	background: rgba(254, 215, 170, 0.62);
-	opacity: 1;
-}
-
-.hero-volume-bar.is-center {
-	height: 2px;
-	background: rgba(254, 215, 170, 0.48);
-}
-
-
-
-.hero-video-shell:hover .hero-volume-bar,
-.hero-video-shell:focus-within .hero-volume-bar,
-.hero-volume-btn:active .hero-volume-bar {
-	opacity: 0.22;
-}
-
-.hero-video-shell:hover .hero-volume-bar.is-on,
-.hero-video-shell:focus-within .hero-volume-bar.is-on,
-.hero-volume-btn:active .hero-volume-bar.is-on {
-	opacity: 0.45;
-}
-
-.hero-video-shell:hover .hero-volume-bar.is-center,
-.hero-video-shell:focus-within .hero-volume-bar.is-center,
-.hero-volume-btn:active .hero-volume-bar.is-center {
-	opacity: 1;
-	background: rgba(254, 215, 170, 0.95);
-	box-shadow: 0 0 12px rgba(254, 215, 170, 0.35);
-}
-
-.hero-video-shell:hover .hero-volume-bar.is-mid,
-.hero-video-shell:focus-within .hero-volume-bar.is-mid,
-.hero-volume-btn:active .hero-volume-bar.is-mid {
-	opacity: 0.55;
-}
-
-.hero-volume-btn:focus-visible .hero-volume-core {
+.hero-volume-btn:focus-visible {
 	outline: 2px solid rgba(254, 215, 170, 0.55);
 	outline-offset: 6px;
 	border-radius: 18px;
 }
 
-.hero-video-shell:hover .hero-volume-core::before,
-.hero-video-shell:focus-within .hero-volume-core::before,
-.hero-volume-btn:active .hero-volume-core::before {
-	opacity: 0.7;
+.hero-video-shell:hover .hero-volume-knob,
+.hero-video-shell:focus-within .hero-volume-knob,
+.hero-volume-btn:active .hero-volume-knob {
+	opacity: 0.8;
 	box-shadow:
 		inset 0 0 0 1px rgba(254, 215, 170, 0.22),
-		inset 0 10px 18px rgba(0, 0, 0, 0.38),
-		inset 0 -10px 18px rgba(254, 215, 170, 0.08);
-}
-
-.hero-video-shell:hover .hero-volume-core::after,
-.hero-video-shell:focus-within .hero-volume-core::after,
-.hero-volume-btn:active .hero-volume-core::after {
-	opacity: 1;
+		inset 0 14px 20px rgba(0, 0, 0, 0.38),
+		inset 0 -14px 20px rgba(254, 215, 170, 0.08);
 }
 
 @media (min-width: 1024px) {
@@ -2569,21 +2497,12 @@ tbody tr:hover {
 	}
 }
 
-.hero-volume-bar.is-on {
-	background: rgba(254, 215, 170, 0.92);
-	box-shadow: 0 0 0 1px rgba(254, 215, 170, 0.12), 0 8px 18px -14px rgba(254, 215, 170, 0.65);
-}
-
 @media (hover: none) {
 	.hero-volume-btn {
 		opacity: 1;
 		visibility: visible;
 		pointer-events: auto;
 		transform: translateY(-50%) rotateY(-10deg) rotateX(4deg);
-	}
-
-	.hero-volume-readout {
-		opacity: 1;
 	}
 }
 
