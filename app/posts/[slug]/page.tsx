@@ -94,10 +94,6 @@ export default async function PostPage({
 
 								<div className="blog-header-main">
 									<h1 className="blog-title">{post.title}</h1>
-
-									{post.description && (
-										<p className="blog-description">{post.description}</p>
-									)}
 								</div>
 							</header>
 
