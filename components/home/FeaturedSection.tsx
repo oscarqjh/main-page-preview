@@ -47,9 +47,6 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 						}).toUpperCase()}
 					</time>
 					<h2 className="museum-featured-title">{featuredPost.title}</h2>
-					{featuredPost.description && (
-						<p className="museum-featured-desc">{featuredPost.description}</p>
-					)}
 					<div className="museum-featured-tags">
 						{featuredPost.mainTags?.map((tag) => (
 							<span key={tag} className="museum-tag">{tag}</span>
