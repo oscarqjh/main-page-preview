@@ -45,11 +45,8 @@ export default function AboutPage() {
 						<span className={styles.sectionLabel}>About</span>
 						<div className={styles.sectionLine} />
 					</div>
-					<p className={styles.description}>
-						LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers, we share the sincere passion for developing multimodal intelligence.
-					</p>
 					<p className={styles.missionQuote}>
-						&ldquo;Advancing the frontier of multimodal understanding - from perception to reasoning, from language to vision.&rdquo;
+						&ldquo;Language learned all the rhetoric of &lsquo;blue&rsquo;, yet it has never seen the sky. True understanding begins where symbols end - in light, in motion, in the tremor of air as a bird crosses the horizon.&rdquo;
 					</p>
 				</section>
 
