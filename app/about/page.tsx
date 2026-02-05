@@ -45,12 +45,12 @@ export default function AboutPage() {
 						<span className={styles.sectionLabel}>About</span>
 						<div className={styles.sectionLine} />
 					</div>
-					<div className={styles.manifesto}>
-						<p>LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers. We share the sincere passion for developing multimodal intelligence.</p>
-						<p>Language is merely reality projected onto a flat plane. It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky. It learned every rhetoric of &lsquo;blue&rsquo;, yet it has never seen the sky. It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception.</p>
-						<p>A true world model reads the book, then looks out the window. To see, to hear, to feel, to act - reach out and enter the world. To gaze upon the noise that cannot be written, to understand the pixels that were never defined.</p>
-						<p>Where rigorous engineering meets romantic vision. Shared as we discover - to every explorer.</p>
-					</div>
+					<p className={styles.description}>
+						LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers. We share the sincere passion for developing multimodal intelligence.
+					</p>
+					<p className={styles.quote}>
+						Language learned all the rhetoric of &lsquo;blue&rsquo;, yet it has never seen the sky. True understanding begins where symbols end - in light, in motion, in the tremor of air as a bird crosses the horizon.
+					</p>
 				</section>
 
 				{/* ── Scientific Board ── */}
