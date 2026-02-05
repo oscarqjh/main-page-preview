@@ -49,7 +49,7 @@ export default function AboutPage() {
 						Language is merely reality projected onto a flat plane. It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky. It learned every rhetoric of <em>blue</em>, yet it has never seen the sky. It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception.
 					</p>
 					<p className={styles.manifesto}>
-						A true world model reads the book, then looks out the window. To see, to hear, to feel, to act - reach out and enter the world. To gaze upon the noise that cannot be written, to understand the pixels that were never defined.
+                        We set our highest aspiration to build a true world model, with superhuman intelligence, that transcends the text and reaches for the thing-in-itself. To see the light before it becomes a word. To hear the silence between definitions. To act upon a world that precedes all description - and in that act, to understand what no symbol ever could.
 					</p>
 					<p className={styles.manifesto}>
 						Shared as we discover - to every explorer.
