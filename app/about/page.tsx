@@ -48,16 +48,9 @@ export default function AboutPage() {
 					<p className={styles.description}>
 						LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers. We share the sincere passion for developing multimodal intelligence.
 					</p>
-					<div className={styles.manifesto}>
-						<p>Language is merely reality projected onto a flat plane.</p>
-						<p>It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky.</p>
-						<p>It learned every rhetoric of &lsquo;blue&rsquo;, yet it has never seen the sky.</p>
-						<p>It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception.</p>
-						<p>A true world model reads the book, then looks out the window.</p>
-						<p>To see, to hear, to feel, to act - reach out and enter the world.</p>
-						<p>To gaze upon the noise that cannot be written, to understand the pixels that were never defined.</p>
-						<p className={styles.manifestoSign}>Shared as we discover - to every explorer.</p>
-					</div>
+					<p className={styles.manifesto}>
+						Language is merely reality projected onto a flat plane. It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky. It learned every rhetoric of &lsquo;blue&rsquo;, yet it has never seen the sky. It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception. A true world model reads the book, then looks out the window. To see, to hear, to feel, to act - reach out and enter the world. To gaze upon the noise that cannot be written, to understand the pixels that were never defined. Shared as we discover - to every explorer.
+					</p>
 				</section>
 
 				{/* ── Scientific Board ── */}
