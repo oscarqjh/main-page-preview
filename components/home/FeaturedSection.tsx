@@ -46,7 +46,11 @@ export function FeaturedSection({ featuredPost }: FeaturedSectionProps) {
 							day: "numeric",
 						}).toUpperCase()}
 					</time>
-					<h2 className="museum-featured-title">{featuredPost.title}</h2>
+					<h2 className="museum-featured-title">
+						{featuredPost.title.includes(": ") ? (
+							<>{featuredPost.title.split(": ")[0]}:<br />{featuredPost.title.split(": ").slice(1).join(": ")}</>
+						) : featuredPost.title}
+					</h2>
 					<div className="museum-featured-tags">
 						{featuredPost.mainTags?.map((tag) => (
 							<span key={tag} className="museum-tag">{tag}</span>
