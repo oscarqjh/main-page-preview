@@ -89,7 +89,7 @@ export default function Header() {
 	};
 
 	return (
-		<header className={styles.masthead}>
+		<header className={styles.masthead} data-menu-open={menuOpen ? "true" : "false"}>
 			<div className={styles.mastheadInner}>
 				<div className={styles.mastheadBrand}>
 					<TransitionLink href="/" className={styles.brandLink}>

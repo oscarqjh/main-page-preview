@@ -2275,6 +2275,22 @@ tbody tr:hover {
 	flex-wrap: wrap;
 }
 
+@media (max-width: 640px) {
+	.brutalist-hero-cta {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.brutalist-btn-primary,
+	.brutalist-btn-secondary {
+		width: 100%;
+	}
+
+	.brutalist-btn-secondary {
+		border: 2px solid var(--foreground);
+	}
+}
+
 .brutalist-btn-primary {
 	display: inline-flex;
 	align-items: center;
@@ -2340,6 +2356,14 @@ tbody tr:hover {
 	.brutalist-hero-visual {
 		max-width: 500px;
 		margin: 0 auto;
+	}
+}
+
+@media (max-width: 640px) {
+	.brutalist-hero-visual {
+		max-width: none;
+		margin: 0;
+		justify-content: flex-start;
 	}
 }
 
@@ -2540,6 +2564,8 @@ tbody tr:hover {
 
 @media (max-width: 1023px) {
 	.hero-video-shell {
+		width: 100%;
+		display: block;
 		padding-bottom: 86px;
 	}
 
