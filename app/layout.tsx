@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "@/styles/globals.css";
 import "katex/dist/katex.min.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { MotionProvider } from "@/components/motion/MotionProvider";
-import { TransitionProvider } from "@/components/motion/TransitionContext";
+import { TransitionProvider } from "@/components/motion/TransitionSystem";
 import PageTransition from "@/components/motion/PageTransition";
 
 export const metadata: Metadata = {
@@ -29,23 +30,25 @@ export default function RootLayout({
 			</head>
 			<body>
 				<MotionProvider>
-					<TransitionProvider>
-						<div
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								minHeight: "100vh",
-							}}
-						>
-							<Header />
-							<main style={{ flex: 1 }}>
-								<PageTransition>
-									{children}
-								</PageTransition>
-							</main>
-							<Footer />
-						</div>
-					</TransitionProvider>
+					<Suspense fallback={null}>
+						<TransitionProvider>
+							<div
+								style={{
+									display: "flex",
+									flexDirection: "column",
+									minHeight: "100vh",
+								}}
+							>
+								<Header />
+								<main style={{ flex: 1 }}>
+									<PageTransition>
+										{children}
+									</PageTransition>
+								</main>
+								<Footer />
+							</div>
+						</TransitionProvider>
+					</Suspense>
 				</MotionProvider>
 			</body>
 		</html>

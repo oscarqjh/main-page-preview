@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import styles from "./HackerTerminal.module.css";
 
+type Phase = "video" | "terminal" | "finale";
+
 type EffectType = 
   | "model-extraction"
   | "prompt-injection"
@@ -12,37 +14,17 @@ type EffectType =
   | "hex-scan"
   | "ssh-brute";
 
-interface Effect {
-  type: EffectType;
-  weight: number;
-  category: "ai" | "retro";
-}
-
-const EFFECTS: Effect[] = [
-  { type: "model-extraction", weight: 20, category: "ai" },
-  { type: "prompt-injection", weight: 20, category: "ai" },
-  { type: "adversarial-attack", weight: 15, category: "ai" },
-  { type: "attention-hijack", weight: 15, category: "ai" },
-  { type: "char-decode", weight: 12, category: "retro" },
-  { type: "hex-scan", weight: 10, category: "retro" },
-  { type: "ssh-brute", weight: 8, category: "retro" },
+const EFFECT_SEQUENCE: EffectType[] = [
+  "model-extraction",
+  "prompt-injection", 
+  "adversarial-attack",
+  "attention-hijack",
+  "char-decode",
+  "hex-scan",
+  "ssh-brute",
 ];
 
-const TOTAL_WEIGHT = EFFECTS.reduce((sum, e) => sum + e.weight, 0);
-
-function pickRandomEffect(exclude?: EffectType): EffectType {
-  const filtered = exclude ? EFFECTS.filter(e => e.type !== exclude) : EFFECTS;
-  const adjustedTotal = filtered.reduce((sum, e) => sum + e.weight, 0);
-  let roll = Math.random() * adjustedTotal;
-  
-  for (const effect of filtered) {
-    roll -= effect.weight;
-    if (roll <= 0) return effect.type;
-  }
-  return filtered[0].type;
-}
-
-const CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+const CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*<>[]{}";
 const HEX_CHARS = "0123456789ABCDEF";
 
 function randomChar() {
@@ -53,38 +35,120 @@ function randomHex() {
   return HEX_CHARS[Math.floor(Math.random() * 16)] + HEX_CHARS[Math.floor(Math.random() * 16)];
 }
 
+const VIDEO_DURATION = 12000;
+const EFFECT_DURATION = 20000;
+const FINALE_DURATION = 5000;
+
+function AIMorphText({ frame }: { frame: number }) {
+  const lines = [
+    ["now", " i", " see,", " hear,", " and", " i", " understand."],
+    ["do", " you?"],
+    ["WHO", " ARE", " YOU?"],
+    ["WHO", " AM", " I?"],
+  ];
+  
+  const tokensPerFrame = 12;
+  
+  let frameOffset = 0;
+  const lineStates = lines.map((tokens) => {
+    const lineStart = frameOffset;
+    const lineEnd = frameOffset + tokens.length * tokensPerFrame;
+    const visibleTokens = Math.min(
+      Math.max(0, Math.floor((frame - lineStart) / tokensPerFrame)),
+      tokens.length
+    );
+    const isTyping = frame >= lineStart && frame < lineEnd && visibleTokens < tokens.length;
+    const isComplete = visibleTokens >= tokens.length;
+    const isVisible = frame >= lineStart;
+    frameOffset = lineEnd;
+    return { tokens, visibleTokens, isTyping, isComplete, isVisible };
+  });
+
+  return (
+    <div className={styles.aiMessageContainer}>
+      {lineStates.map((line, i) => line.isVisible && (
+        <div key={i} className={styles.aiLine}>
+          {line.isTyping ? (
+            <span className={styles.thinkingPrefix}>thinking:</span>
+          ) : (
+            <span className={styles.aiPrefix}>&gt;</span>
+          )}
+          <span>{line.tokens.slice(0, line.visibleTokens).join("")}</span>
+        </div>
+      ))}
+      <span className={styles.cursor}>_</span>
+    </div>
+  );
+}
+
+
+
 export function HackerTerminal() {
-  const [currentEffect, setCurrentEffect] = useState<EffectType>("model-extraction");
+  const [phase, setPhase] = useState<Phase>("video");
+  const [effectIndex, setEffectIndex] = useState(0);
   const [lines, setLines] = useState<string[]>([]);
+  const [aiFrame, setAiFrame] = useState(0);
+  
   const animationRef = useRef<NodeJS.Timeout | null>(null);
   const frameRef = useRef(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const switchEffect = useCallback(() => {
-    setCurrentEffect(prev => pickRandomEffect(prev));
-    setLines([]);
-    frameRef.current = 0;
+  const currentEffect = EFFECT_SEQUENCE[effectIndex];
+
+  const runTerminalSequence = useCallback(() => {
+    let currentEffectIdx = 0;
+    
+    const runNextEffect = () => {
+      if (currentEffectIdx >= EFFECT_SEQUENCE.length) {
+        setPhase("finale");
+        setTimeout(() => {
+          setPhase("video");
+          setTimeout(() => {
+            setEffectIndex(0);
+            runTerminalSequence();
+          }, VIDEO_DURATION);
+        }, FINALE_DURATION);
+        return;
+      }
+      
+      frameRef.current = 0;
+      setEffectIndex(currentEffectIdx);
+      setPhase("terminal");
+      
+      setTimeout(() => {
+        currentEffectIdx++;
+        runNextEffect();
+      }, EFFECT_DURATION);
+    };
+    
+    runNextEffect();
   }, []);
 
   useEffect(() => {
-    const scheduleNext = () => {
-      const delay = 300000 + Math.random() * 300000;
-      return setTimeout(() => {
-        switchEffect();
-        timerRef.current = scheduleNext();
-      }, delay);
-    };
+    setPhase("video");
     
-    const timerRef = { current: scheduleNext() };
-    return () => clearTimeout(timerRef.current);
-  }, [switchEffect]);
+    setTimeout(() => {
+      runTerminalSequence();
+    }, VIDEO_DURATION);
+    
+    return () => {
+      if (animationRef.current) {
+        clearInterval(animationRef.current);
+      }
+    };
+  }, [runTerminalSequence]);
 
   useEffect(() => {
-    if (animationRef.current) clearInterval(animationRef.current);
+    if (phase !== "terminal") {
+      if (animationRef.current) clearInterval(animationRef.current);
+      return;
+    }
+
     frameRef.current = 0;
-    setLines([]);
 
     const runEffect = () => {
       frameRef.current++;
+      setAiFrame(prev => prev + 1);
       const frame = frameRef.current;
 
       switch (currentEffect) {
@@ -112,36 +176,91 @@ export function HackerTerminal() {
       }
     };
 
-    const speed = currentEffect === "hex-scan" ? 50 : 
-                  currentEffect === "char-decode" ? 40 :
-                  currentEffect === "ssh-brute" ? 120 : 80;
-    
-    animationRef.current = setInterval(runEffect, speed);
+    animationRef.current = setInterval(runEffect, 280);
     runEffect();
 
     return () => {
       if (animationRef.current) clearInterval(animationRef.current);
     };
-  }, [currentEffect]);
+  }, [currentEffect, phase]);
 
-  const handleClick = () => {
-    if (Math.random() < 0.15) {
-      switchEffect();
-    }
+  const isTerminalVisible = phase === "terminal";
+
+  const effectLabels: Record<EffectType, string> = {
+    "model-extraction": "NEURAL WEIGHT EXTRACTION",
+    "prompt-injection": "TOKEN INJECTION ATTACK",
+    "adversarial-attack": "ADVERSARIAL PERTURBATION",
+    "attention-hijack": "ATTENTION MATRIX HIJACK",
+    "char-decode": "CRYPTOGRAPHIC BREACH",
+    "hex-scan": "MEMORY REGION SCAN",
+    "ssh-brute": "AUTHENTICATION BYPASS",
   };
 
   return (
-    <div className={styles.terminal} onClick={handleClick} role="button" tabIndex={0}>
-      <div className={styles.scanlines} />
-      <div className={styles.screen}>
-        <div className={styles.output}>
-          {lines.map((line, i) => (
-            <div key={i} className={styles.line} dangerouslySetInnerHTML={{ __html: line }} />
+    <div 
+      className={styles.crtScreen}
+      role="img"
+      aria-label="AI Lab display terminal"
+    >
+      <div className={styles.phosphorGlow} />
+      
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className={`${styles.videoLayer} ${phase !== "video" ? styles.hidden : ""}`}
+        ref={videoRef}
+      >
+        <source src="/videos/hero-promo.mp4" type="video/mp4" />
+      </video>
+
+      {phase === "finale" && (
+        <div className={styles.finaleLayer}>
+          {Array.from({ length: 12 }, (_, i) => (
+            <div key={i} className={styles.finaleText}>
+              {i % 2 === 0 ? "WHO ARE YOU? " : "WHO AM I? "}
+              {i % 3 === 0 ? "WHO ARE YOU? " : "WHO AM I? "}
+              {i % 2 === 1 ? "WHO ARE YOU?" : "WHO AM I?"}
+            </div>
           ))}
-          <span className={styles.cursor}>_</span>
         </div>
+      )}
+
+      <div className={`${styles.terminalLayer} ${isTerminalVisible ? styles.visible : ""}`}>
+        <div className={styles.terminalHeader}>
+          <div className={styles.terminalHeaderLeft}>
+            <span className={styles.terminalTitle}>LMMS-LAB // BREACH ACTIVE</span>
+            <span className={styles.terminalEffect}>{effectLabels[currentEffect]}</span>
+          </div>
+          <div className={styles.terminalStatus}>
+            <span className={styles.effectCounter}>
+              {effectIndex + 1}/{EFFECT_SEQUENCE.length}
+            </span>
+            <span className={styles.statusDot} />
+            <span>LIVE</span>
+          </div>
+        </div>
+        
+        <div className={styles.terminalContent}>
+          <div className={styles.output}>
+            {lines.map((line, i) => (
+              <div key={i} className={styles.line} dangerouslySetInnerHTML={{ __html: line }} />
+            ))}
+            <span className={styles.cursor}>_</span>
+          </div>
+        </div>
+
+        <AIMorphText frame={aiFrame} />
       </div>
-      <div className={styles.glow} />
+
+      <div className={styles.scanlines} />
+      <div className={styles.rgbShift} />
+      <div className={styles.vignette} />
+      <div className={styles.curvature} />
+      <div className={styles.reflection} />
+      <div className={styles.noise} />
     </div>
   );
 }
@@ -164,9 +283,9 @@ function runModelExtraction(frame: number, setLines: React.Dispatch<React.SetSta
   }
 
   const extractFrame = frame - messages.length;
-  const layer = Math.min(Math.floor(extractFrame / 3), totalLayers);
+  const layer = Math.min(Math.floor(extractFrame / 2), totalLayers);
   const progress = Math.min(layer / totalLayers * 100, 100);
-  const bar = "█".repeat(Math.floor(progress / 5)) + "░".repeat(20 - Math.floor(progress / 5));
+  const bar = "\u2588".repeat(Math.floor(progress / 5)) + "\u2591".repeat(20 - Math.floor(progress / 5));
   
   const weights = `${(Math.random() * 0.1 - 0.05).toFixed(4)}, ${(Math.random() * 0.1 - 0.05).toFixed(4)}, ${(Math.random() * 0.1 - 0.05).toFixed(4)}...`;
   
@@ -198,13 +317,13 @@ function runPromptInjection(frame: number, setLines: React.Dispatch<React.SetSta
     "",
   ];
 
-  if (frame <= messages.length + 5) {
+  if (frame <= messages.length + 3) {
     setLines(messages.slice(0, Math.min(frame, messages.length)));
     return;
   }
 
-  const injectFrame = frame - messages.length - 5;
-  const revealCount = Math.min(injectFrame, injectedTokens.length);
+  const injectFrame = frame - messages.length - 3;
+  const revealCount = Math.min(Math.floor(injectFrame / 2), injectedTokens.length);
   
   const displayTokens = injectedTokens.map((t, i) => {
     if (i < revealCount) return `<span class="danger">${t}</span>`;
@@ -229,7 +348,7 @@ function runAdversarialAttack(frame: number, setLines: React.Dispatch<React.SetS
   const messages = [
     "$ adversarial-perturb --epsilon 0.03 --iterations 100",
     '<span class="dim">[*] Loading target classifier...</span>',
-    '<span class="success">[+] Model: ViT-L/14 CLIP</span>',
+    '<span class="success">[+] Model: OneVision-Encoder</span>',
     '<span class="dim">[*] Computing gradients...</span>',
     "",
   ];
@@ -240,17 +359,17 @@ function runAdversarialAttack(frame: number, setLines: React.Dispatch<React.SetS
   }
 
   const attackFrame = frame - messages.length;
-  const iteration = Math.min(attackFrame * 2, 100);
+  const iteration = Math.min(attackFrame * 1.5, 100);
   const originalConf = Math.max(0.97 - iteration * 0.008, 0.12);
   const targetConf = Math.min(0.03 + iteration * 0.009, 0.94);
   const perturbNorm = (iteration * 0.0003).toFixed(4);
 
-  const confBar1 = "█".repeat(Math.floor(originalConf * 20)) + "░".repeat(20 - Math.floor(originalConf * 20));
-  const confBar2 = "█".repeat(Math.floor(targetConf * 20)) + "░".repeat(20 - Math.floor(targetConf * 20));
+  const confBar1 = "\u2588".repeat(Math.floor(originalConf * 20)) + "\u2591".repeat(20 - Math.floor(originalConf * 20));
+  const confBar2 = "\u2588".repeat(Math.floor(targetConf * 20)) + "\u2591".repeat(20 - Math.floor(targetConf * 20));
 
   const attackLines = [
     ...messages,
-    `<span class="highlight">Iteration ${iteration}/100</span>  perturbation: ${perturbNorm}`,
+    `<span class="highlight">Iteration ${Math.floor(iteration)}/100</span>  perturbation: ${perturbNorm}`,
     "",
     `<span class="dim">Original class "cat":</span>    [${confBar1}] <span class="${originalConf > 0.5 ? 'success' : 'danger'}">${(originalConf * 100).toFixed(1)}%</span>`,
     `<span class="dim">Target class "dog":</span>      [${confBar2}] <span class="${targetConf > 0.5 ? 'success' : 'warning'}">${(targetConf * 100).toFixed(1)}%</span>`,
@@ -293,7 +412,7 @@ function runAttentionHijack(frame: number, setLines: React.Dispatch<React.SetSta
           const dist = Math.abs(i - j);
           val = Math.max(0, 1 - dist * 0.15) + Math.random() * 0.1;
         }
-        const char = val > 0.7 ? "█" : val > 0.5 ? "▓" : val > 0.3 ? "▒" : "░";
+        const char = val > 0.7 ? "\u2588" : val > 0.5 ? "\u2593" : val > 0.3 ? "\u2592" : "\u2591";
         const color = val > 0.7 ? "danger" : val > 0.5 ? "warning" : "dim";
         row += `<span class="${color}">${char}</span>`;
       }
@@ -302,7 +421,7 @@ function runAttentionHijack(frame: number, setLines: React.Dispatch<React.SetSta
     return rows;
   };
 
-  const isHijacked = hijackFrame > 20;
+  const isHijacked = hijackFrame > 15;
   const heatmap = generateHeatmap(isHijacked);
 
   const hijackLines = [
@@ -326,8 +445,8 @@ function runCharDecode(frame: number, setLines: React.Dispatch<React.SetStateAct
     "ENCRYPTION_KEY=aes-256-gcm-0x4A2F",
   ];
 
-  const decodeTarget = targets[Math.floor(frame / 80) % targets.length];
-  const progress = (frame % 80) / 80;
+  const decodeTarget = targets[Math.floor(frame / 60) % targets.length];
+  const progress = (frame % 60) / 60;
   const revealCount = Math.floor(progress * decodeTarget.length);
 
   const decoded = decodeTarget.split("").map((char, i) => {
@@ -362,7 +481,7 @@ function runHexScan(frame: number, setLines: React.Dispatch<React.SetStateAction
     "",
   ];
 
-  const numLines = Math.min(Math.floor(frame / 2), 12);
+  const numLines = Math.min(Math.floor(frame / 3), 12);
   
   for (let i = 0; i < numLines; i++) {
     const addr = (baseAddr + i * 16).toString(16).toUpperCase();
@@ -370,7 +489,7 @@ function runHexScan(frame: number, setLines: React.Dispatch<React.SetStateAction
     const highlight = Math.random() > 0.85;
     
     if (highlight) {
-      scanLines.push(`<span class="warning">0x${addr}:</span> <span class="danger">${bytes}</span> <span class="highlight">◄ FOUND</span>`);
+      scanLines.push(`<span class="warning">0x${addr}:</span> <span class="danger">${bytes}</span> <span class="highlight">\u25c4 FOUND</span>`);
     } else {
       scanLines.push(`<span class="dim">0x${addr}:</span> ${bytes}`);
     }
@@ -402,7 +521,7 @@ function runSSHBrute(frame: number, setLines: React.Dispatch<React.SetStateActio
   }
 
   const attemptFrame = frame - messages.length;
-  const attemptIndex = Math.floor(attemptFrame / 3);
+  const attemptIndex = Math.floor(attemptFrame / 4);
   
   const attempts: string[] = [];
   for (let i = 0; i <= Math.min(attemptIndex, passwords.length); i++) {

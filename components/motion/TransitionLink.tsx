@@ -3,8 +3,9 @@
 import Link, { type LinkProps } from 'next/link'
 import { motion } from 'framer-motion'
 import { type ReactNode, type ComponentProps, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { linkVariants } from './variants'
-import { useTransition } from './TransitionContext'
+import { useTransition } from './TransitionSystem'
 
 type TransitionLinkProps = LinkProps & ComponentProps<'a'> & {
   children: ReactNode
@@ -13,8 +14,13 @@ type TransitionLinkProps = LinkProps & ComponentProps<'a'> & {
   style?: React.CSSProperties
 }
 
-export default function TransitionLink({ children, className, style, onClick, ...props }: TransitionLinkProps) {
+export default function TransitionLink({ children, className, style, onClick, onMouseEnter, onFocus, ...props }: TransitionLinkProps) {
   const { triggerTransition, phase } = useTransition()
+  const router = useRouter()
+
+  const handlePrefetch = useCallback(() => {
+    router.prefetch(props.href)
+  }, [router, props.href])
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
@@ -29,10 +35,7 @@ export default function TransitionLink({ children, className, style, onClick, ..
 
     e.preventDefault()
 
-    const target = e.currentTarget
-    const rect = target.getBoundingClientRect()
-
-    triggerTransition(props.href, target, rect)
+    triggerTransition(props.href)
     onClick?.(e)
   }, [triggerTransition, phase, props.href, onClick])
 
@@ -48,6 +51,14 @@ export default function TransitionLink({ children, className, style, onClick, ..
         className={className} 
         {...props} 
         onClick={handleClick}
+        onMouseEnter={(e) => {
+            handlePrefetch()
+            onMouseEnter?.(e)
+        }}
+        onFocus={(e) => {
+            handlePrefetch()
+            onFocus?.(e)
+        }}
         prefetch={true}
       >
         {children}

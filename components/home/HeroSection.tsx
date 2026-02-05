@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import TransitionLink from "@/components/motion/TransitionLink";
 import { DiffusionText } from "@/components/motion/DiffusionText";
-import { useTransition } from "@/components/motion/TransitionContext";
+import { useTransition } from "@/components/motion/TransitionSystem";
 import { HackerTerminal } from "./HackerTerminal";
 
 const HERO_PHRASES = [
