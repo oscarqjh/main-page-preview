@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import styles from "./HackerTerminal.module.css";
 
-type Phase = "video" | "terminal" | "finale";
+type Phase = "video" | "terminal";
 
 type EffectType = 
   | "model-extraction"
@@ -37,7 +37,6 @@ function randomHex() {
 
 const VIDEO_DURATION = 12000;
 const EFFECT_DURATION = 20000;
-const FINALE_DURATION = 5000;
 
 function AIMorphText({ frame }: { frame: number }) {
   const introLines = [
@@ -131,14 +130,11 @@ export function HackerTerminal() {
     
     const runNextEffect = () => {
       if (currentEffectIdx >= EFFECT_SEQUENCE.length) {
-        setPhase("finale");
+        setPhase("video");
         setTimeout(() => {
-          setPhase("video");
-          setTimeout(() => {
-            setEffectIndex(0);
-            runTerminalSequence();
-          }, VIDEO_DURATION);
-        }, FINALE_DURATION);
+          setEffectIndex(0);
+          runTerminalSequence();
+        }, VIDEO_DURATION);
         return;
       }
       
@@ -246,37 +242,6 @@ export function HackerTerminal() {
       >
         <source src="/videos/hero-promo.mp4" type="video/mp4" />
       </video>
-
-      {phase === "finale" && (
-        <div className={styles.finaleLayer}>
-          {Array.from({ length: 35 }, (_, i) => {
-            const texts = ["WHO ARE YOU?", "WHO AM I?", "WHO", "ARE", "YOU", "I", "?"];
-            const text = texts[i % texts.length];
-            const size = [0.7, 0.9, 1.1, 1.4, 1.8, 2.2, 2.8][i % 7];
-            const top = (i * 17 + i * i * 3) % 90;
-            const left = (i * 23 + i * 7) % 85;
-            const rotate = ((i * 13) % 30) - 15;
-            const delay = (i * 0.15) % 2;
-            const duration = 0.3 + (i % 5) * 0.2;
-            return (
-              <div
-                key={i}
-                className={styles.evaText}
-                style={{
-                  top: `${top}%`,
-                  left: `${left}%`,
-                  fontSize: `${size}rem`,
-                  transform: `rotate(${rotate}deg)`,
-                  animationDelay: `${delay}s`,
-                  animationDuration: `${duration}s`,
-                }}
-              >
-                {text}
-              </div>
-            );
-          })}
-        </div>
-      )}
 
       <div className={`${styles.terminalLayer} ${isTerminalVisible ? styles.visible : ""}`}>
         <div className={styles.terminalHeader}>
