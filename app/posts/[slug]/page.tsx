@@ -53,7 +53,7 @@ export default async function PostPage({
 						<article className="blog-article">
 							<header className="blog-header-grid">
 								<div className="blog-header-meta">
-									<div className="blog-meta-group">
+									<div className="blog-meta-row">
 										<time className="blog-date">
 											{new Date(post.date).toLocaleDateString("en-US", {
 												year: "numeric",
@@ -61,37 +61,33 @@ export default async function PostPage({
 												day: "numeric",
 											}).toUpperCase()}
 										</time>
+										{post.mainTags && post.mainTags.length > 0 && (
+											<>
+												<span className="blog-meta-sep">/</span>
+												<div className="blog-main-tags">
+													{post.mainTags.map((tag) => (
+														<span key={tag} className="blog-main-tag">{tag}</span>
+													))}
+												</div>
+											</>
+										)}
 									</div>
 
 									{post.authors && post.authors.length > 0 && (
-										<div className="blog-meta-group">
-											<span className="opacity-50 mx-2">/</span>
-											<div className="blog-authors">
-												{post.authors.map((author, i) => (
-													<span key={author.name} className="blog-author">
-														{author.url ? (
-															<a href={author.url} target="_blank" rel="noopener noreferrer">
-																{author.name}
-															</a>
-														) : (
-															author.name
-														)}
-														{author.main && <span className="author-main">*</span>}
-														{i < post.authors!.length - 1 && ", "}
-													</span>
-												))}
-											</div>
-										</div>
-									)}
-
-									{post.mainTags && post.mainTags.length > 0 && (
-										<div className="blog-meta-group">
-											<span className="opacity-50 mx-2">/</span>
-											<div className="blog-main-tags">
-												{post.mainTags.map((tag) => (
-													<span key={tag} className="blog-main-tag">{tag}</span>
-												))}
-											</div>
+										<div className="blog-authors">
+											{post.authors.map((author, i) => (
+												<span key={author.name} className="blog-author">
+													{author.url ? (
+														<a href={author.url} target="_blank" rel="noopener noreferrer">
+															{author.name}
+														</a>
+													) : (
+														author.name
+													)}
+													{author.main && <span className="author-main">*</span>}
+													{i < post.authors!.length - 1 && ","}
+												</span>
+											))}
 										</div>
 									)}
 								</div>
