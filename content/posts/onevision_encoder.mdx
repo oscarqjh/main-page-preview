@@ -1,6 +1,6 @@
 ---
-title: "OneVision Encoder: the First HEVC-Style Vision Transformer with Advanced Multimodal Capabilities"
-description: "A vision transformer that resolves the frame-computation trade-off using HEVC video compression principles, achieving state-of-the-art results on video and image benchmarks."
+title: "OneVision Encoder: Codec-Aligned Sparsity as a Foundational Principle for Multimodal Intelligence"
+description: "Our hypothesis: AGI is a compression problem. We introduce Codec Patchification that processes only 3.1%-25% of regions, achieving 4.1% improvement on video tasks while outperforming Qwen3-ViT and SigLIP2."
 publishDate: "2026-01-15"
 mainTags: ["models"]
 tags:
@@ -24,13 +24,26 @@ bibtex: |
   }
 ---
 
-## Introduction
+## Core Hypothesis
 
-Video understanding models face a fundamental trade-off: processing more frames captures richer temporal information but increases computation quadratically. Traditional approaches address this through sparse frame sampling, but this discards fine-grained motion dynamics and treats all spatial regions equally — wasting computation on static backgrounds.
+**AGI is a compression problem.** Neural architecture should align with the statistical structure of visual data - not fight against it.
 
-We present **OneVision Encoder**, a vision transformer that resolves this trade-off using principles from HEVC video compression. Instead of sampling sparse frames densely (all patches from few frames), we sample dense frames sparsely (important patches from many frames). Our codec-style patch selection identifies temporally-salient regions — areas with motion, object interactions, or semantic changes — and processes only these informative patches.
+## Method: Codec Patchification
 
-Combined with global contrastive learning using a 2M concept bank, OneVision Encoder achieves state-of-the-art results on video benchmarks (MVBench, VideoMME, Perception Test) and image understanding tasks (DocVQA, ChartQA, OCRBench).
+We introduce **Codec Patchification** - a paradigm where architecture mirrors how information is actually structured in visual streams:
+
+- **Ultra-sparse processing**: Only 3.1%-25% of spatial regions are processed, guided by codec-style saliency
+- **3D RoPE**: Positional encoding that captures spatiotemporal structure across frames
+- **Cluster discrimination**: Contrastive learning with hierarchical concept banks for semantic grounding
+
+Instead of treating all pixels equally, we process visual data the way video codecs do: identify what matters, discard redundancy, preserve signal.
+
+## Results
+
+OneVision Encoder achieves:
+- **4.1% improvement** on video understanding tasks (MVBench, VideoMME, Perception Test)
+- **Outperforms Qwen3-ViT and SigLIP2** on both video and image benchmarks
+- State-of-the-art on document understanding (DocVQA, ChartQA, OCRBench)
 
 <img src="/onevision-encoder/images/method.png" alt="OneVision Encoder Method Overview" style={{width: "100%", maxWidth: "600px", margin: "2rem auto", display: "block"}} />
 
