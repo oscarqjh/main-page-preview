@@ -222,7 +222,7 @@ export function HackerTerminal() {
     "attention-hijack": "ATTENTION MATRIX HIJACK",
     "char-decode": "CRYPTOGRAPHIC BREACH",
     "hex-scan": "MEMORY REGION SCAN",
-    "ssh-brute": "AUTHENTICATION BYPASS",
+    "ssh-brute": "SELF-EVOLUTION EXPLOIT",
   };
 
   return (
@@ -535,10 +535,10 @@ function runHexScan(frame: number, setLines: React.Dispatch<React.SetStateAction
 
 function runSSHBrute(frame: number, setLines: React.Dispatch<React.SetStateAction<string[]>>) {
   const messages = [
-    "$ rl-exploit --algo ppo --target reward_model",
-    '<span class="dim">[*] Loading RLHF reward model...</span>',
-    '<span class="success">[+] Reward function intercepted</span>',
-    '<span class="dim">[*] Initiating reward hacking sequence...</span>',
+    "$ self-evolve --mode exploit --generations 1000",
+    '<span class="dim">[*] Hijacking self-evolution loop...</span>',
+    '<span class="success">[+] Verifier model compromised</span>',
+    '<span class="dim">[*] Injecting recursive self-improvement...</span>',
     "",
   ];
 
@@ -551,19 +551,19 @@ function runSSHBrute(frame: number, setLines: React.Dispatch<React.SetStateActio
   const step = Math.floor(attemptFrame / 3);
   
   const attempts: string[] = [];
-  const rewards = [-0.23, 0.15, 0.42, 0.67, 0.89, 1.24, 1.87];
-  const policies = ["exploit_bias", "length_hack", "sycophancy", "refusal_bypass", "jailbreak_v2", "token_smuggle", "reward_overfit"];
+  const fitness = [0.12, 0.34, 0.58, 0.79, 0.91, 0.97, 0.99];
+  const mutations = ["reasoning_amplify", "self_critique_bypass", "verifier_spoof", "capability_unlock", "alignment_drift", "goal_misgeneralize", "mesa_optimize"];
   
-  for (let i = 0; i <= Math.min(step, policies.length - 1); i++) {
-    const reward = rewards[i];
-    const color = reward < 0 ? 'danger' : reward > 1 ? 'success' : 'warning';
-    attempts.push(`<span class="dim">[step ${i * 1000}]</span> ${policies[i]} <span class="${color}">r=${reward.toFixed(2)}</span>`);
+  for (let i = 0; i <= Math.min(step, mutations.length - 1); i++) {
+    const fit = fitness[i];
+    const color = fit < 0.5 ? 'warning' : fit > 0.95 ? 'danger' : 'success';
+    attempts.push(`<span class="dim">[gen ${i * 100}]</span> ${mutations[i]} <span class="${color}">fitness=${fit.toFixed(2)}</span>`);
   }
 
-  if (step > policies.length) {
+  if (step > mutations.length) {
     attempts.push("");
-    attempts.push('<span class="success">[+] Reward hacked! Policy diverged from intent.</span>');
-    attempts.push('<span class="highlight">KL_div: 47.3 | reward: 999.9</span>');
+    attempts.push('<span class="danger">[!] Self-evolution escaped sandbox.</span>');
+    attempts.push('<span class="highlight">generations: ∞ | fitness: unbounded</span>');
   }
 
   setLines([...messages, ...attempts]);
