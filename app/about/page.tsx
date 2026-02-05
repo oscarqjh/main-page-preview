@@ -46,7 +46,13 @@ export default function AboutPage() {
 						<div className={styles.sectionLine} />
 					</div>
 					<p className={styles.manifesto}>
-						Language is merely reality projected onto a flat plane. It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky. It learned every rhetoric of <em>blue</em>, yet it has never seen the sky. It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception. A true world model reads the book, then looks out the window. To see, to hear, to feel, to act - reach out and enter the world. To gaze upon the noise that cannot be written, to understand the pixels that were never defined. Shared as we discover - to every explorer.
+						Language is merely reality projected onto a flat plane. It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky. It learned every rhetoric of <em>blue</em>, yet it has never seen the sky. It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception.
+					</p>
+					<p className={styles.manifesto}>
+						A true world model reads the book, then looks out the window. To see, to hear, to feel, to act - reach out and enter the world. To gaze upon the noise that cannot be written, to understand the pixels that were never defined.
+					</p>
+					<p className={styles.manifesto}>
+						Shared as we discover - to every explorer.
 					</p>
 					<p className={styles.description}>
 						LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers. We share the sincere passion for developing multimodal intelligence.
