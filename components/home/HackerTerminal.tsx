@@ -58,17 +58,19 @@ function AIMorphText({ frame }: { frame: number }) {
   
   if (isLooping) {
     const loopFrame = frame - totalIntroFrames;
-    const linesPerCycle = 8;
+    const maxLines = 4;
     const framesPerLine = 20;
-    const currentLineIndex = Math.floor(loopFrame / framesPerLine) % linesPerCycle;
+    const totalLines = Math.floor(loopFrame / framesPerLine);
     
-    const loopLines = Array.from({ length: linesPerCycle }, (_, i) => 
-      i % 2 === 0 ? "WHO ARE YOU?" : "WHO AM I?"
-    );
+    const visibleLines = Array.from({ length: maxLines }, (_, i) => {
+      const lineNum = totalLines - (maxLines - 1 - i);
+      if (lineNum < 0) return null;
+      return lineNum % 2 === 0 ? "WHO ARE YOU?" : "WHO AM I?";
+    }).filter(Boolean);
     
     return (
       <div className={styles.aiMessageContainer}>
-        {loopLines.slice(0, currentLineIndex + 1).map((text, i) => (
+        {visibleLines.map((text, i) => (
           <div key={i} className={styles.aiLine}>
             <span className={styles.aiPrefix}>&gt;</span>
             <span>{text}</span>
