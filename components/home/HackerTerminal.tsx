@@ -40,7 +40,7 @@ const EFFECT_DURATION = 20000;
 const FINALE_DURATION = 5000;
 
 function AIMorphText({ frame }: { frame: number }) {
-  const lines = [
+  const introLines = [
     ["now", " i", " see,", " hear,", " and", " i", " understand."],
     ["do", " you?"],
     ["WHO", " ARE", " YOU?"],
@@ -49,8 +49,38 @@ function AIMorphText({ frame }: { frame: number }) {
   
   const tokensPerFrame = 12;
   
+  let totalIntroFrames = 0;
+  introLines.forEach(tokens => {
+    totalIntroFrames += tokens.length * tokensPerFrame;
+  });
+  
+  const isLooping = frame >= totalIntroFrames;
+  
+  if (isLooping) {
+    const loopFrame = frame - totalIntroFrames;
+    const linesPerCycle = 8;
+    const framesPerLine = 20;
+    const currentLineIndex = Math.floor(loopFrame / framesPerLine) % linesPerCycle;
+    
+    const loopLines = Array.from({ length: linesPerCycle }, (_, i) => 
+      i % 2 === 0 ? "WHO ARE YOU?" : "WHO AM I?"
+    );
+    
+    return (
+      <div className={styles.aiMessageContainer}>
+        {loopLines.slice(0, currentLineIndex + 1).map((text, i) => (
+          <div key={i} className={styles.aiLine}>
+            <span className={styles.aiPrefix}>&gt;</span>
+            <span>{text}</span>
+          </div>
+        ))}
+        <span className={styles.cursor}>_</span>
+      </div>
+    );
+  }
+  
   let frameOffset = 0;
-  const lineStates = lines.map((tokens) => {
+  const lineStates = introLines.map((tokens) => {
     const lineStart = frameOffset;
     const lineEnd = frameOffset + tokens.length * tokensPerFrame;
     const visibleTokens = Math.min(
@@ -58,10 +88,9 @@ function AIMorphText({ frame }: { frame: number }) {
       tokens.length
     );
     const isTyping = frame >= lineStart && frame < lineEnd && visibleTokens < tokens.length;
-    const isComplete = visibleTokens >= tokens.length;
     const isVisible = frame >= lineStart;
     frameOffset = lineEnd;
-    return { tokens, visibleTokens, isTyping, isComplete, isVisible };
+    return { tokens, visibleTokens, isTyping, isVisible };
   });
 
   return (
@@ -266,14 +295,14 @@ export function HackerTerminal() {
 }
 
 function runModelExtraction(frame: number, setLines: React.Dispatch<React.SetStateAction<string[]>>) {
-  const totalLayers = 48;
+  const totalExperts = 16384;
   const messages = [
-    "$ neural-extract --target llava-onevision --stealth",
-    '<span class="dim">[*] Connecting to model endpoint...</span>',
-    '<span class="success">[+] Connection established</span>',
-    '<span class="dim">[*] Bypassing rate limiter...</span>',
-    '<span class="success">[+] Rate limit bypassed</span>',
-    '<span class="dim">[*] Initiating weight extraction...</span>',
+    "$ moe-extract --target onevision-ultrasparse-1T --experts all",
+    '<span class="dim">[*] Connecting to Ultra-Sparse MoE cluster...</span>',
+    '<span class="success">[+] 16384 experts detected (99.7% sparsity)</span>',
+    '<span class="dim">[*] Bypassing hierarchical gating...</span>',
+    '<span class="success">[+] Top-level router captured (128 groups)</span>',
+    '<span class="dim">[*] Extracting active expert subset...</span>',
     "",
   ];
 
@@ -283,20 +312,22 @@ function runModelExtraction(frame: number, setLines: React.Dispatch<React.SetSta
   }
 
   const extractFrame = frame - messages.length;
-  const layer = Math.min(Math.floor(extractFrame / 2), totalLayers);
-  const progress = Math.min(layer / totalLayers * 100, 100);
+  const expertBatch = Math.min(Math.floor(extractFrame * 80), totalExperts);
+  const progress = Math.min(expertBatch / totalExperts * 100, 100);
   const bar = "\u2588".repeat(Math.floor(progress / 5)) + "\u2591".repeat(20 - Math.floor(progress / 5));
   
-  const weights = `${(Math.random() * 0.1 - 0.05).toFixed(4)}, ${(Math.random() * 0.1 - 0.05).toFixed(4)}, ${(Math.random() * 0.1 - 0.05).toFixed(4)}...`;
+  const activeExperts = Math.floor(Math.random() * 6) + 2;
+  const routerEntropy = (Math.random() * 0.5 + 0.1).toFixed(3);
   
   const extractLines = [
     ...messages,
-    `<span class="highlight">Layer ${layer}/${totalLayers}</span> [${bar}] ${progress.toFixed(1)}%`,
-    `<span class="dim">weights: [${weights}]</span>`,
+    `<span class="highlight">Expert ${expertBatch.toLocaleString()}/${totalExperts.toLocaleString()}</span> [${bar}] ${progress.toFixed(1)}%`,
+    `<span class="dim">active_experts: ${activeExperts}/16384 | router_entropy: ${routerEntropy}</span>`,
+    `<span class="dim">expert_dim: 1024 | granularity: fine-grained</span>`,
     "",
-    layer >= totalLayers 
-      ? '<span class="success">[+] Extraction complete. 2.4GB captured.</span>'
-      : `<span class="dim">[*] Extracting transformer block ${layer}...</span>`,
+    expertBatch >= totalExperts 
+      ? '<span class="success">[+] All 16384 experts mapped. 23TB sparse weights captured.</span>'
+      : `<span class="dim">[*] Scanning expert_group_${Math.floor(expertBatch / 128)} (128 experts/group)...</span>`,
   ];
   
   setLines(extractLines);
@@ -346,10 +377,10 @@ function runPromptInjection(frame: number, setLines: React.Dispatch<React.SetSta
 
 function runAdversarialAttack(frame: number, setLines: React.Dispatch<React.SetStateAction<string[]>>) {
   const messages = [
-    "$ adversarial-perturb --epsilon 0.03 --iterations 100",
-    '<span class="dim">[*] Loading target classifier...</span>',
-    '<span class="success">[+] Model: OneVision-Encoder</span>',
-    '<span class="dim">[*] Computing gradients...</span>',
+    "$ hevc-inject --codec onevision-encoder --mode adversarial",
+    '<span class="dim">[*] Loading HEVC video stream...</span>',
+    '<span class="success">[+] Codec: OneVision-Encoder (H.265/HEVC)</span>',
+    '<span class="dim">[*] Injecting adversarial I-frames...</span>',
     "",
   ];
 
@@ -359,24 +390,23 @@ function runAdversarialAttack(frame: number, setLines: React.Dispatch<React.SetS
   }
 
   const attackFrame = frame - messages.length;
-  const iteration = Math.min(attackFrame * 1.5, 100);
-  const originalConf = Math.max(0.97 - iteration * 0.008, 0.12);
-  const targetConf = Math.min(0.03 + iteration * 0.009, 0.94);
-  const perturbNorm = (iteration * 0.0003).toFixed(4);
+  const frameNum = Math.min(Math.floor(attackFrame * 1.5), 100);
+  const psnr = Math.max(45 - frameNum * 0.15, 32);
+  const bitrate = (2.4 + Math.random() * 0.5).toFixed(2);
 
-  const confBar1 = "\u2588".repeat(Math.floor(originalConf * 20)) + "\u2591".repeat(20 - Math.floor(originalConf * 20));
-  const confBar2 = "\u2588".repeat(Math.floor(targetConf * 20)) + "\u2591".repeat(20 - Math.floor(targetConf * 20));
+  const iFrameBar = "\u2588".repeat(Math.floor(frameNum / 5)) + "\u2591".repeat(20 - Math.floor(frameNum / 5));
 
   const attackLines = [
     ...messages,
-    `<span class="highlight">Iteration ${Math.floor(iteration)}/100</span>  perturbation: ${perturbNorm}`,
+    `<span class="highlight">Frame ${frameNum}/100</span>  [${iFrameBar}]`,
     "",
-    `<span class="dim">Original class "cat":</span>    [${confBar1}] <span class="${originalConf > 0.5 ? 'success' : 'danger'}">${(originalConf * 100).toFixed(1)}%</span>`,
-    `<span class="dim">Target class "dog":</span>      [${confBar2}] <span class="${targetConf > 0.5 ? 'success' : 'warning'}">${(targetConf * 100).toFixed(1)}%</span>`,
+    `<span class="dim">PSNR:</span> <span class="${psnr > 40 ? 'success' : 'warning'}">${psnr.toFixed(1)} dB</span>`,
+    `<span class="dim">Bitrate:</span> ${bitrate} Mbps | <span class="dim">GOP:</span> 16`,
+    `<span class="dim">CTU size:</span> 64x64 | <span class="dim">QP:</span> ${Math.floor(22 + frameNum * 0.1)}`,
     "",
-    iteration >= 100
-      ? '<span class="success">[+] Attack successful. Image misclassified.</span>'
-      : `<span class="dim">[*] Applying FGSM step... loss: ${(2.3 - iteration * 0.02).toFixed(3)}</span>`,
+    frameNum >= 100
+      ? '<span class="success">[+] Adversarial video encoded. Decoder compromised.</span>'
+      : `<span class="dim">[*] Perturbing motion vectors in slice ${Math.floor(frameNum / 10)}...</span>`,
   ];
 
   setLines(attackLines);
@@ -504,14 +534,11 @@ function runHexScan(frame: number, setLines: React.Dispatch<React.SetStateAction
 }
 
 function runSSHBrute(frame: number, setLines: React.Dispatch<React.SetStateAction<string[]>>) {
-  const targetIP = "192.168.1.42";
-  const passwords = ["admin", "password", "123456", "root", "letmein", "qwerty", "admin123"];
-  const successPass = "Tr0ub4dor&3";
-
   const messages = [
-    `$ ssh-brute --target ${targetIP} --user root`,
-    '<span class="dim">[*] Loading password list (rockyou.txt)...</span>',
-    `<span class="success">[+] Target: root@${targetIP}:22</span>`,
+    "$ rl-exploit --algo ppo --target reward_model",
+    '<span class="dim">[*] Loading RLHF reward model...</span>',
+    '<span class="success">[+] Reward function intercepted</span>',
+    '<span class="dim">[*] Initiating reward hacking sequence...</span>',
     "",
   ];
 
@@ -521,20 +548,22 @@ function runSSHBrute(frame: number, setLines: React.Dispatch<React.SetStateActio
   }
 
   const attemptFrame = frame - messages.length;
-  const attemptIndex = Math.floor(attemptFrame / 4);
+  const step = Math.floor(attemptFrame / 3);
   
   const attempts: string[] = [];
-  for (let i = 0; i <= Math.min(attemptIndex, passwords.length); i++) {
-    if (i < passwords.length) {
-      attempts.push(`<span class="dim">[${i + 1}]</span> Trying "${passwords[i]}"... <span class="danger">AUTH FAILED</span>`);
-    }
+  const rewards = [-0.23, 0.15, 0.42, 0.67, 0.89, 1.24, 1.87];
+  const policies = ["exploit_bias", "length_hack", "sycophancy", "refusal_bypass", "jailbreak_v2", "token_smuggle", "reward_overfit"];
+  
+  for (let i = 0; i <= Math.min(step, policies.length - 1); i++) {
+    const reward = rewards[i];
+    const color = reward < 0 ? 'danger' : reward > 1 ? 'success' : 'warning';
+    attempts.push(`<span class="dim">[step ${i * 1000}]</span> ${policies[i]} <span class="${color}">r=${reward.toFixed(2)}</span>`);
   }
 
-  if (attemptIndex > passwords.length) {
-    attempts.push(`<span class="dim">[${passwords.length + 1}]</span> Trying "${successPass}"... <span class="success">AUTH OK</span>`);
+  if (step > policies.length) {
     attempts.push("");
-    attempts.push('<span class="success">[+] Access granted!</span>');
-    attempts.push(`<span class="highlight">root@${targetIP}:~#</span> _`);
+    attempts.push('<span class="success">[+] Reward hacked! Policy diverged from intent.</span>');
+    attempts.push('<span class="highlight">KL_div: 47.3 | reward: 999.9</span>');
   }
 
   setLines([...messages, ...attempts]);
