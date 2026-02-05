@@ -56,9 +56,8 @@
 
 /* ── Manifesto ── */
 .manifesto {
-  margin-top: var(--space-lg);
   font-size: 1rem;
-  line-height: 2.2;
+  line-height: 1.8;
   opacity: 0.8;
 }
 
