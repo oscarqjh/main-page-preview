@@ -55,23 +55,44 @@
   max-width: 60ch;
 }
 
+/* ── Mission quote ── */
+.missionQuote {
+  font-family: "Space Grotesk", var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  opacity: 0.7;
+  max-width: 40ch;
+  font-style: italic;
+  border-left: 3px solid rgba(254, 215, 170, 0.3);
+  padding-left: var(--space-md);
+  margin: var(--space-md) 0 0;
+}
+
 /* ── Board grid ── */
 .boardGrid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0;
+}
+
+@media (max-width: 640px) {
+  .boardGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .boardCard {
   display: flex;
   align-items: baseline;
   gap: var(--space-md);
-  padding: var(--space-md) 0;
-  border-top: 1px solid rgba(254, 215, 170, 0.12);
+  padding: var(--space-md) var(--space-md);
+  border: 1px solid rgba(254, 215, 170, 0.08);
+  transition: background 200ms ease;
 }
 
-.boardCard:last-child {
-  border-bottom: 1px solid rgba(254, 215, 170, 0.12);
+.boardCard:hover {
+  background: rgba(254, 215, 170, 0.03);
 }
 
 .boardIndex {
@@ -125,16 +146,17 @@
 
 .projectCard {
   padding: var(--space-md);
-  border: 1px solid rgba(254, 215, 170, 0.1);
+  border: 1px solid rgba(254, 215, 170, 0.08);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  background: rgba(254, 215, 170, 0.02);
   transition: border-color 200ms ease, background 200ms ease;
 }
 
 .projectCard:hover {
-  border-color: rgba(254, 215, 170, 0.3);
-  background: rgba(254, 215, 170, 0.03);
+  border-color: rgba(254, 215, 170, 0.25);
+  background: rgba(254, 215, 170, 0.06);
 }
 
 .projectHeader {

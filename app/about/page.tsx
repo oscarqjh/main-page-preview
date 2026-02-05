@@ -48,6 +48,9 @@ export default function AboutPage() {
 					<p className={styles.description}>
 						LMMs-Lab is a non-profit research-oriented organization with a group of passionate researchers, we share the sincere passion for developing multimodal intelligence.
 					</p>
+					<p className={styles.missionQuote}>
+						&ldquo;Advancing the frontier of multimodal understanding - from perception to reasoning, from language to vision.&rdquo;
+					</p>
 				</section>
 
 				{/* ── Scientific Board ── */}
