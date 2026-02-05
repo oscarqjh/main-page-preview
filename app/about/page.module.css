@@ -55,18 +55,39 @@
   max-width: 60ch;
 }
 
-/* ── Mission quote ── */
-.missionQuote {
+/* ── Manifesto ── */
+.manifesto {
+  max-width: 55ch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.manifestoLead {
   font-family: "Space Grotesk", var(--font-sans);
-  font-size: 1.125rem;
-  font-weight: 500;
-  line-height: 1.6;
-  opacity: 0.6;
-  max-width: 50ch;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  opacity: 0.9;
   font-style: italic;
-  border-left: 2px solid rgba(254, 215, 170, 0.2);
-  padding-left: var(--space-md);
-  margin: var(--space-lg) 0 0;
+}
+
+.manifestoBody {
+  font-size: 1rem;
+  line-height: 1.8;
+  opacity: 0.65;
+  font-style: italic;
+}
+
+.manifestoFooter {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(254, 215, 170, 0.12);
 }
 
 /* ── Board grid ── */
