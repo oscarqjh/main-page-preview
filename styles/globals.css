@@ -1718,7 +1718,7 @@ tbody tr:hover {
 }
 
 .museum-featured {
-	padding: var(--space-lg) var(--space-md) var(--space-lg);
+	padding: var(--space-md) var(--space-md) var(--space-lg);
 	max-width: 80rem;
 	margin: 0 auto;
 }
@@ -2199,7 +2199,7 @@ tbody tr:hover {
 
 @media (min-width: 1024px) {
 	.brutalist-hero {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: minmax(22rem, 2fr) minmax(0, 3fr);
 		min-height: 55vh;
 		padding: var(--space-xl) var(--space-lg);
 		gap: var(--space-xl);
@@ -2213,7 +2213,13 @@ tbody tr:hover {
 	flex-direction: column;
 	justify-content: center;
 	gap: var(--space-lg);
-	max-width: 100%;
+	max-width: 36rem;
+}
+
+@media (min-width: 1024px) {
+	.brutalist-hero-content {
+		max-width: 33rem;
+	}
 }
 
 .brutalist-hero-label {
@@ -2349,6 +2355,8 @@ tbody tr:hover {
 	.brutalist-hero-visual {
 		min-height: unset;
 		justify-content: flex-start;
+		width: 100%;
+		margin-left: 0;
 	}
 }
 
@@ -2371,4 +2379,14 @@ tbody tr:hover {
 	position: relative;
 	width: 100%;
 	max-width: 100%;
+	transform: scale(1);
+	transform-origin: left center;
+}
+
+@media (min-width: 1024px) {
+	.hero-terminal-shell {
+		width: 100%;
+		max-width: 100%;
+		transform: scale(1.01);
+	}
 }

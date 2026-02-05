@@ -1156,6 +1156,23 @@
                 --pipeline-seg-w-active: 16px;
             }
         }
+
+        .hero-subtitle-ellipsis {
+            max-width: min(100%, 72rem);
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        @media (max-width: 640px) {
+            .hero-subtitle-ellipsis {
+                -webkit-line-clamp: 3;
+            }
+        }
     </style>
 </head>
 <body class="text-[#fed7aa] bg-[#0369a1]">
@@ -1196,8 +1213,8 @@
             <h1 class="text-5xl sm:text-7xl font-bold text-[#fed7aa] tracking-tight mb-8 leading-tight">
                 <span class="gradient-text">OneVision Encoder</span>
             </h1>
-            <p class="text-xl sm:text-2xl text-[#fed7aa]/90 font-light mb-6">
-                Codec‑Aligned Sparsity as a Foundational Principle for Multimodal Intelligence
+            <p class="hero-subtitle-ellipsis text-xl sm:text-2xl text-[#fed7aa]/90 font-light mb-6" title="Artificial general intelligence is, at its core, a compression problem. Effective compression demands resonance: deep learning scales best when its architecture aligns with the fundamental structure of the data. These are the fundamental principles. Yet, modern vision architectures have strayed from these truths">
+                Artificial general intelligence is, at its core, a compression problem. Effective compression demands resonance: deep learning scales best when its architecture aligns with the fundamental structure of the data. These are the fundamental principles. Yet, modern vision architectures have strayed from these truths
             </p>
 
             <div class="mt-8 text-base text-[#fed7aa]/70">
