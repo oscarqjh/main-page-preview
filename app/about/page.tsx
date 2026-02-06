@@ -23,15 +23,12 @@ const board: BoardMember[] = [
 ];
 
 const projects: Project[] = [
-	{ name: "Aero-1-Audio", authors: "Kaichen Zhang, Bo Li, Yezhen Wang" },
-	{ name: "EgoLife", authors: "Jingkang Yang, Shuai Liu, Hongming Guo" },
-	{ name: "LLaVA-Critic-R1", authors: "Xiyao Wang, Chunyuan Li" },
-	{ name: "LLaVA-OneVision", authors: "Bo Li, Yuanhan Zhang, Dong Guo, Renrui Zhang, Feng Li, Hao Zhang, Kaichen Zhang, Peiyuan Zhang, Yanwei Li, Ziwei Liu, Chunyuan Li" },
-	{ name: "LLaVA-OneVision-1.5", authors: "Xiang An, Yin Xie, Kaicheng Yang, Changrui Chen, Huajie Tan, Chunyuan Li, Zizhen Yan, *Ziyong Feng, *Ziwei Liu, *Bo Li, *Jiankang Deng" },
-	{ name: "LMMs-Eval", authors: "Bo Li, Kaichen Zhang, Fanyi Pu, Peiyuan Zhang, Joshua Adrian Cahyono, Kairui Hu, Shuai Liu, Nguyen Quang Trung, Cong Pham, Devin Thang" },
-	{ name: "LongVA", authors: "Peiyuan Zhang, Kaichen Zhang, Bo Li" },
+	{ name: "OneVision Encoder", authors: "LMMs Lab, Glint Lab, AIM for Health Lab, MVP Lab" },
 	{ name: "LMMs-Engine", authors: "Kaichen Zhang, Bo Li" },
+	{ name: "LLaVA-OneVision-1.5", authors: "Xiang An, Yin Xie, Kaicheng Yang, Changrui Chen, Huajie Tan, Chunyuan Li, Zizhen Yan, *Ziyong Feng, *Ziwei Liu, *Bo Li, *Jiankang Deng" },
 	{ name: "Multimodal-SAE", authors: "Kaichen Zhang, Bo Li, Yifei Shen" },
+	{ name: "LLaVA-OneVision", authors: "Bo Li, Yuanhan Zhang, Dong Guo, Renrui Zhang, Feng Li, Hao Zhang, Kaichen Zhang, Peiyuan Zhang, Yanwei Li, Ziwei Liu, Chunyuan Li" },
+	{ name: "LMMs-Eval", authors: "Bo Li, Kaichen Zhang, Fanyi Pu, Peiyuan Zhang, Joshua Adrian Cahyono, Kairui Hu, Shuai Liu, Nguyen Quang Trung, Cong Pham, Devin Thang" },
 ];
 
 export default function AboutPage() {
