@@ -46,7 +46,8 @@ export default function AboutPage() {
 						<div className={styles.sectionLine} />
 					</div>
 					<p className={styles.manifesto}>
-						Language is merely reality projected onto a flat plane. It lost the light, lost the gravity, lost the tremor of air as a bird crossed the sky. It learned every rhetoric of <em>blue</em>, yet it has never seen the sky. It gained wisdom in a labyrinth of symbols, yet stands empty in the wilderness of perception.
+                    Language is the first fire. It illuminated the invisible, gave shape to thought, carried knowledge across generations in symbols no larger than a breath. It
+                    learned every rhetoric of <em>blue</em>. Now we reach beyond - not away from language, but through it - toward the light it was always pointing at.
 					</p>
 					<p className={styles.manifesto}>
                         We set our highest aspiration to build a true world model, with superhuman intelligence, that transcends the text and reaches for the thing-in-itself. To see the light before it becomes a word. To hear the silence between definitions. To act upon a world that precedes all description - and in that act, to understand what no symbol ever could.
