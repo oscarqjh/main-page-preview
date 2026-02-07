@@ -2339,17 +2339,23 @@ tbody tr:hover {
 	padding: 1rem 2rem;
 	background: var(--foreground);
 	color: var(--background);
+	box-shadow: inset 0 0 0 2px var(--foreground);
 	text-decoration: none;
 	font-weight: 700;
 	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
-	transition: all var(--duration-fast) var(--ease-out);
+	transition:
+		background-color var(--duration-fast) var(--ease-out),
+		color var(--duration-fast) var(--ease-out),
+		box-shadow var(--duration-fast) var(--ease-out),
+		filter var(--duration-fast) var(--ease-out);
 }
 
 .brutalist-btn-primary:hover {
-	background: transparent;
-	color: var(--foreground);
+	background: var(--foreground);
+	color: var(--background);
+	filter: brightness(1.08);
 }
 
 .brutalist-btn-primary:focus-visible {
@@ -2363,16 +2369,22 @@ tbody tr:hover {
 	padding: 1rem 2rem;
 	background: transparent;
 	color: var(--foreground);
+	box-shadow: inset 0 0 0 2px currentColor;
 	text-decoration: none;
 	font-weight: 700;
 	font-size: var(--text-caption);  /* Level 5: 16px minimum */
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
-	transition: all var(--duration-fast) var(--ease-out);
+	transition:
+		background-color var(--duration-fast) var(--ease-out),
+		color var(--duration-fast) var(--ease-out),
+		box-shadow var(--duration-fast) var(--ease-out),
+		filter var(--duration-fast) var(--ease-out);
 }
 
 .brutalist-btn-secondary:hover {
 	background: rgba(254, 215, 170, 0.1);
+	filter: none;
 }
 
 .brutalist-hero-visual {
