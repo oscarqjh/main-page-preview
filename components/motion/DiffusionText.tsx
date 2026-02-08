@@ -4,6 +4,13 @@ import React, { useEffect, useState, useRef } from "react";
 
 export type DiffusionVariant = "diffusion" | "morph";
 
+type MorphLexiconEntry = {
+	zh: string[];
+	ja: string[];
+};
+
+type MorphLexicon = Record<string, MorphLexiconEntry>;
+
 interface DiffusionTextProps {
   text: string;
   className?: string;
@@ -11,18 +18,41 @@ interface DiffusionTextProps {
   revealSpeed?: number;
   variant?: DiffusionVariant;
   paused?: boolean;
+  morphLexicon?: MorphLexicon;
 }
 
 const GLYPHS = "█▓▒░>_[]{}—+*!#&";
 
-const CJK    = "感觉构建探索未来智慧视觉语言模型认识思维预测";
-const KANA   = "アイウエオカキクケコサシスセソタチツテト";
 const BLOCKS = "░▒▓█▄▀";
+const DEFAULT_CJK = "构建探索未来智慧视觉语言模型认知思维数据算力网络超维";
+const DEFAULT_KANA = "アイウエオカキクケコサシスセソタチツテトナニヌネノ";
+const DEFAULT_CJK_KANA = `${DEFAULT_CJK}${DEFAULT_KANA}`;
 
 const _hash = (seed: number) => {
   const x = Math.sin(seed * 9301 + 49297) * 233280;
   return x - Math.floor(x);
 };
+
+function buildContextualMorphPools(
+	prevText: string,
+	nextText: string,
+	morphLexicon?: MorphLexicon,
+) {
+	const prev = morphLexicon?.[prevText];
+	const next = morphLexicon?.[nextText];
+
+	const contextualWords = [
+		...(prev?.zh ?? []),
+		...(prev?.ja ?? []),
+		...(next?.zh ?? []),
+		...(next?.ja ?? []),
+	].join("");
+
+	const langPool = contextualWords.length > 0 ? contextualWords : DEFAULT_CJK_KANA;
+	const cyberPool = `${langPool}${GLYPHS}${BLOCKS}`;
+
+	return { langPool, cyberPool };
+}
 
 export function DiffusionText({ 
   text, 
@@ -30,6 +60,7 @@ export function DiffusionText({
   revealSpeed = 1500,
   variant = "diffusion",
   paused = false,
+  morphLexicon,
 }: DiffusionTextProps) {
   const [displayText, setDisplayText] = useState(text);
   const prevTextRef = useRef(text);
@@ -82,10 +113,12 @@ export function DiffusionText({
         }).join('');
 
       } else {
-        // --- Variant B: Broken neon / malfunctioning CJK display ---
+        // --- Variant B: Broken neon / stuttering terminal text ---
         const length = Math.max(prevText.length, text.length);
         const chars: string[] = [];
-        const stagger = 680;
+        const morphSpeed = Math.max(0.9, revealSpeed / 1500);
+        const stagger = 220 * morphSpeed;
+        const { langPool, cyberPool } = buildContextualMorphPools(prevText, text, morphLexicon);
         let morphEnd = 0;
 
         for (let i = 0; i < length; i++) {
@@ -101,19 +134,19 @@ export function DiffusionText({
           const charDelay = i * stagger + jitter;
           const t = elapsed - charDelay;
 
-          const entryFlicker   = 200 + _hash(i * 11) * 150;
-          const cjk1Hold       = 1600 + _hash(i * 13) * 1200;
+          const entryFlicker   = (120 + _hash(i * 11) * 120) * morphSpeed;
+          const noise1Hold     = (420 + _hash(i * 13) * 360) * morphSpeed;
           const hasFlickerBack = _hash(i * 17) > 0.2;
-          const flickerBack    = hasFlickerBack ? 140 + _hash(i * 19) * 120 : 0;
-          const cjk2Hold       = hasFlickerBack ? 1200 + _hash(i * 23) * 900 : 0;
+          const flickerBack    = hasFlickerBack ? (80 + _hash(i * 19) * 100) * morphSpeed : 0;
+          const noise2Hold     = hasFlickerBack ? (280 + _hash(i * 23) * 280) * morphSpeed : 0;
           const hasStutter     = _hash(i * 53) > 0.55;
-          const stutterHold    = hasStutter ? 500 + _hash(i * 59) * 500 : 0;
-          const settleGlitch   = 100 + _hash(i * 29) * 80;
+          const stutterHold    = hasStutter ? (220 + _hash(i * 59) * 260) * morphSpeed : 0;
+          const settleGlitch   = (70 + _hash(i * 29) * 70) * morphSpeed;
 
           const t1 = entryFlicker;
-          const t2 = t1 + cjk1Hold;
+          const t2 = t1 + noise1Hold;
           const t3 = t2 + flickerBack;
-          const t4 = t3 + cjk2Hold;
+          const t4 = t3 + noise2Hold;
           const t5 = t4 + stutterHold;
           const t6 = t5 + settleGlitch;
 
@@ -130,18 +163,17 @@ export function DiffusionText({
                 : BLOCKS[Math.floor(_hash(i * 31 + tick) * BLOCKS.length)]
             );
           } else if (t < t2) {
-            chars.push(CJK[Math.floor(_hash(i * 37 + 1) * CJK.length)]);
+            chars.push(langPool[Math.floor(_hash(i * 37 + 1) * langPool.length)]);
           } else if (t < t3 && hasFlickerBack) {
             chars.push(oldChar);
           } else if (t < t4 && hasFlickerBack) {
-            const pool = _hash(i * 41) > 0.5 ? KANA : CJK;
-            chars.push(pool[Math.floor(_hash(i * 43 + 2) * pool.length)]);
+            chars.push(cyberPool[Math.floor(_hash(i * 43 + 2) * cyberPool.length)]);
           } else if (t < t5 && hasStutter) {
             const tick = Math.floor((t - t4) / 160);
             chars.push(
               tick % 2 === 0
                 ? targetChar
-                : CJK[Math.floor(_hash(i * 61 + 3) * CJK.length)]
+                : langPool[Math.floor(_hash(i * 61 + 3) * langPool.length)]
             );
           } else if (t < t6) {
             const tick = Math.floor((t - t5) / 50);
@@ -175,7 +207,7 @@ export function DiffusionText({
     animationFrameId = requestAnimationFrame(animate);
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [text, revealSpeed, variant, paused]);
+  }, [text, revealSpeed, variant, paused, morphLexicon]);
 
   return (
     <span className={className}>

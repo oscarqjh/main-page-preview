@@ -7,43 +7,50 @@ import { useTransition } from "@/components/motion/TransitionSystem";
 import { HackerTerminal } from "./HackerTerminal";
 
 const HERO_PHRASES = [
-  { en: ["Building", "Creating", "Forging"], zh: ["构建", "创造", "铸造"], ja: ["構築", "つくる", "ビルド", "創造", "きずく"] },
-  { en: ["Feeling", "Sensing", "Perceiving"], zh: ["感受", "体会", "感知", "领悟"], ja: ["感じる", "かんじる", "フィーリング", "知覚", "体感"] },
-  { en: ["Paving", "Exploring", "Seeking"], zh: ["求索", "探索", "追寻"], ja: ["探求", "さぐる", "もとめる", "探る", "シーキング"] },
-];
+	{
+		en: "Building",
+		zh: ["构建", "建造", "筑基"],
+		ja: ["構築", "ビルド", "構成"],
+	},
+	{
+		en: "Feeling",
+		zh: ["感受", "感知", "体悟"],
+		ja: ["感じる", "感知", "知覚"],
+	},
+	{
+		en: "Paving",
+		zh: ["铺路", "开拓", "探求"],
+		ja: ["道を拓く", "開拓", "探求"],
+	},
+] as const;
 
-const LANGS = ["en", "zh", "ja"] as const;
+const HERO_MORPH_LEXICON = HERO_PHRASES.reduce(
+	(acc, phrase) => {
+		acc[phrase.en] = {
+			zh: [...phrase.zh],
+			ja: [...phrase.ja],
+		};
+		return acc;
+	},
+	{} as Record<string, { zh: string[]; ja: string[] }>,
+);
 
 export function HeroSection() {
 	const { phase } = useTransition();
 	const transitioning = phase !== "idle";
 
 	const [phraseIndex, setPhraseIndex] = useState(0);
-	const [langIndex, setLangIndex] = useState(0);
-	const [wordIndex, setWordIndex] = useState(0);
 	
 	useEffect(() => {
 		if (transitioning) return;
 		const interval = setInterval(() => {
 			setPhraseIndex((prev) => (prev + 1) % HERO_PHRASES.length);
-		}, 28000);
+		}, 9600);
 		return () => clearInterval(interval);
 	}, [transitioning]);
 
-	useEffect(() => {
-		if (transitioning) return;
-		const interval = setInterval(() => {
-			setLangIndex((prev) => (prev + 1) % LANGS.length);
-			setWordIndex(Math.floor(Math.random() * 10));
-		}, 3000);
-		return () => clearInterval(interval);
-	}, [transitioning]);
-
-	const currentPhrase = HERO_PHRASES[phraseIndex];
-	const currentLang = LANGS[langIndex];
-	const words = currentPhrase[currentLang];
-	const displayText = words[wordIndex % words.length];
-	const showSubtitle = currentPhrase.en.includes("Paving");
+	const displayText = HERO_PHRASES[phraseIndex].en;
+	const showSubtitle = phraseIndex === 2;
 
 	return (
 		<div className="relative w-full overflow-hidden bg-[var(--background)]">
@@ -53,12 +60,13 @@ export function HeroSection() {
 					<div className="brutalist-hero-content">
 						<h1 className="brutalist-hero-title fade-in-up animate-fill-both">
 							<div className="min-h-[1.2em] overflow-hidden" style={{ whiteSpace: "nowrap" }}>
-							<DiffusionText 
-								text={displayText}
-								revealSpeed={4000} 
-								variant="morph"
-								paused={transitioning}
-							/>
+										<DiffusionText 
+											text={displayText}
+											revealSpeed={2400} 
+											variant="morph"
+											paused={transitioning}
+											morphLexicon={HERO_MORPH_LEXICON}
+										/>
 							</div>
 							<span
 								className={`brutalist-hero-title-sub lowercase ${

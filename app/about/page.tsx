@@ -8,27 +8,19 @@ export const metadata = {
 
 interface Project {
 	name: string;
-	authors: string;
-}
-
-interface BoardMember {
-	name: string;
 	href: string;
-	affiliation: string;
 }
 
-const board: BoardMember[] = [
-	{ name: "Bo Li", href: "https://brianboli.com/", affiliation: "Nanyang Technological University" },
-	{ name: "Ziwei Liu", href: "https://liuziwei7.github.io/", affiliation: "Nanyang Technological University" },
-];
+const ORIGIN_TEXT =
+	"This organization is formed and founded by Bo Li with his friends and heavily supported by Prof. Ziwei Liu.";
 
 const projects: Project[] = [
-	{ name: "OneVision Encoder", authors: "LMMs Lab, Glint Lab, AIM for Health Lab, MVP Lab" },
-	{ name: "LMMs-Engine", authors: "Kaichen Zhang, Bo Li" },
-	{ name: "LLaVA-OneVision-1.5", authors: "Xiang An, Yin Xie, Kaicheng Yang, Changrui Chen, Huajie Tan, Chunyuan Li, Zizhen Yan, *Ziyong Feng, *Ziwei Liu, *Bo Li, *Jiankang Deng" },
-	{ name: "Multimodal-SAE", authors: "Kaichen Zhang, Bo Li, Yifei Shen" },
-	{ name: "LLaVA-OneVision", authors: "Bo Li, Yuanhan Zhang, Dong Guo, Renrui Zhang, Feng Li, Hao Zhang, Kaichen Zhang, Peiyuan Zhang, Yanwei Li, Ziwei Liu, Chunyuan Li" },
-	{ name: "LMMs-Eval", authors: "Bo Li, Kaichen Zhang, Fanyi Pu, Peiyuan Zhang, Joshua Adrian Cahyono, Kairui Hu, Shuai Liu, Nguyen Quang Trung, Cong Pham, Devin Thang" },
+	{ name: "OneVision Encoder", href: "https://github.com/search?q=OneVision+Encoder+EvolvingLMMs-Lab&type=repositories" },
+	{ name: "LMMs-Engine", href: "https://github.com/EvolvingLMMs-Lab/lmms-engine" },
+	{ name: "LLaVA-OneVision-1.5", href: "https://github.com/EvolvingLMMs-Lab/LLaVA-OneVision-1.5" },
+	{ name: "Multimodal-SAE", href: "https://github.com/EvolvingLMMs-Lab/multimodal-sae" },
+	{ name: "LLaVA-OneVision", href: "https://github.com/LLaVA-VL/LLaVA-NeXT" },
+	{ name: "LMMs-Eval", href: "https://github.com/EvolvingLMMs-Lab/lmms-eval" },
 ];
 
 export default function AboutPage() {
@@ -57,31 +49,6 @@ export default function AboutPage() {
 					</p>
 				</section>
 
-				{/* ── Scientific Board ── */}
-				<section>
-					<div className={styles.sectionHeader}>
-						<span className={styles.sectionLabel}>Scientific Board</span>
-						<div className={styles.sectionLine} />
-					</div>
-					<div className={styles.boardGrid}>
-						{board.map((member, i) => (
-							<div key={member.name} className={styles.boardCard}>
-								<span className={styles.boardIndex}>{String(i + 1).padStart(2, "0")}</span>
-								<div>
-									<Link
-										href={member.href}
-										target="_blank"
-										className={styles.boardName}
-									>
-										{member.name}
-									</Link>
-									<p className={styles.boardAffiliation}>{member.affiliation}</p>
-								</div>
-							</div>
-						))}
-					</div>
-				</section>
-
 				{/* ── Core Projects ── */}
 				<section>
 					<div className={styles.sectionHeader}>
@@ -90,15 +57,29 @@ export default function AboutPage() {
 					</div>
 					<div className={styles.projectsGrid}>
 						{projects.map((project, index) => (
-							<div key={project.name} className={styles.projectCard}>
+							<Link
+								key={project.name}
+								href={project.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className={styles.projectCard}
+							>
 								<div className={styles.projectHeader}>
 									<span className={styles.projectIndex}>{String(index + 1).padStart(2, "0")}</span>
 									<h3 className={styles.projectTitle}>{project.name}</h3>
 								</div>
-								<p className={styles.projectAuthors}>{project.authors}</p>
-							</div>
+							</Link>
 						))}
 					</div>
+				</section>
+
+				{/* ── Origin (muted footer note) ── */}
+				<section className={styles.originNoteSection}>
+					<p className={styles.originNote}>
+						<span className={styles.originLabel}>Origin</span>
+						<br />
+						{ORIGIN_TEXT}
+					</p>
 				</section>
 
 			</div>
