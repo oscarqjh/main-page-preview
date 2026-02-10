@@ -11,8 +11,11 @@ interface Project {
 	href: string;
 }
 
-const ORIGIN_TEXT =
-	"This organization is formed and founded by Bo Li with his friends and heavily supported by Prof. Ziwei Liu.";
+const ORIGIN_TEXT = (
+	<>
+		This organization is formed and founded by <a href="https://brianboli.com" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Bo Li</a> with his friends and heavily supported by <a href="https://liuziwei7.github.io/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>Prof. Ziwei Liu</a>.
+	</>
+);
 
 const projects: Project[] = [
 	{ name: "OneVision Encoder", href: "https://github.com/search?q=OneVision+Encoder+EvolvingLMMs-Lab&type=repositories" },
