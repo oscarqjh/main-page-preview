@@ -29,6 +29,16 @@
             background: #0369a1;
             border-bottom: 1px solid rgba(254, 215, 170, 0.1);
         }
+        .hero-resource-link {
+            color: #fed7aa;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(254, 215, 170, 0.4);
+            transition: all 0.2s ease;
+        }
+        .hero-resource-link:hover {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
 
         /* --- Component Styles --- */
         .nav-link {
@@ -1213,6 +1223,17 @@
             <h1 class="text-5xl sm:text-7xl font-bold text-[#fed7aa] tracking-tight mb-8 leading-tight">
                 <span class="gradient-text">OneVision Encoder</span>
             </h1>
+            <div class="text-[#fed7aa]/90 text-sm sm:text-base leading-relaxed">
+                <p>
+                    📝 <strong><a href="https://www.lmms-lab.com/onevision-encoder/index.html" class="hero-resource-link" target="_blank" rel="noopener noreferrer">Homepage</a></strong>
+                </p>
+                <p class="mt-2">
+                    🤗 <strong><a href="https://huggingface.co/collections/lmms-lab-encoder/onevision-encoder" class="hero-resource-link" target="_blank" rel="noopener noreferrer">Models</a></strong> |
+                    📄 <strong><a href="https://arxiv.org/abs/2602.08683" class="hero-resource-link" target="_blank" rel="noopener noreferrer">Tech Report</a></strong> |
+                    📋 <strong><a href="docs/model_card.md" class="hero-resource-link">Model Card</a></strong> |
+                    📊 <strong><a href="docs/data_card.md" class="hero-resource-link">Data Card</a></strong>
+                </p>
+            </div>
             <div class="mt-8 text-base text-[#fed7aa]/70">
                 <p class="font-medium">LMMs Lab, Glint Lab, AIM for Health Lab, MVP Lab</p>
             </div>
