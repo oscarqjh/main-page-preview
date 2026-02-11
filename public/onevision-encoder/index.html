@@ -319,6 +319,24 @@
             background-color: rgba(254, 215, 170, 0.05);
             font-weight: 600;
         }
+
+        .results-table .section-header td {
+            text-align: center;
+            padding: 0.55rem 0.75rem;
+            background-color: rgba(254, 215, 170, 0.18);
+            color: rgba(254, 215, 170, 0.96);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+            border-top: 1px solid rgba(254, 215, 170, 0.45);
+            border-bottom: 1px solid rgba(254, 215, 170, 0.45);
+            border-left: 1px solid rgba(254, 215, 170, 0.18);
+            border-right: 1px solid rgba(254, 215, 170, 0.18);
+        }
+
+        .results-table .section-header + tr td {
+            border-top-width: 0;
+        }
         /* Highlight OV-Encoder columns - keep it minimal (header carries most of the emphasis) */
         .results-table .highlight-ours {
             background-color: rgba(254, 215, 170, 0.04);
@@ -648,6 +666,11 @@
             .data-table,
             .results-table {
                 min-width: 800px;
+            }
+
+            .results-table .section-header td {
+                padding: 0.45rem 0.6rem;
+                font-size: 0.82rem;
             }
 
             /* Improve sticky column on mobile */
@@ -1202,7 +1225,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="hero-bg pt-32 pb-20 sm:pt-40 sm:pb-28">
+    <div class="hero-bg pt-20 pb-12 sm:pt-24 sm:pb-16">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-5xl sm:text-7xl font-bold text-[#fed7aa] tracking-tight mb-8 leading-tight">
                 <span class="gradient-text">OneVision Encoder</span>
@@ -1629,7 +1652,6 @@
                                 </p>
                                 <p class="text-[#fed7aa]/90 mb-6 text-base">
                                 OV-Encoder (Codec) refers to a variant of OV-Encoder that replaces traditional frame sampling with codec-style input, where dense full-frame inputs are substituted by codec-guided patch reorganization. Under the same attentive probe setting and token budget, patches are selectively reallocated across the input clip based on codec-native motion vectors and residuals, without changing the backbone architecture or training protocol. This results in stronger performance on motion-sensitive datasets, particularly Diving48 and Perception Test.</p>
-                                </p>
                                 <div class="table-wrapper">
                                 <table class="results-table" style="float:left;">
                                     <colgroup>
@@ -1667,7 +1689,7 @@
                                         <!-- Group: 8 Frames -->
                                         <tr class="section-header">
                                             <td colspan="12">
-                                                <i class="fa-solid fa-film mr-2 text-[#fed7aa]/60"></i> 8 Frames
+                                                8 Frames
                                             </td>
                                         </tr>
                                         <tr>
@@ -1711,7 +1733,7 @@
                                         <!-- Group: 16 Frames -->
                                         <tr class="section-header">
                                             <td colspan="12">
-                                                <i class="fa-solid fa-film mr-2 text-[#fed7aa]/60"></i> 16 Frames
+                                                16 Frames
                                             </td>
                                         </tr>
                                         <tr>
