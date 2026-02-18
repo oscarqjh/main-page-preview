@@ -1336,7 +1336,7 @@
                             <div class="pipeline-label" style="flex: 1; text-align: center; font-size: 0.875rem; font-weight: 600; color: #fed7aa; white-space: nowrap; padding: 0 0.25rem;">Codec-Style Patch Extraction</div>
                         </div>
                         <div id="pipelineGifContainer" style="position: relative; border-radius: 0.5rem; overflow: hidden;">
-                            <video id="pipelineGifImage" src="images/case1.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 0.5rem; display: block; transition: opacity 0.3s ease;"></video>
+                            <video id="pipelineGifImage" src="https://wqrxkrduisy4rnf0.public.blob.vercel-storage.com/onevision-encoder/images/case1.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 0.5rem; display: block; transition: opacity 0.3s ease;"></video>
                         </div>
                     </div>
 
@@ -1376,7 +1376,7 @@
                     Standard contrastive learning (e.g., CLIP) is limited by batch size—negative samples are drawn only from the current batch, typically 32K-64K examples. This creates a narrow view of the embedding space and leads to suboptimal representations. Our approach maintains a <strong>global concept bank of 2M clustered centers</strong>, enabling each training sample to contrast against a diverse, representative set of negatives regardless of batch composition. This produces more discriminative embeddings with better-separated semantic clusters.
                 </p>
                 <figure class="figure-centered flex-col">
-                    <video src="images/global_contrastive_comparison.webm" autoplay loop muted playsinline class="w-full max-w-5xl rounded-lg"></video>
+                    <video src="https://wqrxkrduisy4rnf0.public.blob.vercel-storage.com/onevision-encoder/images/global_contrastive_comparison.webm" autoplay loop muted playsinline class="w-full max-w-5xl rounded-lg"></video>
                     <!-- <figcaption class="text-center text-[#fed7aa]/70 text-xs mt-4 italic max-w-3xl">
                         Left: CLIP's batch-level contrastive learning with limited negatives. Right: Our global contrastive approach with clustered positive centers (green) contrasting against 60 diverse negative samples (red/orange) drawn from a 2M concept bank.
                     </figcaption> -->
@@ -2527,34 +2527,39 @@
             }
         });
 
+        const MEDIA_BASE_URL = 'https://wqrxkrduisy4rnf0.public.blob.vercel-storage.com';
+        function mediaUrl(path) {
+            return `${MEDIA_BASE_URL}/${path.replace(/^\/+/, '')}`;
+        }
+
         // Pipeline cases data - 7 different pipeline visualizations
         const pipelineCases = [
             {
-                image: 'images/case1.webm',
+                image: 'onevision-encoder/images/case1.webm',
                 title: 'Case 1: Standard Pipeline'
             },
             {
-                image: 'images/case2.webm',
+                image: 'onevision-encoder/images/case2.webm',
                 title: 'Case 2: Saliency Focus'
             },
             {
-                image: 'images/case3.webm',
+                image: 'onevision-encoder/images/case3.webm',
                 title: 'Case 3: Compression Analysis'
             },
             {
-                image: 'images/case4.webm',
+                image: 'onevision-encoder/images/case4.webm',
                 title: 'Case 4: Zigzag Ordering'
             },
             {
-                image: 'images/case5.webm',
+                image: 'onevision-encoder/images/case5.webm',
                 title: 'Case 5: Comparative Analysis'
             },
             {
-                image: 'images/case6.webm',
+                image: 'onevision-encoder/images/case6.webm',
                 title: 'Case 6: Comparative Analysis'
             },
             {
-                image: 'images/case7.webm',
+                image: 'onevision-encoder/images/case7.webm',
                 title: 'Case 7: Comparative Analysis'
             }
         ];
@@ -2578,7 +2583,7 @@
 
             setTimeout(() => {
                 // Update content
-                imageElement.src = caseData.image;
+                imageElement.src = mediaUrl(caseData.image);
                 if (caseData.description) {
                     descElement.textContent = caseData.description;
                 }

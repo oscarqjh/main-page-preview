@@ -1,5 +1,7 @@
 "use client";
 
+import { mediaUrl } from "@/lib/media";
+
 type PreloadLevel = "warm" | "hot";
 
 const COOKIE_NAME = "ov_encoder_preloaded";
@@ -113,8 +115,16 @@ function hot() {
 	addLink("prefetch", "https://cdn.tailwindcss.com", { as: "script" });
 
 	if (isFastEnoughForVideoPrefetch()) {
-		addLink("prefetch", "/onevision-encoder/images/case1.webm", { as: "video", type: "video/webm" });
-		addLink("prefetch", "/onevision-encoder/images/global_contrastive_comparison.webm", { as: "video", type: "video/webm" });
+		addLink("prefetch", mediaUrl("onevision-encoder/images/case1.webm"), {
+			as: "video",
+			type: "video/webm",
+			crossorigin: "anonymous",
+		});
+		addLink("prefetch", mediaUrl("onevision-encoder/images/global_contrastive_comparison.webm"), {
+			as: "video",
+			type: "video/webm",
+			crossorigin: "anonymous",
+		});
 	}
 }
 

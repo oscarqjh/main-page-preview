@@ -5,7 +5,7 @@ interface QuickLink {
 }
 
 interface QuickLinksProps {
-  links: QuickLink[];
+  links?: QuickLink[];
 }
 
 const defaultLabels: Record<string, string> = {
@@ -17,7 +17,9 @@ const defaultLabels: Record<string, string> = {
   link: "Link",
 };
 
-export function QuickLinks({ links }: QuickLinksProps) {
+export function QuickLinks({ links = [] }: QuickLinksProps) {
+  if (links.length === 0) return null;
+
   return (
     <>
       <div className="quick-links">

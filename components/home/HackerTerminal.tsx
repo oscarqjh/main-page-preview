@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import styles from "./HackerTerminal.module.css";
+import { mediaUrl } from "@/lib/media";
 
 type Phase = "video" | "terminal";
 
@@ -236,11 +237,11 @@ export function HackerTerminal() {
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         className={`${styles.videoLayer} ${phase !== "video" ? styles.hidden : ""}`}
         ref={videoRef}
       >
-        <source src="/videos/hero-promo.mp4" type="video/mp4" />
+        <source src={mediaUrl("videos/hero-promo.mp4")} type="video/mp4" />
       </video>
 
       <div className={`${styles.terminalLayer} ${isTerminalVisible ? styles.visible : ""}`}>
