@@ -193,7 +193,7 @@ export default function Header() {
               <FiArrowUpRight
                 size={20}
                 style={{
-                  marginBottom: "4px",
+                  marginBottom: "3px",
                   display: "inline-block",
                   verticalAlign: "middle",
                 }}
