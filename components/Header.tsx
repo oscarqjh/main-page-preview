@@ -16,7 +16,7 @@ const navItems = [
 
 const galleryProjects = [
   {
-    label: "LMMS Lab Writer",
+    label: "LMMS-Lab Writer",
     href: "https://writer.lmms-lab.com",
     description: "AI-native LaTeX editor",
   },
