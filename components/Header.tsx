@@ -11,7 +11,6 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Posts", href: "/posts" },
   { label: "Notes", href: "/notes" },
-  { label: "About", href: "/about" },
 ];
 
 const galleryProjects = [
@@ -289,6 +288,12 @@ export default function Header() {
               )}
             </AnimatePresence>
           </div>
+          <TransitionLink
+            href="/about"
+            className={`${styles.navLink} ${isActive("/about") ? styles.active : ""}`}
+          >
+            About
+          </TransitionLink>
         </nav>
       </div>
 
@@ -341,6 +346,13 @@ export default function Header() {
                   ))}
                 </ul>
               </div>
+              <TransitionLink
+                href="/about"
+                onClick={() => setMenuOpen(false)}
+                className={`${styles.mobileNavLink} ${isActive("/about") ? styles.active : ""}`}
+              >
+                About
+              </TransitionLink>
             </nav>
           </motion.div>
         )}
