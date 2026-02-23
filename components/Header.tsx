@@ -7,12 +7,20 @@ import TransitionLink from "@/components/motion/TransitionLink";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Header.module.css";
 
-const navItems = [
+const baseNavItems = [
 	{ label: "Home", href: "/" },
 	{ label: "Posts", href: "/posts" },
 	{ label: "Notes", href: "/notes" },
 	{ label: "About", href: "/about" },
 ];
+
+function isDocsNavItem(label: string, href: string): boolean {
+	const normalizedLabel = label.trim().toLowerCase();
+	const normalizedHref = href.trim().toLowerCase();
+	return normalizedLabel.startsWith("docs") || normalizedHref === "/docs" || normalizedHref.startsWith("/docs/");
+}
+
+const navItems = baseNavItems.filter((item) => !isDocsNavItem(item.label, item.href));
 
 export default function Header() {
 	const [menuOpen, setMenuOpen] = useState(false);
